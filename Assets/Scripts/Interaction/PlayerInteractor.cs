@@ -2,43 +2,56 @@ using UnityEngine;
 
 public class PlayerInteractor : MonoBehaviour
 {
-    [SerializeField] private float pickUpRange = 3f;
-    [SerializeField] private float throwForce = 5f;
-    [SerializeField] private Transform playerCameraTransform;
-    [SerializeField] private Transform objectGrabPointTransform;
+    [SerializeField] private float _pickUpRange = 3f;
+    [SerializeField] private float _throwForce = 5f;
+    [SerializeField] private Transform _playerCameraTransform;
+    [SerializeField] private Transform _objectGrabPointTransform;
 
-    private PhysicsObject objectGrabbable;
+    private PhysicsObject _objectGrabbable;
+    private bool _isInteractableInView = false;
 
     void Update()
     {
+        bool hitInteractable = false;
+        if (Physics.Raycast(_playerCameraTransform.position, _playerCameraTransform.forward, out RaycastHit hit, _pickUpRange))
+        {
+            if (hit.collider.gameObject.CompareTag("Interactable"))
+            {
+                hitInteractable = true;
+            }
+        }
+
+        if (hitInteractable != _isInteractableInView && !_objectGrabbable)
+        {
+            _isInteractableInView = hitInteractable;
+            CrosshairController.Instance.ToggleCrosshairSize(_isInteractableInView);
+        }
+
         if (Input.GetKeyDown(KeyCode.E))
         {
-            if (!objectGrabbable)
+            if (!_objectGrabbable)
             {
-                if (Physics.Raycast(playerCameraTransform.position, playerCameraTransform.forward, out RaycastHit hit, pickUpRange))
+                if (hitInteractable && hit.transform.TryGetComponent<PhysicsObject>(out _objectGrabbable))
                 {
-                    if (hit.transform.TryGetComponent<PhysicsObject>(out objectGrabbable))
-                    {
-                        objectGrabbable.Grab(objectGrabPointTransform);
-                    }
+                    _objectGrabbable.Grab(_objectGrabPointTransform);
                 }
             }
             else
             {
-                objectGrabbable.Drop();
+                _objectGrabbable.Drop();
                 ClearHands();
-
             }
         }
-        if (Input.GetMouseButtonDown(0) && objectGrabbable)
+
+        if (Input.GetMouseButtonDown(0) && _objectGrabbable)
         {
-            objectGrabbable.Throw(objectGrabPointTransform, throwForce);
+            _objectGrabbable.Throw(_objectGrabPointTransform, _throwForce);
             ClearHands();
         }
     }
 
     void ClearHands()
     {
-        objectGrabbable = null;
+        _objectGrabbable = null;
     }
 }

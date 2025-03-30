@@ -146,7 +146,7 @@ MonoBehaviour:
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
   m_Cameras: []
-  m_RendererIndex: -1
+  m_RendererIndex: 0
   m_VolumeLayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -154,7 +154,7 @@ MonoBehaviour:
   m_VolumeFrameworkUpdateModeOption: 2
   m_RenderPostProcessing: 1
   m_Antialiasing: 2
-  m_AntialiasingQuality: 2
+  m_AntialiasingQuality: 1
   m_StopNaN: 0
   m_Dithering: 0
   m_ClearDepth: 1
@@ -173,6 +173,12 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
+--- !u!4 &108072199 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 39638478611586813, guid: aa5db274d2174ae45920284397c6340a,
+    type: 3}
+  m_PrefabInstance: {fileID: 845692153}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &465085783
 GameObject:
   m_ObjectHideFlags: 0
@@ -190,7 +196,7 @@ GameObject:
   - component: {fileID: 465085790}
   m_Layer: 6
   m_Name: TestCubeM
-  m_TagString: Untagged
+  m_TagString: Interactable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -271,7 +277,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
+  m_StaticShadowCaster: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -280,7 +286,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8f25333caf0e8dd499298b69894b5ec2, type: 2}
+  - {fileID: 2100000, guid: a191a8c5095bdbc42928574737fec651, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -319,7 +325,7 @@ Transform:
   m_GameObject: {fileID: 465085783}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.506, y: 0.243, z: 0.5400001}
+  m_LocalPosition: {x: 2.5, y: 0.243, z: 0.5}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -339,6 +345,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   IsHittingRB: 0
   IsHittingNOTRB: 0
+--- !u!4 &570713816 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2135538731388836316, guid: aa5db274d2174ae45920284397c6340a,
+    type: 3}
+  m_PrefabInstance: {fileID: 845692153}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &604968170
 GameObject:
   m_ObjectHideFlags: 0
@@ -443,7 +455,7 @@ Light:
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 2
+    m_Type: 1
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -542,7 +554,7 @@ GameObject:
   - component: {fileID: 757520497}
   m_Layer: 6
   m_Name: TestCubeXL
-  m_TagString: Untagged
+  m_TagString: Interactable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -606,7 +618,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
+  m_StaticShadowCaster: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -615,7 +627,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c66d5e2a59b5d744493f60d4fce54589, type: 2}
+  - {fileID: 2100000, guid: e9b93324b2600264db6470ed3489fa22, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -654,7 +666,7 @@ Transform:
   m_GameObject: {fileID: 757520490}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.501, y: 0.504, z: -1.476}
+  m_LocalPosition: {x: 2.5, y: 0.504, z: -1.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -739,6 +751,21 @@ PrefabInstance:
       propertyPath: m_CullingMask.m_Bits
       value: 4294967295
       objectReference: {fileID: 0}
+    - target: {fileID: 6961200762295146853, guid: aa5db274d2174ae45920284397c6340a,
+        type: 3}
+      propertyPath: _throwForce
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 6961200762295146853, guid: aa5db274d2174ae45920284397c6340a,
+        type: 3}
+      propertyPath: _playerCameraTransform
+      value: 
+      objectReference: {fileID: 108072199}
+    - target: {fileID: 6961200762295146853, guid: aa5db274d2174ae45920284397c6340a,
+        type: 3}
+      propertyPath: _objectGrabPointTransform
+      value: 
+      objectReference: {fileID: 570713816}
     - target: {fileID: 7782167138438023990, guid: aa5db274d2174ae45920284397c6340a,
         type: 3}
       propertyPath: state
@@ -896,7 +923,7 @@ GameObject:
   - component: {fileID: 1288939125}
   m_Layer: 6
   m_Name: TestCubeL
-  m_TagString: Untagged
+  m_TagString: Interactable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -991,7 +1018,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
+  m_StaticShadowCaster: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -1000,7 +1027,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c07c4432fdd88024fbefa4af9801437d, type: 2}
+  - {fileID: 2100000, guid: 1c94e9a85482a7841a41fd82116d9739, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1039,7 +1066,7 @@ Transform:
   m_GameObject: {fileID: 1288939124}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.515, y: 0.36799997, z: -0.449}
+  m_LocalPosition: {x: 2.5, y: 0.36799997, z: -0.5}
   m_LocalScale: {x: 0.75, y: 0.75, z: 0.75}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -1180,7 +1207,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: cb6c8de2a0a45c746b056d7a433fb8a4, type: 2}
+  - {fileID: 2100000, guid: 547e1192c9b002a4db3f16121daaa987, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1235,6 +1262,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1946152787}
   - component: {fileID: 1946152786}
+  - component: {fileID: 1946152788}
   m_Layer: 0
   m_Name: Global Volume
   m_TagString: Untagged
@@ -1254,7 +1282,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_IsGlobal: 1
+  m_IsGlobal: 0
   priority: 0
   blendDistance: 0
   weight: 1
@@ -1268,12 +1296,33 @@ Transform:
   m_GameObject: {fileID: 1946152785}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1946152788
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1946152785}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 10, y: 2, z: 10}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2057234110
 GameObject:
   m_ObjectHideFlags: 0
@@ -1291,7 +1340,7 @@ GameObject:
   - component: {fileID: 2057234117}
   m_Layer: 6
   m_Name: TestCubeS
-  m_TagString: Untagged
+  m_TagString: Interactable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1372,7 +1421,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
+  m_StaticShadowCaster: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -1381,7 +1430,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0074bf35d6f244742bb71eca3d471d54, type: 2}
+  - {fileID: 2100000, guid: 152d939b276dafb41ba81eefbb2a0b82, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1420,7 +1469,7 @@ Transform:
   m_GameObject: {fileID: 2057234110}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.509, y: 0.122, z: 1.519}
+  m_LocalPosition: {x: 2.5, y: 0.122, z: 1.5}
   m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1452,6 +1501,7 @@ GameObject:
   - component: {fileID: 2076214775}
   - component: {fileID: 2076214774}
   - component: {fileID: 2076214773}
+  - component: {fileID: 2076214777}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1542,6 +1592,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &2076214777
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2076214772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 734f87aa81f480540950b6f3bba2d627, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  crosshairRect: {fileID: 1649820719}
+  enlargeSize: 20
+  shrinkSize: 10
+  transitionSpeed: 0.1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
