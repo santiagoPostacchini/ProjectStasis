@@ -1,9 +1,11 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlayerInteractor : MonoBehaviour
 {
-    [SerializeField] private float _pickUpRange = 3f;
-    [SerializeField] private float _throwForce = 5f;
+    [Header("Interaction Settings")]
+    [SerializeField] private float _pickUpRange;
+    [SerializeField] private float _throwForce;
     [SerializeField] private Transform _playerCameraTransform;
     [SerializeField] private Transform _objectGrabPointTransform;
 
@@ -13,9 +15,13 @@ public class PlayerInteractor : MonoBehaviour
     void Update()
     {
         bool hitInteractable = false;
+        GameObject hitObject = null;
+
         if (Physics.Raycast(_playerCameraTransform.position, _playerCameraTransform.forward, out RaycastHit hit, _pickUpRange))
         {
-            if (hit.collider.gameObject.CompareTag("Interactable"))
+            hitObject = hit.collider.gameObject;
+
+            if (hitObject.CompareTag("Interactable"))
             {
                 hitInteractable = true;
             }
@@ -29,23 +35,38 @@ public class PlayerInteractor : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            if (!_objectGrabbable)
-            {
-                if (hitInteractable && hit.transform.TryGetComponent<PhysicsObject>(out _objectGrabbable))
-                {
-                    _objectGrabbable.Grab(_objectGrabPointTransform);
-                }
-            }
-            else
-            {
-                _objectGrabbable.Drop();
-                ClearHands();
-            }
+            HandleGrabOrDrop(hitObject);
         }
 
-        if (Input.GetMouseButtonDown(0) && _objectGrabbable)
+        if (Input.GetMouseButtonDown(0))
         {
-            _objectGrabbable.Throw(_objectGrabPointTransform, _throwForce);
+            if (_objectGrabbable != null)
+            {
+                _objectGrabbable.Throw(_objectGrabPointTransform, _throwForce);
+
+                StartCoroutine(DelayedClearHands());
+            }
+        }
+    }
+
+    private IEnumerator DelayedClearHands()
+    {
+        yield return new WaitForEndOfFrame();
+        ClearHands();
+    }
+
+    void HandleGrabOrDrop(GameObject hitObject)
+    {
+        if (_objectGrabbable == null)
+        {
+            if (hitObject != null && hitObject.TryGetComponent(out _objectGrabbable))
+            {
+                _objectGrabbable.Grab(_objectGrabPointTransform);
+            }
+        }
+        else
+        {
+            _objectGrabbable.Drop();
             ClearHands();
         }
     }
@@ -53,5 +74,10 @@ public class PlayerInteractor : MonoBehaviour
     void ClearHands()
     {
         _objectGrabbable = null;
+    }
+
+    public bool HasObjectInHand()
+    {
+        return _objectGrabbable != null;
     }
 }

@@ -1,4 +1,5 @@
 public interface IStasis
 {
-    protected void StatisEffectActivate();
+    void StatisEffectActivate();
+    void StatisEffectDeactivate();
 }

@@ -1,18 +1,7 @@
 using UnityEngine;
 
-public class PhysicsBox : PhysicsObject
+public class PhysicsBox : PhysicsObject, IStasis
 {
-    private void Awake()
-    {
-        objRB = GetComponent<Rigidbody>();
-        collisionDetector = objRB.GetComponent<CollisionDetector>();
-    }
-
-    public override void Freeze()
-    {
-        Debug.Log("Freezed set to " + _isFreezed);
-    }
-
     public override void Grab(Transform objGrabPointTransform)
     {
         StartCoroutine(EnableCollisionCheckAfterDelay(collisionCheckDelay));
@@ -31,17 +20,28 @@ public class PhysicsBox : PhysicsObject
     public override void Throw(Transform objGrabPointTransform, float force)
     {
         Drop();
-        objRB.AddForce(objGrabPointTransform.forward * (force/objRB.mass));
+        Vector3 throwVelocity = objGrabPointTransform.forward * (force / objRB.mass);
+        objRB.AddForce(throwVelocity);
     }
 
     private void FixedUpdate()
     {
-        if(objGrabPointTransform != null)
+        if (objGrabPointTransform != null)
         {
             Vector3 newPos = Vector3.Lerp(transform.position, objGrabPointTransform.transform.position, Time.fixedDeltaTime * 10f);
             Quaternion newRot = Quaternion.Lerp(transform.localRotation, objGrabPointTransform.transform.rotation, Time.fixedDeltaTime * 10f);
             objRB.MoveRotation(newRot);
             objRB.MovePosition(newPos);
         }
+    }
+
+    public void StatisEffectActivate()
+    {
+        FreezeObject();
+    }
+
+    public void StatisEffectDeactivate()
+    {
+        UnfreezeObject();
     }
 }
