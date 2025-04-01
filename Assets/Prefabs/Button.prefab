@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4567227867388474164}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1.6222514, y: 0.125, z: 2.027}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -203,6 +203,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: a29dd3d7a914b1d4d9e11f17ce9a787c, type: 2}
+  - {fileID: 2100000, guid: ede74eb79b9d0e94694f3cb677c03bb2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -257,9 +258,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53caba299ba1b4f46a2ff6fdb280d638, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  matStasis: {fileID: 2100000, guid: ede74eb79b9d0e94694f3cb677c03bb2, type: 2}
   activationMassThreshold: 0.6
   plateGroup: {fileID: 0}
   animator: {fileID: 1006556228799024872}
+  isFrozen: 0
+  isButtonPressed: 0
 --- !u!95 &1006556228799024872
 Animator:
   serializedVersion: 5
