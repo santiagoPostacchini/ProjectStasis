@@ -5,10 +5,10 @@ using UnityEngine;
 [RequireComponent(typeof(CollisionDetector))]
 public abstract class PhysicsObject : MonoBehaviour
 {
-    public Material matStasis;  // Reference to the stasis material
-    private string OutlineThicknessName = "_BorderThickness";  // Property name in shader
-    private MaterialPropertyBlock _mpb;  // Material Property Block for per-instance modification
-    private Renderer _renderer;  // Renderer for applying the property block
+    public Material matStasis;
+    private string OutlineThicknessName = "_BorderThickness";
+    private MaterialPropertyBlock _mpb;
+    private Renderer _renderer;
 
     public float collisionCheckDelay = 0.3f;
     [HideInInspector] public bool IsUnderHighPressure;

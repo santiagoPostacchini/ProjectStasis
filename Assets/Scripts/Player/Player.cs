@@ -168,22 +168,4 @@ public class Player : MonoBehaviour
     {
         _readyToJump = true;
     }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        //state = MovementStates.Sprinting;
-        var ButtonInteract = collision.gameObject.GetComponent<ButtonPrefab>();
-        if(ButtonInteract != null)
-        {
-            ButtonInteract.InteractionEnter(true);
-        }
-    }
-    private void OnCollisionExit(Collision collision)
-    {
-        var ButtonInteract = collision.gameObject.GetComponent<ButtonPrefab>();
-        if (ButtonInteract != null)
-        {
-            ButtonInteract.InteractionEnter(false);
-        }
-    }
 }

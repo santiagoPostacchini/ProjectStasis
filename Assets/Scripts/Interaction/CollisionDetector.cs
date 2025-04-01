@@ -17,11 +17,6 @@ public class CollisionDetector : MonoBehaviour
             IsHittingRB = false;
             IsHittingNOTRB = true;
         }
-        var ButtonInteract = hit.gameObject.GetComponent<ButtonPrefab>();
-        if (ButtonInteract != null)
-        {
-            ButtonInteract.InteractionEnter(true);
-        }
     }
 
     private void OnCollisionExit(Collision hit)
@@ -33,11 +28,6 @@ public class CollisionDetector : MonoBehaviour
         else
         {
             IsHittingNOTRB = false;
-        }
-        var ButtonInteract = hit.gameObject.GetComponent<ButtonPrefab>();
-        if (ButtonInteract != null)
-        {
-            ButtonInteract.InteractionEnter(false);
         }
     }
 }
