@@ -114,7 +114,9 @@ public class Player : MonoBehaviour
         }
         else
         {
-            state = MovementStates.Air;
+            if (_rb.velocity.y > 0.1f)
+                state = MovementStates.Air;
+            else state = MovementStates.Sprinting;
         }
 
         if (Input.GetKey(crouchKey))
@@ -165,5 +167,23 @@ public class Player : MonoBehaviour
     private void ResetJump()
     {
         _readyToJump = true;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        //state = MovementStates.Sprinting;
+        var ButtonInteract = collision.gameObject.GetComponent<ButtonPrefab>();
+        if(ButtonInteract != null)
+        {
+            ButtonInteract.InteractionEnter(true);
+        }
+    }
+    private void OnCollisionExit(Collision collision)
+    {
+        var ButtonInteract = collision.gameObject.GetComponent<ButtonPrefab>();
+        if (ButtonInteract != null)
+        {
+            ButtonInteract.InteractionEnter(false);
+        }
     }
 }

@@ -51,6 +51,7 @@ public class StasisGun : MonoBehaviour
             if (hitObject.TryGetComponent<IStasis>(out IStasis stasisComponent))
             {
                 ApplyStasisEffect(hitObject, stasisComponent);
+                Debug.Log("ASD");
             }
         }
     }

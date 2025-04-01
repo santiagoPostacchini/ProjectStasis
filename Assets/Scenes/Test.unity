@@ -778,6 +778,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6961200762295146853, guid: aa5db274d2174ae45920284397c6340a,
         type: 3}
+      propertyPath: _pickUpRange
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 6961200762295146853, guid: aa5db274d2174ae45920284397c6340a,
+        type: 3}
       propertyPath: _stasisRange
       value: 16
       objectReference: {fileID: 0}
