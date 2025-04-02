@@ -1,63 +1,69 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TemporalJumpWeapon : MonoBehaviour
 {
-    public Transform futurePosPlayer;
-    public Transform auxPosPlayer;
-    [SerializeField]private bool canUseTemporalJumpWeapon;
-    public bool iAmInTheFuture= true;
+    [SerializeField] private Transform _futureShadow;
+    [SerializeField] private Transform _pastShadow;
+    [SerializeField] private bool _inFuture = true;
+    private bool _canTeleport = true;
+    private bool _isTeleporting = false;
     private PlayerInteractor playerInteractor;
 
-    // Start is called before the first frame update
     void Start()
     {
-        canUseTemporalJumpWeapon = true;
-        playerInteractor = GetComponent<PlayerInteractor>();
+        playerInteractor = GetComponentInChildren<PlayerInteractor>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetKeyDown(KeyCode.T) && _canTeleport)
         {
-            if (!canUseTemporalJumpWeapon) return;
-            
-            if(playerInteractor != null)
-            {
-                if (playerInteractor._objectGrabbable != null)
-                {
-                    if (playerInteractor._objectGrabbable.TryGetComponent(out ObjectPast op))
-                    {
-                        playerInteractor._objectGrabbable.Drop();
-                        playerInteractor.ClearHands();
-                        
-                    }
-                    
-                }
-            }
+            CleanPastObject();
             StartCoroutine(TemporalJump());
         }
     }
+
+    void CleanPastObject()
+    {
+        if (playerInteractor?._objectGrabbable != null)
+        {
+            if (playerInteractor._objectGrabbable.GetComponent<ObjectUpdater>() != null)
+            {
+                playerInteractor._objectGrabbable.Drop();
+                playerInteractor.ClearHands();
+            }
+        }
+    }
+
     IEnumerator TemporalJump()
     {
-        canUseTemporalJumpWeapon = false;
-        yield return new WaitForSeconds(0.5f);
-        ShadowPlayer sP = futurePosPlayer.GetComponent<ShadowPlayer>();
-        if (sP != null)
+        _canTeleport = false;
+
+        ShadowPlayer futureSP = _futureShadow.GetComponent<ShadowPlayer>();
+        if (futureSP != null)
         {
-            sP.UpdateShadowPlayerPosition();
+            futureSP.UpdateShadowPlayerPosition();
         }
-        auxPosPlayer.position = transform.position;
-        transform.position = futurePosPlayer.position;
-        futurePosPlayer.position = auxPosPlayer.position;
+        ShadowPlayer pastSP = _pastShadow.GetComponent<ShadowPlayer>();
+        if (pastSP != null)
+        {
+            pastSP.UpdateShadowPlayerPosition();
+        }
 
-        iAmInTheFuture = !iAmInTheFuture;
+        if (_inFuture)
+        {
+            transform.position = _pastShadow.position;
+        }
+        else
+        {
+            transform.position = _futureShadow.position;
+        }
 
+        _inFuture = !_inFuture;
 
+        yield return new WaitForEndOfFrame();
 
-        canUseTemporalJumpWeapon = true;
-
+        _canTeleport = true;
     }
 }

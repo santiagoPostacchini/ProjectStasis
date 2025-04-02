@@ -15,7 +15,6 @@ public abstract class PhysicsObject : MonoBehaviour
     [HideInInspector] public bool _isFreezed;
     [SerializeField] private float _rigidbodyPressureThreshold;
     [SerializeField] private float _nonRigidbodyPressureThreshold;
-    public bool isFrozen = false;
 
     private float accumulatedImpulse = 0f;
     private float accumulationTime = 0f;
@@ -29,7 +28,7 @@ public abstract class PhysicsObject : MonoBehaviour
 
     private Vector3 _savedVelocity;
     private Vector3 _savedAngularVelocity;
-    private bool _wasKinematicBeforeFreeze;
+    private float _savedDrag;
 
     public abstract void Grab(Transform objGrabPointTransform);
     public abstract void Drop();
@@ -40,9 +39,9 @@ public abstract class PhysicsObject : MonoBehaviour
         objRB = GetComponent<Rigidbody>();
         collisionDetector = GetComponent<CollisionDetector>();
 
-        _renderer = GetComponent<Renderer>();  // Get Renderer reference
-        _mpb = new MaterialPropertyBlock();  // Create a new Material Property Block
-        SetOutlineThickness(1f);  // Initialize the default outline thickness
+        _renderer = GetComponent<Renderer>();
+        _mpb = new MaterialPropertyBlock();
+        SetOutlineThickness(1f);
     }
 
     private void OnCollisionStay(Collision collision)
@@ -58,11 +57,10 @@ public abstract class PhysicsObject : MonoBehaviour
         if (accumulationTime >= accumulationPeriod)
         {
             float averageImpulse = accumulatedImpulse / accumulationTime;
-
             float threshold = collisionDetector.IsHittingNOTRB ? _nonRigidbodyPressureThreshold : _rigidbodyPressureThreshold;
             if (averageImpulse > threshold)
             {
-                if (!isFrozen)
+                if (!_isFreezed)
                 {
                     IsUnderHighPressure = true;
                     Drop();
@@ -104,73 +102,65 @@ public abstract class PhysicsObject : MonoBehaviour
         _canCheckCollisions = true;
     }
 
-    // ------------------ STASIS MANAGEMENT ------------------
-
-    // Save Rigidbody state before freezing
     public void SaveRigidbodyState()
     {
         if (objRB != null)
         {
             _savedVelocity = objRB.velocity;
             _savedAngularVelocity = objRB.angularVelocity;
-            _wasKinematicBeforeFreeze = objRB.isKinematic;
+            _savedDrag = objRB.drag;
         }
     }
 
-    // Restore Rigidbody state after unfreezing
     public void RestoreRigidbodyState()
     {
         if (objRB != null)
         {
-            objRB.isKinematic = _wasKinematicBeforeFreeze;
-
-            // Only restore velocity and angular velocity if it was not kinematic before
-            if (!_wasKinematicBeforeFreeze)
-            {
-                objRB.velocity = _savedVelocity;
-                objRB.angularVelocity = _savedAngularVelocity;
-            }
-
-            objRB.WakeUp(); // Ensure physics resumes correctly
+            objRB.velocity = _savedVelocity;
+            objRB.angularVelocity = _savedAngularVelocity;
+            objRB.drag = _savedDrag;
+            objRB.WakeUp();
         }
     }
 
-    // Freeze the object and make it kinematic
     public void FreezeObject()
     {
-        if (!isFrozen)
+        if (!_isFreezed)
         {
-            SaveRigidbodyState(); // Save Rigidbody state before freezing
-            objRB.isKinematic = true;
-            objRB.Sleep(); // Prevent unnecessary physics calculations
-            isFrozen = true;
+            SaveRigidbodyState();
+            objRB.velocity = Vector3.zero;
+            objRB.angularVelocity = Vector3.zero;
+            objRB.useGravity = false;
+            _isFreezed = true;
 
-            SetOutlineThickness(1.05f);  // Increase outline thickness when frozen
+            SetOutlineThickness(1.05f);
         }
     }
 
-    // Unfreeze the object and restore previous state
     public void UnfreezeObject()
     {
-        if (isFrozen)
+        if (_isFreezed)
         {
-            RestoreRigidbodyState(); // Restore Rigidbody state after unfreezing
-            isFrozen = false;
-
-            SetOutlineThickness(1f);  // Reset outline thickness when unfrozen
+            RestoreRigidbodyState();
+            _isFreezed = false;
+            objRB.useGravity = true;
+            SetOutlineThickness(1f);
         }
     }
 
-    // ------------------ OUTLINE MANAGEMENT ------------------
-
-    // Apply outline thickness using MaterialPropertyBlock
     private void SetOutlineThickness(float thickness)
     {
         if (_renderer != null && _mpb != null)
         {
-            _renderer.GetPropertyBlock(_mpb);  // Get the current property block
-            _mpb.SetFloat(OutlineThicknessName, thickness);  // Set the thickness value
-            _renderer.SetPropertyBlock(_mpb);  // Apply the updated property block
+            _renderer.GetPropertyBlock(_mpb);
+            _mpb.SetFloat(OutlineThicknessName, thickness);
+            _renderer.SetPropertyBlock(_mpb);
         }
     }
+
+    public bool IsGrabbed
+    {
+        get { return objGrabPointTransform != null; }
+    }
+
 }
