@@ -8,10 +8,13 @@ public class TemporalJumpWeapon : MonoBehaviour
     public Transform auxPosPlayer;
     [SerializeField]private bool canUseTemporalJumpWeapon;
     public bool iAmInTheFuture= true;
+    private PlayerInteractor playerInteractor;
+
     // Start is called before the first frame update
     void Start()
     {
         canUseTemporalJumpWeapon = true;
+        playerInteractor = GetComponent<PlayerInteractor>();
     }
 
     // Update is called once per frame
@@ -20,6 +23,20 @@ public class TemporalJumpWeapon : MonoBehaviour
         if (Input.GetMouseButtonDown(1))
         {
             if (!canUseTemporalJumpWeapon) return;
+            
+            if(playerInteractor != null)
+            {
+                if (playerInteractor._objectGrabbable != null)
+                {
+                    if (playerInteractor._objectGrabbable.TryGetComponent(out ObjectPast op))
+                    {
+                        playerInteractor._objectGrabbable.Drop();
+                        playerInteractor.ClearHands();
+                        
+                    }
+                    
+                }
+            }
             StartCoroutine(TemporalJump());
         }
     }

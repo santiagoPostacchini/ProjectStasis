@@ -9,7 +9,7 @@ public class PlayerInteractor : MonoBehaviour
     [SerializeField] private Transform _playerCameraTransform;
     [SerializeField] private Transform _objectGrabPointTransform;
 
-    private PhysicsObject _objectGrabbable;
+    [HideInInspector] public PhysicsObject _objectGrabbable;
     private bool _isInteractableInView = false;
 
     void Update()
@@ -71,7 +71,7 @@ public class PlayerInteractor : MonoBehaviour
         }
     }
 
-    void ClearHands()
+    public void ClearHands()
     {
         _objectGrabbable = null;
     }

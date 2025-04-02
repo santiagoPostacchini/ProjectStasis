@@ -2,10 +2,8 @@ using UnityEngine;
 
 public class PhysicsBox : PhysicsObject, IStasis
 {
-    [SerializeField]private bool canDrop;
     public override void Grab(Transform objGrabPointTransform)
     {
-        if (!canDrop) return;
         StartCoroutine(EnableCollisionCheckAfterDelay(collisionCheckDelay));
         this.objGrabPointTransform = objGrabPointTransform;
         objRB.useGravity = false;
@@ -14,7 +12,6 @@ public class PhysicsBox : PhysicsObject, IStasis
 
     public override void Drop()
     {
-        if (!canDrop) return;
         this.objGrabPointTransform = null;
         objRB.useGravity = true;
         objRB.drag = 1;
@@ -22,7 +19,6 @@ public class PhysicsBox : PhysicsObject, IStasis
 
     public override void Throw(Transform objGrabPointTransform, float force)
     {
-        if (!canDrop) return;
         Drop();
         Vector3 throwVelocity = objGrabPointTransform.forward * (force / objRB.mass);
         objRB.AddForce(throwVelocity);
