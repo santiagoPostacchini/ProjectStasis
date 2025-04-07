@@ -7,12 +7,12 @@ public class UIButtonHoverHandler : MonoBehaviour, IPointerEnterHandler, IPointe
 {
     public TextMeshProUGUI label;
     public Image background;
+    public Sprite backgroundOnHover;
+    public Sprite backgroundDefault;
 
     [Header("Color Settings")]
     public Color normalTextColor = Color.white;
     public Color hoverTextColor = Color.yellow;
-    public Color normalBackgroundColor = Color.white;
-    public Color hoverBackgroundColor = Color.gray;
 
     [Header("Animation Settings")]
     public float hoverScale = 1.05f;
@@ -23,6 +23,7 @@ public class UIButtonHoverHandler : MonoBehaviour, IPointerEnterHandler, IPointe
     private Vector3 targetScale;
     private bool isHovered = false;
     private bool isPressed = false;
+    public bool animate = true;
 
     void Start()
     {
@@ -38,13 +39,16 @@ public class UIButtonHoverHandler : MonoBehaviour, IPointerEnterHandler, IPointe
     public void OnPointerEnter(PointerEventData eventData)
     {
         isHovered = true;
-        if (!isPressed)
-            targetScale = originalScale * hoverScale;
-
+        if(animate) 
+        {
+            if (!isPressed)
+                targetScale = originalScale * hoverScale;
+        }
+        
         if (label != null)
             label.color = hoverTextColor;
         if (background != null)
-            background.color = hoverBackgroundColor;
+            background.sprite = backgroundOnHover;
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -56,18 +60,21 @@ public class UIButtonHoverHandler : MonoBehaviour, IPointerEnterHandler, IPointe
         if (label != null)
             label.color = normalTextColor;
         if (background != null)
-            background.color = normalBackgroundColor;
+            background.sprite = backgroundDefault;
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
         isPressed = true;
-        targetScale = originalScale * pressedScale;
+        if (animate)
+            targetScale = originalScale * pressedScale;
+        
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
         isPressed = false;
-        targetScale = isHovered ? originalScale * hoverScale : originalScale;
+        if (animate)
+            targetScale = isHovered ? originalScale * hoverScale : originalScale;
     }
 }
