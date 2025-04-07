@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
 
@@ -6,15 +6,18 @@ public class SceneController : MonoBehaviour
 {
     public static SceneController Instance;
 
+    [Header("Optional Glitch Transition")]
+    public SceneGlitchTransition glitchTransition; // Asignar desde el Inspector
+
     private string lastScene;
 
     void Awake()
     {
-        // Singleton para mantener una �nica instancia
+        // Singleton básico
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); // persiste entre escenas
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -48,23 +51,32 @@ public class SceneController : MonoBehaviour
     public void LoadLastScene()
     {
         if (!string.IsNullOrEmpty(lastScene))
-        {
             SceneManager.LoadScene(lastScene);
-        }
-        else
-        {
-            Debug.LogWarning("No previous scene stored.");
-        }
     }
 
     public void LoadMenuScene()
     {
-        LoadScene("MainMenu"); // asegurate de tener esa escena agregada al Build Settings
+        LoadScene("MainMenu");
     }
 
     public void QuitGame()
     {
         Debug.Log("Exiting game...");
         Application.Quit();
+    }
+
+    // 🔥 NUEVO: Transición con glitch sin usar GameObject.Find
+    public void LoadSceneWithGlitch(string sceneName)
+    {
+        if (glitchTransition != null)
+        {
+            glitchTransition.targetScene = sceneName;
+            glitchTransition.TriggerTransition();
+        }
+        else
+        {
+            Debug.LogWarning("No glitch transition assigned. Loading scene directly.");
+            LoadScene(sceneName);
+        }
     }
 }
