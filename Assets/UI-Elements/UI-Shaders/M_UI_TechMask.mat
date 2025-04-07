@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: M_UI_TechMask
-  m_Shader: {fileID: 4800000, guid: a0fd11d840f6ae443a83835e25bfc33d, type: 3}
+  m_Shader: {fileID: 4800000, guid: 7607b08fa40f5e24780121b83ed3552b, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -23,6 +23,18 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _BaseMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _CrackTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _GrungeTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 2800000, guid: f8fe5c6fdb4fb894ea39be46f2ebfedc, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -33,9 +45,11 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _Opacity: 1
     - _Speed: 1
     - _Thickness: 0.1
     m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _LineColor: {r: 0, g: 1, b: 1, a: 1}
     - _MainColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
