@@ -7,9 +7,9 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_UI_TechGradient
-  m_Shader: {fileID: 4800000, guid: a0fd11d840f6ae443a83835e25bfc33d, type: 3}
-  m_Parent: {fileID: 2100000, guid: fae9ef19444a8b642a43b27076bf99d6, type: 2}
+  m_Name: M_TechGradient
+  m_Shader: {fileID: 4800000, guid: 367649ff280e83c4aabb70c79e0e6adc, type: 3}
+  m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -24,18 +24,19 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 105f68696e35b994da3dac447845397b, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskTex:
-        m_Texture: {fileID: 2800000, guid: 105f68696e35b994da3dac447845397b, type: 3}
+        m_Texture: {fileID: 2800000, guid: ce827f5f51acbb1498a0120d0a454da9, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _EffectActive: 0
     - _Speed: 0.5
-    - _Thickness: 0.05
+    - _Thickness: 0.005
     m_Colors:
-    - _LineColor: {r: 0.6084906, g: 0.9442297, b: 1, a: 1}
-    - _MainColor: {r: 0.08548417, g: 0.09828273, b: 0.16037738, a: 1}
+    - _LineColor: {r: 1, g: 1, b: 1, a: 1}
+    - _MainColor: {r: 0.0980391, g: 0.0980391, b: 0.0980391, a: 0.8627451}
   m_BuildTextureStacks: []
