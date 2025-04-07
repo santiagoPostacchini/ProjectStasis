@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
-using System.Collections;
 
 public class UIButtonHoverHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
@@ -16,11 +15,13 @@ public class UIButtonHoverHandler : MonoBehaviour, IPointerEnterHandler, IPointe
     public Color hoverBackgroundColor = Color.gray;
 
     [Header("Animation Settings")]
+    public float hoverScale = 1.05f;
     public float pressedScale = 0.9f;
-    public float animationSpeed = 10f; // velocidad de interpolación
+    public float animationSpeed = 10f;
 
     private Vector3 originalScale;
     private Vector3 targetScale;
+    private bool isHovered = false;
     private bool isPressed = false;
 
     void Start()
@@ -31,12 +32,15 @@ public class UIButtonHoverHandler : MonoBehaviour, IPointerEnterHandler, IPointe
 
     void Update()
     {
-        // Interpolación suave tipo UI técnica
         transform.localScale = Vector3.Lerp(transform.localScale, targetScale, Time.unscaledDeltaTime * animationSpeed);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        isHovered = true;
+        if (!isPressed)
+            targetScale = originalScale * hoverScale;
+
         if (label != null)
             label.color = hoverTextColor;
         if (background != null)
@@ -45,6 +49,10 @@ public class UIButtonHoverHandler : MonoBehaviour, IPointerEnterHandler, IPointe
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        isHovered = false;
+        isPressed = false;
+        targetScale = originalScale;
+
         if (label != null)
             label.color = normalTextColor;
         if (background != null)
@@ -60,6 +68,6 @@ public class UIButtonHoverHandler : MonoBehaviour, IPointerEnterHandler, IPointe
     public void OnPointerUp(PointerEventData eventData)
     {
         isPressed = false;
-        targetScale = originalScale;
+        targetScale = isHovered ? originalScale * hoverScale : originalScale;
     }
 }
