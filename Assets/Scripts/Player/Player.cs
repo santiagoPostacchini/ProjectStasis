@@ -3,7 +3,8 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class Player : MonoBehaviour
 {
-    [Header("<color=orange>Movement values</color>")]
+    #region Movement Variables
+    [Header("<color=orange>Movement Values</color>")]
     [Tooltip("Modifies how fast the player will move.")]
     [SerializeField] private float _sprintSpeed = 5f;
     [SerializeField] private float _walkSpeed = 3f;
@@ -18,6 +19,7 @@ public class Player : MonoBehaviour
     public KeyCode jumpKey = KeyCode.Space;
     public KeyCode crouchKey = KeyCode.LeftControl;
     public KeyCode walkKey = KeyCode.LeftShift;
+    // Teleport key is handled by TeleportJumpWeapon, so it is not used here.
 
     [Header("Ground Check")]
     public LayerMask groundLayer;
@@ -36,23 +38,24 @@ public class Player : MonoBehaviour
 
     private float crouchFatigue = 0f;
     private Vector3 targetScale;
+    #endregion
 
-    bool _grounded, _isMoving = false;
-    public MovementStates state;
-
-    public enum MovementStates
-    {
-        Walking,
-        Sprinting,
-        Air,
-        Crouching
-    }
-
+    #region Movement and State Components
     public Transform orientation;
+    public enum MovementStates { Walking, Sprinting, Air, Crouching }
+    public MovementStates state;
     private float _xAxis = 0f, _zAxis = 0f;
-    private Vector3 _dir = new Vector3();
+    private Vector3 _dir = Vector3.zero;
     private Rigidbody _rb;
+    private bool _grounded, _isMoving = false;
     public static Player Instance;
+    #endregion
+
+    // (Assuming PlayerInteractor is used for picking up objects.)
+    private PlayerInteractor playerInteractor;
+
+    // Reference to the TeleportJumpWeapon component.
+    private TeleportJumpWeapon teleportWeapon;
 
     private void Awake()
     {
@@ -64,6 +67,18 @@ public class Player : MonoBehaviour
         targetScale = transform.localScale;
     }
 
+    private void Start()
+    {
+        playerInteractor = GetComponentInChildren<PlayerInteractor>();
+
+        // Get the TeleportJumpWeapon component from this GameObject.
+        teleportWeapon = GetComponent<TeleportJumpWeapon>();
+        if (teleportWeapon == null)
+        {
+            Debug.LogWarning("Player: TeleportJumpWeapon component not found on the GameObject.");
+        }
+    }
+
     private void Update()
     {
         _grounded = Physics.Raycast(transform.position, Vector3.down, _height * 0.5f + 0.2f, groundLayer);
@@ -72,8 +87,14 @@ public class Player : MonoBehaviour
         StateHandler();
 
         transform.localScale = Vector3.Lerp(transform.localScale, targetScale, crouchLerpSpeed * Time.deltaTime);
-
         _rb.drag = _grounded ? _groundDrag : 0f;
+
+        // Handle teleport input.
+        // When the T key is pressed, delegate to the TeleportJumpWeapon component.
+        if (Input.GetKeyDown(KeyCode.T) && teleportWeapon != null)
+        {
+            teleportWeapon.ActivateTeleport();
+        }
     }
 
     private void FixedUpdate()
@@ -85,6 +106,7 @@ public class Player : MonoBehaviour
         }
     }
 
+    #region Movement Methods
     void Controller()
     {
         _xAxis = Input.GetAxis("Horizontal");
@@ -114,9 +136,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            if (_rb.velocity.y > 0.1f)
-                state = MovementStates.Air;
-            else state = MovementStates.Sprinting;
+            state = _rb.velocity.y > 0.1f ? MovementStates.Air : MovementStates.Sprinting;
         }
 
         if (Input.GetKey(crouchKey))
@@ -124,11 +144,8 @@ public class Player : MonoBehaviour
             state = MovementStates.Crouching;
             crouchFatigue += Time.deltaTime * crouchFatigueIncreaseRate;
             crouchFatigue = Mathf.Clamp(crouchFatigue, 0f, maxCrouchFatigue);
-
             float extraCrouch = Mathf.Lerp(0f, extraCrouchAmount, crouchFatigue / maxCrouchFatigue);
-
             targetScale = new Vector3(transform.localScale.x, _crouchYScale - extraCrouch, transform.localScale.z);
-
             _movSpeed = _crouchSpeed;
         }
         else
@@ -168,4 +185,5 @@ public class Player : MonoBehaviour
     {
         _readyToJump = true;
     }
+    #endregion
 }

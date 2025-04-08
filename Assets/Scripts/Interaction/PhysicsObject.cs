@@ -1,40 +1,39 @@
-using System.Collections;
 using UnityEngine;
+using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(CollisionDetector))]
 public abstract class PhysicsObject : MonoBehaviour
 {
+    // Common physics components
+    protected Rigidbody objRB;
+    protected CollisionDetector collisionDetector;
+    protected Transform objGrabPointTransform;
+
+    // For outline visual effects
     public Material matStasis;
     private string OutlineThicknessName = "_BorderThickness";
     private MaterialPropertyBlock _mpb;
     private Renderer _renderer;
 
+    // Configuration for collision impulse handling
     public float collisionCheckDelay = 0.3f;
     [HideInInspector] public bool IsUnderHighPressure;
-    [HideInInspector] public bool _isFreezed;
-    [SerializeField] private float _rigidbodyPressureThreshold;
-    [SerializeField] private float _nonRigidbodyPressureThreshold;
+    [SerializeField] private float _rigidbodyPressureThreshold = 50f;
+    [SerializeField] private float _nonRigidbodyPressureThreshold = 30f;
 
+    // Variables for accumulating collision impulse
     private float accumulatedImpulse = 0f;
     private float accumulationTime = 0f;
     private float accumulationPeriod = 0.1f;
+    protected bool _canCheckCollisions = false;
 
-    private bool _canCheckCollisions = false;
-
-    protected CollisionDetector collisionDetector;
-    protected Rigidbody objRB;
-    protected Transform objGrabPointTransform;
-
+    // Variables for saving Rigidbody state (used by stasis objects)
     private Vector3 _savedVelocity;
     private Vector3 _savedAngularVelocity;
     private float _savedDrag;
 
-    public abstract void Grab(Transform objGrabPointTransform);
-    public abstract void Drop();
-    public abstract void Throw(Transform objGrabPointTransform, float force);
-
-    private void Start()
+    protected virtual void Start()
     {
         objRB = GetComponent<Rigidbody>();
         collisionDetector = GetComponent<CollisionDetector>();
@@ -42,6 +41,44 @@ public abstract class PhysicsObject : MonoBehaviour
         _renderer = GetComponent<Renderer>();
         _mpb = new MaterialPropertyBlock();
         SetOutlineThickness(1f);
+
+        StartCoroutine(EnableCollisionCheckAfterDelay(collisionCheckDelay));
+    }
+
+    // Grabs the object and sets up physics for a smooth movement.
+    public virtual void Grab(Transform grabPoint)
+    {
+        objGrabPointTransform = grabPoint;
+        objRB.useGravity = false;
+        objRB.drag = 10;
+    }
+
+    // Drops the object, reverting physics settings.
+    public virtual void Drop()
+    {
+        objGrabPointTransform = null;
+        objRB.useGravity = true;
+        objRB.drag = 1;
+    }
+
+    // Throws the object in a given direction.
+    public virtual void Throw(Transform grabPoint, float force)
+    {
+        Drop();
+        Vector3 throwVelocity = grabPoint.forward * (force / objRB.mass);
+        objRB.AddForce(throwVelocity);
+    }
+
+    // Handles movement of the object when grabbed.
+    protected virtual void FixedUpdate()
+    {
+        if (objGrabPointTransform != null)
+        {
+            Vector3 newPos = Vector3.Lerp(transform.position, objGrabPointTransform.position, Time.fixedDeltaTime * 10f);
+            Quaternion newRot = Quaternion.Lerp(transform.rotation, objGrabPointTransform.rotation, Time.fixedDeltaTime * 10f);
+            objRB.MovePosition(newPos);
+            objRB.MoveRotation(newRot);
+        }
     }
 
     private void OnCollisionStay(Collision collision)
@@ -50,7 +87,6 @@ public abstract class PhysicsObject : MonoBehaviour
             return;
 
         float currentImpulseForce = collision.impulse.magnitude / Time.fixedDeltaTime;
-
         accumulatedImpulse += currentImpulseForce;
         accumulationTime += Time.fixedDeltaTime;
 
@@ -60,7 +96,8 @@ public abstract class PhysicsObject : MonoBehaviour
             float threshold = collisionDetector.IsHittingNOTRB ? _nonRigidbodyPressureThreshold : _rigidbodyPressureThreshold;
             if (averageImpulse > threshold)
             {
-                if (!_isFreezed)
+                // Optionally, you may wish to check if the object is currently grabbed.
+                if (!IsGrabbed)
                 {
                     IsUnderHighPressure = true;
                     Drop();
@@ -87,7 +124,6 @@ public abstract class PhysicsObject : MonoBehaviour
     protected IEnumerator ResetForcesAfterDrop()
     {
         yield return new WaitForFixedUpdate();
-
         if (objRB != null)
         {
             objRB.velocity = Vector3.zero;
@@ -102,6 +138,7 @@ public abstract class PhysicsObject : MonoBehaviour
         _canCheckCollisions = true;
     }
 
+    // Saves the current Rigidbody state.
     public void SaveRigidbodyState()
     {
         if (objRB != null)
@@ -112,6 +149,7 @@ public abstract class PhysicsObject : MonoBehaviour
         }
     }
 
+    // Restores the Rigidbody state saved earlier.
     public void RestoreRigidbodyState()
     {
         if (objRB != null)
@@ -123,32 +161,8 @@ public abstract class PhysicsObject : MonoBehaviour
         }
     }
 
-    public void FreezeObject()
-    {
-        if (!_isFreezed)
-        {
-            SaveRigidbodyState();
-            objRB.velocity = Vector3.zero;
-            objRB.angularVelocity = Vector3.zero;
-            objRB.useGravity = false;
-            _isFreezed = true;
-
-            SetOutlineThickness(1.05f);
-        }
-    }
-
-    public void UnfreezeObject()
-    {
-        if (_isFreezed)
-        {
-            RestoreRigidbodyState();
-            _isFreezed = false;
-            objRB.useGravity = true;
-            SetOutlineThickness(1f);
-        }
-    }
-
-    private void SetOutlineThickness(float thickness)
+    // Updates the outline effect (visual feedback) on the object.
+    protected void SetOutlineThickness(float thickness)
     {
         if (_renderer != null && _mpb != null)
         {
@@ -158,9 +172,9 @@ public abstract class PhysicsObject : MonoBehaviour
         }
     }
 
+    // Indicates whether the object is currently grabbed.
     public bool IsGrabbed
     {
         get { return objGrabPointTransform != null; }
     }
-
 }
