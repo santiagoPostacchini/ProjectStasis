@@ -81,7 +81,8 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        _grounded = Physics.Raycast(transform.position, Vector3.down, _height * 0.5f + 0.2f, groundLayer);
+        //_grounded = Physics.Raycast(transform.position, Vector3.down, _height * 0.5f + 0.2f, groundLayer);
+        _grounded = Physics.SphereCast(transform.position, 0.5f, Vector3.down, out RaycastHit hit, _height * 0.5f + 0.2f, groundLayer);
 
         Controller();
         StateHandler();

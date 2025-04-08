@@ -38,7 +38,17 @@ public class TeleportJumpWeapon : MonoBehaviour
     private IEnumerator DoTeleport()
     {
         canTeleport = false;
+        PhysicsObject physObj = GetComponent<PhysicsObject>();
+        if (physObj != null && physObj.IsGrabbed)
+        {
+            physObj.Drop();
 
+            PlayerInteractor interactor = physObj.GetComponentInParent<PlayerInteractor>();
+            if (interactor != null)
+            {
+                interactor.ClearHands();
+            }
+        }
         // (Optional) Drop any held object if needed.
         PlayerInteractor playerInteractor = GetComponentInChildren<PlayerInteractor>();
         if (playerInteractor?._objectGrabbable != null)

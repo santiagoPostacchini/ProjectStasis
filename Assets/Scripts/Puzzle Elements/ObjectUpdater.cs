@@ -31,17 +31,7 @@ public class ObjectUpdater : MonoBehaviour
 
     public void UpdateObjectFuture()
     {
-        PhysicsObject physObj = GetComponent<PhysicsObject>();
-        if (physObj != null && physObj.IsGrabbed)
-        {
-            physObj.Drop();
-
-            PlayerInteractor interactor = physObj.GetComponentInParent<PlayerInteractor>();
-            if (interactor != null)
-            {
-                interactor.ClearHands();
-            }
-        }
+        
 
         _objectFuture.position = new Vector3(transform.position.x,
                                                transform.position.y + _heightDifference,
