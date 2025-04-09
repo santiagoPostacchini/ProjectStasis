@@ -1,19 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+[RequireComponent(typeof(BoxCollider))]
+[RequireComponent(typeof(Rigidbody))]
 public class MovingPlatform : MonoBehaviour
 {
     [SerializeField] private Transform pointA;
     [SerializeField] private Transform pointB;
     [SerializeField] private float speed = 3f;
-    public bool canMove= false;
+    [HideInInspector] public bool canMove;
 
     private Rigidbody rb;
     private Vector3 target;
 
     private void Start()
     {
+        canMove = true;
         rb = GetComponent<Rigidbody>();
         rb.isKinematic = true; 
         target = pointB.position;

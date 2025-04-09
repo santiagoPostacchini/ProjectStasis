@@ -44,7 +44,7 @@ public class Player : MonoBehaviour
     public Transform orientation;
     public enum MovementStates { Walking, Sprinting, Air, Crouching }
     public MovementStates state;
-    private float _xAxis = 0f, _zAxis = 0f;
+    [SerializeField]private float _xAxis = 0f, _zAxis = 0f;
     private Vector3 _dir = Vector3.zero;
     private Rigidbody _rb;
     private bool _grounded, _isMoving = false;
@@ -97,7 +97,6 @@ public class Player : MonoBehaviour
             teleportWeapon.ActivateTeleport();
         }
     }
-
     private void FixedUpdate()
     {
         if (_isMoving)
@@ -122,9 +121,25 @@ public class Player : MonoBehaviour
             ResetJump();
         }
     }
-
     void StateHandler()
     {
+        if (Input.GetKey(crouchKey))
+        {
+            state = MovementStates.Crouching;
+            crouchFatigue += Time.deltaTime * crouchFatigueIncreaseRate;
+            crouchFatigue = Mathf.Clamp(crouchFatigue, 0f, maxCrouchFatigue);
+            float extraCrouch = Mathf.Lerp(0f, extraCrouchAmount, crouchFatigue / maxCrouchFatigue);
+            targetScale = new Vector3(transform.localScale.x, _crouchYScale - extraCrouch, transform.localScale.z);
+            _movSpeed = _crouchSpeed;
+            return; // <-- IMPORTANTE: evita que se sobreescriba el estado después
+        }
+        else
+        {
+            crouchFatigue -= Time.deltaTime * crouchFatigueRecoveryRate;
+            crouchFatigue = Mathf.Max(crouchFatigue, 0f);
+            targetScale = new Vector3(transform.localScale.x, _startYScale, transform.localScale.z);
+        }
+
         if (_grounded && Input.GetKey(walkKey))
         {
             state = MovementStates.Walking;
@@ -139,23 +154,40 @@ public class Player : MonoBehaviour
         {
             state = _rb.velocity.y > 0.1f ? MovementStates.Air : MovementStates.Sprinting;
         }
-
-        if (Input.GetKey(crouchKey))
-        {
-            state = MovementStates.Crouching;
-            crouchFatigue += Time.deltaTime * crouchFatigueIncreaseRate;
-            crouchFatigue = Mathf.Clamp(crouchFatigue, 0f, maxCrouchFatigue);
-            float extraCrouch = Mathf.Lerp(0f, extraCrouchAmount, crouchFatigue / maxCrouchFatigue);
-            targetScale = new Vector3(transform.localScale.x, _crouchYScale - extraCrouch, transform.localScale.z);
-            _movSpeed = _crouchSpeed;
-        }
-        else
-        {
-            crouchFatigue -= Time.deltaTime * crouchFatigueRecoveryRate;
-            crouchFatigue = Mathf.Max(crouchFatigue, 0f);
-            targetScale = new Vector3(transform.localScale.x, _startYScale, transform.localScale.z);
-        }
     }
+    //void StateHandler()
+    //{
+    //    if (_grounded && Input.GetKey(walkKey))
+    //    {
+    //        state = MovementStates.Walking;
+    //        _movSpeed = _walkSpeed;
+    //    }
+    //    else if (_grounded)
+    //    {
+    //        state = MovementStates.Sprinting;
+    //        _movSpeed = _sprintSpeed;
+    //    }
+    //    else
+    //    {
+    //        state = _rb.velocity.y > 0.1f ? MovementStates.Air : MovementStates.Sprinting;
+    //    }
+
+    //    if (Input.GetKey(crouchKey))
+    //    {
+    //        state = MovementStates.Crouching;
+    //        crouchFatigue += Time.deltaTime * crouchFatigueIncreaseRate;
+    //        crouchFatigue = Mathf.Clamp(crouchFatigue, 0f, maxCrouchFatigue);
+    //        float extraCrouch = Mathf.Lerp(0f, extraCrouchAmount, crouchFatigue / maxCrouchFatigue);
+    //        targetScale = new Vector3(transform.localScale.x, _crouchYScale - extraCrouch, transform.localScale.z);
+    //        _movSpeed = _crouchSpeed;
+    //    }
+    //    else
+    //    {
+    //        crouchFatigue -= Time.deltaTime * crouchFatigueRecoveryRate;
+    //        crouchFatigue = Mathf.Max(crouchFatigue, 0f);
+    //        targetScale = new Vector3(transform.localScale.x, _startYScale, transform.localScale.z);
+    //    }
+    //}
 
     private void SpeedControl()
     {

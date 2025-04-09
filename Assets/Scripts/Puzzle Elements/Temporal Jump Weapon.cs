@@ -20,7 +20,7 @@ public class TeleportJumpWeapon : MonoBehaviour
 
     // When true, we assume the player is on the past level and wants to teleport to the future level.
     // When false, the reverse applies.
-    [SerializeField] private bool teleportToFuture = true;
+    public bool teleportToFuture = true;
     private bool canTeleport = true;
 
     /// <summary>
@@ -64,6 +64,7 @@ public class TeleportJumpWeapon : MonoBehaviour
         // Determine the origin and destination anchors.
         // When teleportToFuture is true, assume the player is on the past level:
         // origin = pastTeleportAnchor, destination = futureTeleportAnchor.
+        
         Transform originAnchor = teleportToFuture ? pastTeleportAnchor : futureTeleportAnchor;
         Transform destinationAnchor = teleportToFuture ? futureTeleportAnchor : pastTeleportAnchor;
 
@@ -80,7 +81,9 @@ public class TeleportJumpWeapon : MonoBehaviour
             player.transform.position.x - originAnchor.position.x,
             0f,
             player.transform.position.z - originAnchor.position.z);
+       
 
+        float verticalOffsetY = teleportToFuture ? 50f : -50f;
         // If the horizontal offset is too small, use a fallback offset along the player's forward direction.
         if (horizontalOffset.magnitude < minOffsetThreshold)
         {
@@ -108,7 +111,7 @@ public class TeleportJumpWeapon : MonoBehaviour
         // we add the player's current vertical offset to the destination anchor's Y.
         Vector3 destination = new Vector3(
             destinationAnchor.position.x + horizontalOffset.x,
-            destinationAnchor.position.y + playerOffsetAboveFloor,
+            player.transform.position.y + verticalOffsetY,
             destinationAnchor.position.z + horizontalOffset.z);
 
         // Teleport the player.
