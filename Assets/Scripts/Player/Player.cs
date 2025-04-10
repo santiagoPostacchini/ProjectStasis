@@ -1,222 +1,262 @@
+using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
 public class Player : MonoBehaviour
 {
-    #region Movement Variables
-    [Header("<color=orange>Movement Values</color>")]
-    [Tooltip("Modifies how fast the player will move.")]
-    [SerializeField] private float _sprintSpeed = 5f;
-    [SerializeField] private float _walkSpeed = 3f;
-    [SerializeField] private float _jumpForce = 5f;
-    [SerializeField] private float _height = 2f;
-    [SerializeField] private float _airMultiplier = 0.5f;
-    [SerializeField] private float _groundDrag = 5f;
-    private float _movSpeed;
-    private bool _readyToJump = true;
+    [Header("Movement")]
+    private float moveSpeed;
+    [SerializeField] private float walkSpeed;
+    [SerializeField] private float sprintSpeed;
+    [SerializeField] private float groundDrag;
+    [SerializeField] private float airDrag;
 
-    [Header("Keybinds")]
-    public KeyCode jumpKey = KeyCode.Space;
-    public KeyCode crouchKey = KeyCode.LeftControl;
-    public KeyCode walkKey = KeyCode.LeftShift;
-    // Teleport key is handled by TeleportJumpWeapon, so it is not used here.
-
-    [Header("Ground Check")]
-    public LayerMask groundLayer;
+    [Header("Jumping")]
+    [SerializeField] private float jumpForce;
+    [SerializeField] private float jumpCooldown;
+    [SerializeField] private float airMultiplier;
+    private bool readyToJump;
 
     [Header("Crouching")]
-    [SerializeField] private float _crouchSpeed = 2f;
-    [SerializeField] private float _crouchYScale = 0.5f;
-    [SerializeField] private float _startYScale = 1f;
+    [SerializeField] private float crouchSpeed;
+    [SerializeField] private float crouchYScale;
+    private float startYScale;
+    [SerializeField] private float transitionDuration;
 
-    [Header("Crouch Fatigue")]
-    [SerializeField] private float crouchFatigueIncreaseRate = 1f;
-    [SerializeField] private float crouchFatigueRecoveryRate = 0.5f;
-    [SerializeField] private float maxCrouchFatigue = 3f;
-    [SerializeField] private float extraCrouchAmount = 0.2f;
-    [SerializeField] private float crouchLerpSpeed = 5f;
+    [Header("Keybinds")]
+    [SerializeField] private KeyCode jumpKey = KeyCode.Space;
+    [SerializeField] private KeyCode walkKey = KeyCode.LeftShift;
+    [SerializeField] private KeyCode crouchKey = KeyCode.LeftControl;
 
-    private float crouchFatigue = 0f;
-    private Vector3 targetScale;
-    #endregion
+    [Header("Ground Check")]
+    private float playerHeight;
+    public LayerMask whatIsGround;
+    private bool grounded;
 
-    #region Movement and State Components
-    public Transform orientation;
-    public enum MovementStates { Walking, Sprinting, Air, Crouching }
-    public MovementStates state;
-    [SerializeField]private float _xAxis = 0f, _zAxis = 0f;
-    private Vector3 _dir = Vector3.zero;
-    private Rigidbody _rb;
-    private bool _grounded, _isMoving = false;
-    public static Player Instance;
-    #endregion
+    [Header("Slope Handling")]
+    [SerializeField] private float maxSlopeAngle;
+    private RaycastHit slopeHit;
+    private bool exitingSlope;
 
-    // (Assuming PlayerInteractor is used for picking up objects.)
-    private PlayerInteractor playerInteractor;
+    [SerializeField] private Transform orientation;
 
-    // Reference to the TeleportJumpWeapon component.
-    private TeleportJumpWeapon teleportWeapon;
+    [SerializeField] private CapsuleCollider body;
 
-    private void Awake()
+    float horizontalInput;
+    float verticalInput;
+
+    Vector3 moveDirection;
+
+    Rigidbody rb;
+    Coroutine currentTransition;
+
+    TeleportJumpWeapon teleportWeapon;
+    public PlayerInteractor playerInteractor;
+
+
+    public MovementState state;
+    public enum MovementState
     {
-        Instance = this;
-        _rb = GetComponent<Rigidbody>();
-        _rb.angularDrag = 1f;
-        _rb.constraints = RigidbodyConstraints.FreezeRotation;
-        _startYScale = transform.localScale.y;
-        targetScale = transform.localScale;
+        walking,
+        sprinting,
+        crouching,
+        air
     }
 
     private void Start()
     {
-        playerInteractor = GetComponentInChildren<PlayerInteractor>();
+        rb = GetComponent<Rigidbody>();
+        rb.freezeRotation = true;
+        
+        readyToJump = true;
 
-        // Get the TeleportJumpWeapon component from this GameObject.
+        startYScale = transform.localScale.y;
+
         teleportWeapon = GetComponent<TeleportJumpWeapon>();
-        if (teleportWeapon == null)
-        {
-            Debug.LogWarning("Player: TeleportJumpWeapon component not found on the GameObject.");
-        }
+
+        playerHeight = body.height;
     }
 
     private void Update()
     {
-        //_grounded = Physics.Raycast(transform.position, Vector3.down, _height * 0.5f + 0.2f, groundLayer);
-        _grounded = Physics.SphereCast(transform.position, 0.5f, Vector3.down, out RaycastHit hit, _height * 0.5f + 0.2f, groundLayer);
+        // ground check
+        //grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
+        grounded = Physics.SphereCast(transform.position, 0.5f, Vector3.down, out RaycastHit hit, playerHeight * 0.5f + 0.2f, whatIsGround);
 
-        Controller();
+        MyInput();
+        SpeedControl();
         StateHandler();
 
-        transform.localScale = Vector3.Lerp(transform.localScale, targetScale, crouchLerpSpeed * Time.deltaTime);
-        _rb.drag = _grounded ? _groundDrag : 0f;
+        // handle drag
+        if (grounded)
+            rb.drag = groundDrag;
+        else
+            rb.drag = airDrag;
+    }
 
-        // Handle teleport input.
-        // When the T key is pressed, delegate to the TeleportJumpWeapon component.
+    private void FixedUpdate()
+    {
+        MovePlayer();
+    }
+
+    private void MyInput()
+    {
+        horizontalInput = Input.GetAxisRaw("Horizontal");
+        verticalInput = Input.GetAxisRaw("Vertical");
+
+        // when to jump
+        if (Input.GetKey(jumpKey) && readyToJump && grounded)
+        {
+            readyToJump = false;
+
+            Jump();
+
+            Invoke(nameof(ResetJump), jumpCooldown);
+        }
+
+        if (Input.GetKeyDown(crouchKey))
+        {
+            if (currentTransition != null)
+                StopCoroutine(currentTransition);
+            currentTransition = StartCoroutine(SmoothScaleChange(crouchYScale));
+            rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
+        }
+        else if (Input.GetKeyUp(crouchKey))
+        {
+            if (currentTransition != null)
+                StopCoroutine(currentTransition);
+            currentTransition = StartCoroutine(SmoothScaleChange(startYScale));
+            rb.AddForce(Vector3.up * 5f, ForceMode.Impulse);
+        }
+
         if (Input.GetKeyDown(KeyCode.T) && teleportWeapon != null)
         {
             teleportWeapon.ActivateTeleport();
         }
     }
-    private void FixedUpdate()
+
+    private IEnumerator SmoothScaleChange(float targetYScale)
     {
-        if (_isMoving)
+        float elapsed = 0f;
+        Vector3 initialScale = transform.localScale;
+        Vector3 targetScale = new Vector3(initialScale.x, targetYScale, initialScale.z);
+
+        while (elapsed < transitionDuration)
         {
-            Movement(_xAxis, _zAxis);
-            SpeedControl();
+            transform.localScale = Vector3.Lerp(initialScale, targetScale, elapsed / transitionDuration);
+            elapsed += Time.deltaTime;
+            yield return null;
         }
+        transform.localScale = targetScale;
     }
 
-    #region Movement Methods
-    void Controller()
+    private void StateHandler()
     {
-        _xAxis = Input.GetAxis("Horizontal");
-        _zAxis = Input.GetAxis("Vertical");
-
-        _isMoving = (_xAxis != 0 || _zAxis != 0);
-
-        if (Input.GetKeyDown(jumpKey) && _readyToJump && _grounded)
-        {
-            _readyToJump = false;
-            Jump();
-            ResetJump();
-        }
-    }
-    void StateHandler()
-    {
+        // Mode - Crouching
         if (Input.GetKey(crouchKey))
         {
-            state = MovementStates.Crouching;
-            crouchFatigue += Time.deltaTime * crouchFatigueIncreaseRate;
-            crouchFatigue = Mathf.Clamp(crouchFatigue, 0f, maxCrouchFatigue);
-            float extraCrouch = Mathf.Lerp(0f, extraCrouchAmount, crouchFatigue / maxCrouchFatigue);
-            targetScale = new Vector3(transform.localScale.x, _crouchYScale - extraCrouch, transform.localScale.z);
-            _movSpeed = _crouchSpeed;
-            return; // <-- IMPORTANTE: evita que se sobreescriba el estado después
-        }
-        else
-        {
-            crouchFatigue -= Time.deltaTime * crouchFatigueRecoveryRate;
-            crouchFatigue = Mathf.Max(crouchFatigue, 0f);
-            targetScale = new Vector3(transform.localScale.x, _startYScale, transform.localScale.z);
+            state = MovementState.crouching;
+            moveSpeed = crouchSpeed;
         }
 
-        if (_grounded && Input.GetKey(walkKey))
+        // Mode - Walking
+        else if (grounded && Input.GetKey(walkKey))
         {
-            state = MovementStates.Walking;
-            _movSpeed = _walkSpeed;
+            state = MovementState.walking;
+            moveSpeed = walkSpeed;
         }
-        else if (_grounded)
+
+        // Mode - Sprinting
+        else if (grounded)
         {
-            state = MovementStates.Sprinting;
-            _movSpeed = _sprintSpeed;
+            state = MovementState.sprinting;
+            moveSpeed = sprintSpeed;
         }
+
+        // Mode - Air
         else
         {
-            state = _rb.velocity.y > 0.1f ? MovementStates.Air : MovementStates.Sprinting;
+            state = MovementState.air;
         }
     }
-    //void StateHandler()
-    //{
-    //    if (_grounded && Input.GetKey(walkKey))
-    //    {
-    //        state = MovementStates.Walking;
-    //        _movSpeed = _walkSpeed;
-    //    }
-    //    else if (_grounded)
-    //    {
-    //        state = MovementStates.Sprinting;
-    //        _movSpeed = _sprintSpeed;
-    //    }
-    //    else
-    //    {
-    //        state = _rb.velocity.y > 0.1f ? MovementStates.Air : MovementStates.Sprinting;
-    //    }
 
-    //    if (Input.GetKey(crouchKey))
-    //    {
-    //        state = MovementStates.Crouching;
-    //        crouchFatigue += Time.deltaTime * crouchFatigueIncreaseRate;
-    //        crouchFatigue = Mathf.Clamp(crouchFatigue, 0f, maxCrouchFatigue);
-    //        float extraCrouch = Mathf.Lerp(0f, extraCrouchAmount, crouchFatigue / maxCrouchFatigue);
-    //        targetScale = new Vector3(transform.localScale.x, _crouchYScale - extraCrouch, transform.localScale.z);
-    //        _movSpeed = _crouchSpeed;
-    //    }
-    //    else
-    //    {
-    //        crouchFatigue -= Time.deltaTime * crouchFatigueRecoveryRate;
-    //        crouchFatigue = Mathf.Max(crouchFatigue, 0f);
-    //        targetScale = new Vector3(transform.localScale.x, _startYScale, transform.localScale.z);
-    //    }
-    //}
+    private void MovePlayer()
+    {
+        // calculate movement direction
+        moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
+
+        // on slope
+        if (OnSlope() && !exitingSlope)
+        {
+            rb.AddForce(GetSlopeMoveDirection() * moveSpeed * 20f, ForceMode.Force);
+
+            if (rb.velocity.y > 0)
+                rb.AddForce(Vector3.down * 80f, ForceMode.Force);
+        }
+
+        // on ground
+        else if (grounded)
+            rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
+
+        // in air
+        else if (!grounded)
+            rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+
+        // turn gravity off while on slope
+        rb.useGravity = !OnSlope();
+    }
 
     private void SpeedControl()
     {
-        Vector3 flatVel = new Vector3(_rb.velocity.x, 0f, _rb.velocity.z);
-        if (flatVel.magnitude > _movSpeed)
+        // limiting speed on slope
+        if (OnSlope() && !exitingSlope)
         {
-            Vector3 limitedVel = flatVel.normalized * _movSpeed;
-            _rb.velocity = new Vector3(limitedVel.x, _rb.velocity.y, limitedVel.z);
+            if (rb.velocity.magnitude > moveSpeed)
+                rb.velocity = rb.velocity.normalized * moveSpeed;
         }
-    }
 
-    private void Movement(float xAxis, float zAxis)
-    {
-        _dir = (orientation.forward * zAxis + orientation.right * xAxis).normalized;
-        if (_grounded)
-            _rb.AddForce(_dir * _movSpeed * 10f, ForceMode.Force);
+        // limiting speed on ground or in air
         else
-            _rb.AddForce(_dir * _movSpeed * 10f * _airMultiplier, ForceMode.Force);
+        {
+            Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+
+            // limit velocity if needed
+            if (flatVel.magnitude > moveSpeed)
+            {
+                Vector3 limitedVel = flatVel.normalized * moveSpeed;
+                rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
+            }
+        }
     }
 
     private void Jump()
     {
-        _rb.velocity = new Vector3(_rb.velocity.x, 0f, _rb.velocity.z);
-        _rb.AddForce(transform.up * _jumpForce, ForceMode.Impulse);
-    }
+        exitingSlope = true;
 
+        // reset y velocity
+        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+
+        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+    }
     private void ResetJump()
     {
-        _readyToJump = true;
+        readyToJump = true;
+
+        exitingSlope = false;
     }
-    #endregion
+
+    private bool OnSlope()
+    {
+        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.3f))
+        {
+            float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
+            return angle < maxSlopeAngle && angle != 0;
+        }
+
+        return false;
+    }
+
+    private Vector3 GetSlopeMoveDirection()
+    {
+        return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;
+    }
 }

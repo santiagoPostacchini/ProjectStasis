@@ -7,6 +7,11 @@ public class PhysicsBox : PhysicsObject, IStasis
     private Quaternion freezeRotation;
     private bool _isFreezed;
 
+    public bool IsFreezed
+    {
+        get => _isFreezed;
+        private set => _isFreezed = value;
+    }
     public override void Grab(Transform grabPoint)
     {
         base.Grab(grabPoint);
@@ -80,7 +85,7 @@ public class PhysicsBox : PhysicsObject, IStasis
         }
     }
 
-    private void UnfreezeObject()
+    public void UnfreezeObject()
     {
         if (_isFreezed)
         {

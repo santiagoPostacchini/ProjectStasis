@@ -94,7 +94,7 @@ public class TeleportJumpWeapon : MonoBehaviour
         float playerOffsetAboveFloor = 0f;
         RaycastHit hit;
         // Raycast downward from the player's position. Ensure the groundLayer is properly set.
-        if (Physics.Raycast(player.transform.position, Vector3.down, out hit, 100f, player.groundLayer))
+        if (Physics.Raycast(player.transform.position, Vector3.down, out hit, 100f, player.whatIsGround))
         {
             // Calculate the distance between the player's position and the floor hit.
             playerOffsetAboveFloor = player.transform.position.y - hit.point.y - 1;

@@ -185,7 +185,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   detectionRadius: 0.8
   detectionHeight: 10
-  pullStrength: 6
+  pullStrength: 9
   playerLayer:
     serializedVersion: 2
     m_Bits: 128

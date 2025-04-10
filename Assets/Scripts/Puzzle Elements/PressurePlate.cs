@@ -6,9 +6,8 @@ public class PressurePlate : MonoBehaviour
     [SerializeField] private float activationMassThreshold = 10f;
     [SerializeField] private PressurePlateGroup plateGroup;
     [SerializeField] private Animator animator;
-    [SerializeField] private bool isFrozen;
-    [SerializeField] private bool isButtonPressed;
-   
+    public bool isFrozen;
+    
     public bool isActivated { get; private set; } = false;
     private readonly List<Rigidbody> objectsOnPlate = new();
 
@@ -45,7 +44,6 @@ public class PressurePlate : MonoBehaviour
                 break;
             }
         }
-
         if (heavyEnoughObjectFound != isActivated)
         {
             isActivated = heavyEnoughObjectFound;
