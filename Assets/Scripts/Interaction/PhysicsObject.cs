@@ -5,6 +5,7 @@ using System.Collections;
 [RequireComponent(typeof(CollisionDetector))]
 public abstract class PhysicsObject : MonoBehaviour
 {
+    public Player player;
     // Common physics components
     protected Rigidbody objRB;
     protected CollisionDetector collisionDetector;

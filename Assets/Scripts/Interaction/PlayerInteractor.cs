@@ -11,7 +11,8 @@ public class PlayerInteractor : MonoBehaviour
 
     [HideInInspector] public PhysicsObject _objectGrabbable;
     private bool _isInteractableInView = false;
-
+    [SerializeField] private Player player;
+    
     void Update()
     {
         bool hitInteractable = false;
@@ -62,11 +63,13 @@ public class PlayerInteractor : MonoBehaviour
             if (hitObject != null && hitObject.TryGetComponent(out _objectGrabbable))
             {
                 _objectGrabbable.Grab(_objectGrabPointTransform);
+                _objectGrabbable.player = player;
             }
         }
         else
         {
             _objectGrabbable.Drop();
+            _objectGrabbable.player = null;
             ClearHands();
         }
     }

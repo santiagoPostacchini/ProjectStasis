@@ -12,7 +12,6 @@ public class CubeGenerator : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         Player player = collision.gameObject.GetComponentInParent<Player>();
-        Debug.Log("CubeGenerator a colisionado con el player = a " + player);
         if (player != null)
         {
             GenerateCube();
@@ -22,5 +21,6 @@ public class CubeGenerator : MonoBehaviour
     public void GenerateCube()
     {
         box.transform.position = posRespawn.position;
+
     }
 }

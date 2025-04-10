@@ -309,6 +309,7 @@ MonoBehaviour:
   _playerCameraTransform: {fileID: 39638478611586813}
   _objectGrabPointTransform: {fileID: 2135538731388836316}
   _objectGrabbable: {fileID: 0}
+  player: {fileID: 7782167138438023990}
 --- !u!114 &3578624255495326970
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -462,7 +463,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &639732043577978843
 Transform:
   m_ObjectHideFlags: 0
@@ -630,30 +631,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acdbcc1a222ef994eb9c820e022f9dfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sprintSpeed: 5
-  _walkSpeed: 3
-  _jumpForce: 10.5
-  _height: 2
-  _airMultiplier: 0.4
-  _groundDrag: 5
+  walkSpeed: 3.5
+  sprintSpeed: 4
+  groundDrag: 3
+  airDrag: 1
+  jumpForce: 10.5
+  jumpCooldown: 0.4
+  airMultiplier: 0.4
+  crouchSpeed: 3
+  crouchYScale: 0.5
+  transitionDuration: 0.3
   jumpKey: 32
-  crouchKey: 306
   walkKey: 304
-  groundLayer:
+  crouchKey: 306
+  whatIsGround:
     serializedVersion: 2
     m_Bits: 64
-  _crouchSpeed: 2.5
-  _crouchYScale: 0.5
-  _startYScale: 1
-  crouchFatigueIncreaseRate: 1
-  crouchFatigueRecoveryRate: 0.5
-  maxCrouchFatigue: 7
-  extraCrouchAmount: 0.2
-  crouchLerpSpeed: 6
+  maxSlopeAngle: 45
   orientation: {fileID: 6540965775433269479}
+  body: {fileID: 4085493207276297061}
+  playerInteractor: {fileID: 6961200762295146853}
   state: 1
-  _xAxis: 0
-  _zAxis: 0
 --- !u!114 &6844010981100544773
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1001,12 +999,12 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.3
   m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.01, z: 0}
 --- !u!65 &1847044833722992687
 BoxCollider:
   m_ObjectHideFlags: 0
