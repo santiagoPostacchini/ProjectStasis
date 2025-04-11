@@ -91,7 +91,8 @@ public class PhysicsBox : PhysicsObject, IStasis
         {
             RestoreRigidbodyState();
             _isFreezed = false;
-            objRB.useGravity = true;
+            if(objRB)
+                objRB.useGravity = true;
             SetOutlineThickness(1f); // Reset the visual effect.
         }
     }

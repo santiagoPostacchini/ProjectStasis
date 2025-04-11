@@ -11,26 +11,21 @@ public class JumpPlatform : MonoBehaviour
     private bool canApplyForce = true;
     private void OnCollisionEnter(Collision collision)
     {
-       
         if (!canApplyForce) return;
-        Rigidbody rb = collision.rigidbody;
-        Transform t = collision.transform;
+        Rigidbody rb = collision.gameObject.GetComponent<Rigidbody>();
+        Transform t = collision.gameObject.transform;
         if (rb != null)
         {
             StartCoroutine(ApplyJumpForce(rb, t));
         }
     }
-    private void Update()
-    {
-        
-    }
+
     private IEnumerator ApplyJumpForce(Rigidbody rb, Transform t)
     {
         canApplyForce = false;
 
         Vector3 startPos = t.position;
         Vector3 endPos = pos.position;
-   
 
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
@@ -54,7 +49,6 @@ public class JumpPlatform : MonoBehaviour
 
         // APLICAMOS LA FUERZA JUSTO DESPUÉS DE ACTIVAR LA FÍSICA
         yield return new WaitForFixedUpdate(); // Esperamos al siguiente FixedUpdate para que la física esté lista
-        yield return null;
 
         Vector3 jumpDirection = (transform.forward * forwardForce) + (transform.up * jumpForce);
         rb.AddForce(jumpDirection, ForceMode.VelocityChange);

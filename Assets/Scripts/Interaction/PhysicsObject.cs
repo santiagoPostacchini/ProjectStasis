@@ -98,7 +98,7 @@ public abstract class PhysicsObject : MonoBehaviour
             if (averageImpulse > threshold)
             {
                 // Optionally, you may wish to check if the object is currently grabbed.
-                if (!IsGrabbed)
+                if (IsGrabbed)
                 {
                     IsUnderHighPressure = true;
                     Drop();

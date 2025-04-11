@@ -12,7 +12,7 @@ public class InvisibleObject : MonoBehaviour
         var player = other.GetComponentInParent<Player>();
         if(player != null)
         {
-            Debug.Log("Esta colisionando");
+            //Debug.Log("Esta colisionando");
             alreadyOpen = false;
             StartCoroutine(OpenAndCloseDoor());
         }

@@ -80,7 +80,7 @@ public class Player : MonoBehaviour
     {
         // ground check
         //grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
-        grounded = Physics.SphereCast(transform.position, 0.5f, Vector3.down, out RaycastHit hit, playerHeight * 0.5f + 0.2f, whatIsGround);
+        grounded = Physics.SphereCast(transform.position, 0.5f, Vector3.down, out RaycastHit hit, playerHeight * 0.25f + 0.2f, whatIsGround);
 
         MyInput();
         SpeedControl();

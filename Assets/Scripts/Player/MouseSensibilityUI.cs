@@ -11,10 +11,12 @@ public class MouseSensibilityUI : MonoBehaviour
 
     void Start()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         cameraController = GetComponent<PlayerCam>();
         sensibilitySlider.minValue = 10f;
         sensibilitySlider.maxValue = 1000f;
-
+        cameraController.sens = 500;
         //sensibilidadSlider.onValueChanged.AddListener(UpdateSensitivity);
     }
     private void Update()

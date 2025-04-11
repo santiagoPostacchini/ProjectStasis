@@ -7,7 +7,7 @@ public class FreezablePlatform : PhysicsObject, IStasis
     private Vector3 freezePosition;
     private Quaternion freezeRotation;
     private bool _isFreezed;
-    [SerializeField]private MovingPlatform movingPlatform;
+    [SerializeField] private MovingPlatform movingPlatform;
 
     private void Awake()
     {

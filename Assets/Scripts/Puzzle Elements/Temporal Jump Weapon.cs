@@ -91,30 +91,26 @@ public class TeleportJumpWeapon : MonoBehaviour
         }
 
         // --- NEW SECTION: Calculate player-to-floor offset on the current level ---
+        // --- Calculate player-to-floor offset on the current level ---
         float playerOffsetAboveFloor = 0f;
         RaycastHit hit;
-        // Raycast downward from the player's position. Ensure the groundLayer is properly set.
         if (Physics.Raycast(player.transform.position, Vector3.down, out hit, 100f, player.whatIsGround))
         {
-            // Calculate the distance between the player's position and the floor hit.
-            playerOffsetAboveFloor = player.transform.position.y - hit.point.y - 1;
+            // You might adjust the offset depending on your player's height.
+            playerOffsetAboveFloor = player.transform.position.y - hit.point.y - 1f;
         }
         else
         {
-            // If no floor is hit, default to zero offset.
             playerOffsetAboveFloor = 0f;
         }
-        // -------------------------------------------------------------------------
 
-        // Build the destination position.
-        // Instead of using destinationAnchor.position.y directly,
-        // we add the player's current vertical offset to the destination anchor's Y.
+        // Use the destination anchor's Y plus the player's offset above the floor
         Vector3 destination = new Vector3(
             destinationAnchor.position.x + horizontalOffset.x,
-            player.transform.position.y + verticalOffsetY,
+            destinationAnchor.position.y + playerOffsetAboveFloor,
             destinationAnchor.position.z + horizontalOffset.z);
 
-        // Teleport the player.
+        // Teleport the player
         player.transform.position = destination;
 
         // Toggle the teleport state so that next teleport goes to the alternate level.
