@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
 {
     [Header("Scene Transition")]
     [SerializeField] private string sceneName = "SceneToLoad";
+    [SerializeField] private int index;
     [SerializeField] private float delayBeforeSceneLoad = 2f;
 
     [Header("Video Components")]
@@ -59,6 +60,6 @@ public class GameManager : MonoBehaviour
         }
 
         // Finalmente, cargamos la siguiente escena
-        SceneManager.LoadScene(sceneName);
+        SceneManager.LoadScene(index);
     }
 }
