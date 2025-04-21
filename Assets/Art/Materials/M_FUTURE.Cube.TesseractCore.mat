@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_TesseractCore
+  m_Name: M_FUTURE.Cube.TesseractCore
   m_Shader: {fileID: 4800000, guid: 8e82eef8c6511394495d01985b52b1e6, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -24,19 +24,27 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _GlowTex:
-        m_Texture: {fileID: 2800000, guid: 126e0af0f74abba45b8567864eab6526, type: 3}
+        m_Texture: {fileID: 2800000, guid: afffeb273ee9e5f4597d6d32af8550be, type: 3}
         m_Scale: {x: 5, y: 5}
         m_Offset: {x: 0, y: 0}
     - _NoiseTex:
-        m_Texture: {fileID: 2800000, guid: 126e0af0f74abba45b8567864eab6526, type: 3}
+        m_Texture: {fileID: 2800000, guid: afffeb273ee9e5f4597d6d32af8550be, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
     - _ContourDarkness: 0.938
-    - _DistortionStrength: 0.518
-    - _EmissionIntensity: 10
+    - _DisplaceNoiseScale: 1
+    - _DisplaceStrength: 0.075
+    - _DisplaceType: 0
+    - _DistortionScale: 1
+    - _DistortionStrength: 0.129
+    - _EdgeDarkness: 0.4
+    - _EmissionIntensity: 2.06
     - _FresnelFactor: 0.95
+    - _FresnelIntensity: 1
+    - _FresnelPower: 3
+    - _GlobalAlpha: 0.33
     - _GlowMaskStrength: 1.12
     - _GlowPulseSpeed: 1
     - _GlowScale: 1.1
@@ -44,5 +52,6 @@ Material:
     - _LayerCount: 3
     - _RotationSpeed: 0.01
     m_Colors:
-    - _CoreColor: {r: 1, g: 0.94244504, b: 0, a: 1}
+    - _CoreColor: {r: 0.12220478, g: 1, b: 0, a: 1}
+    - _RotationAxis: {r: 0, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []

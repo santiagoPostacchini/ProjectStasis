@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Interactable
   - Switch
+  - Cube
   layers:
   - Default
   - TransparentFX

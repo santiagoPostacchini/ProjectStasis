@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_GlassPanel
+  m_Name: M_FUTURE.Cube.GlassPanel
   m_Shader: {fileID: 4800000, guid: 180491f56a689c641b309eb40a56a043, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0

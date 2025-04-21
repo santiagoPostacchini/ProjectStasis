@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 8d057f6b72f84764b87d20f2c9bdcc3a
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - volume: {instanceID: 0}
+  - sfxSource: {instanceID: 0}
+  - mixer: {fileID: 24100000, guid: f380811a388512f45bca0ea436ce452b, type: 2}
+  - snapNormal: {fileID: 24500006, guid: f380811a388512f45bca0ea436ce452b, type: 2}
+  - snapTimeTravel: {fileID: -8547031592506940604, guid: f380811a388512f45bca0ea436ce452b,
+      type: 2}
+  - cameraShake: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

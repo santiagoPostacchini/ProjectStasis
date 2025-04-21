@@ -193,6 +193,7 @@ GameObject:
   - component: {fileID: 3578624255495326970}
   - component: {fileID: 8717153882962824655}
   - component: {fileID: 6739123019768479840}
+  - component: {fileID: 7456762218464567133}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -383,6 +384,18 @@ MonoBehaviour:
   sensibilitySlider: {fileID: 1773157856863290018}
   cameraController: {fileID: 9182856139386719623}
   isActive: 0
+--- !u!114 &7456762218464567133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2511134714295764284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8371ff1731184674e986c2347a1025a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2543247529738800005
 GameObject:
   m_ObjectHideFlags: 0
@@ -681,11 +694,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cd0e329f762b2e489a7ba3c9f555d67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  futureTeleportAnchor: {fileID: 0}
-  pastTeleportAnchor: {fileID: 0}
+  futureAnchor: {fileID: 0}
+  pastAnchor: {fileID: 0}
+  fxManager: {fileID: 0}
+  blurInTime: 0.18
+  blurOutTime: 0.3
   teleportCooldown: 0.5
   minOffsetThreshold: 0.1
-  fallbackOffsetDistance: 2
+  fallbackOffset: 2
   teleportToFuture: 0
 --- !u!114 &6374095552406892429
 MonoBehaviour:
