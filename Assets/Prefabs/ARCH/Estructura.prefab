@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 2627678103862536142}
   - component: {fileID: 8684093920937550016}
   - component: {fileID: 5545442407032687245}
-  m_Layer: 0
+  - component: {fileID: 2152311446745425161}
+  m_Layer: 6
   m_Name: Estructura
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26,13 +27,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 980016421776913862}
   serializedVersion: 2
-  m_LocalRotation: {x: -6.123234e-17, y: 1, z: 6.123234e-17, w: -3.7493994e-33}
+  m_LocalRotation: {x: 0, y: -1, z: 0, w: 0}
   m_LocalPosition: {x: -15.000002, y: -0.00000021744657, z: 0.00000004194401}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
 --- !u!33 &8684093920937550016
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -61,8 +62,8 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -4399033299644909597, guid: 570959f53e0c1f1418ccf5136f034549, type: 3}
-  - {fileID: 340946845092145757, guid: 570959f53e0c1f1418ccf5136f034549, type: 3}
+  - {fileID: 2100000, guid: c3e36a5b004a29f4f9a627e751786867, type: 2}
+  - {fileID: 2100000, guid: c54cd5724a4fa2146a4c0b31bf3c0e5b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -84,3 +85,25 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &2152311446745425161
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 980016421776913862}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -2071813984746699189, guid: 570959f53e0c1f1418ccf5136f034549, type: 3}
