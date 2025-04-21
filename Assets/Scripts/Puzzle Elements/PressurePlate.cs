@@ -17,6 +17,7 @@ public class PressurePlate : MonoBehaviour
         var rb = collision.rigidbody;
         if (rb != null && !objectsOnPlate.Contains(rb))
         {
+           
             objectsOnPlate.Add(rb);
             UpdateState();
         }
@@ -26,7 +27,8 @@ public class PressurePlate : MonoBehaviour
         var rb = collision.rigidbody;
         if (rb != null && objectsOnPlate.Contains(rb))
         {
-            objectsOnPlate.Add(rb);
+            Debug.Log("Saliendo");
+            objectsOnPlate.Remove(rb);
             UpdateState();
         }
     }

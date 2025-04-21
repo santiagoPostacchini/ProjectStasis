@@ -22945,6 +22945,16 @@ PrefabInstance:
       propertyPath: plateGroup
       value: 
       objectReference: {fileID: 1908681121}
+    - target: {fileID: 1640321844698934971, guid: 552154b544866d14e8fe51183313e00b,
+        type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1640321844698934971, guid: 552154b544866d14e8fe51183313e00b,
+        type: 3}
+      propertyPath: m_Materials.Array.data[2]
+      value: 
+      objectReference: {fileID: 2100000, guid: ede74eb79b9d0e94694f3cb677c03bb2, type: 2}
     - target: {fileID: 5716578258265172005, guid: 552154b544866d14e8fe51183313e00b,
         type: 3}
       propertyPath: m_LocalPosition.x
