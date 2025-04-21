@@ -6,30 +6,49 @@ public class PressurePlate : MonoBehaviour
     [SerializeField] private float activationMassThreshold = 10f;
     [SerializeField] private PressurePlateGroup plateGroup;
     [SerializeField] private Animator animator;
+    [SerializeField] private ParticleSystem particles;
     public bool isFrozen;
     
     public bool isActivated { get; private set; } = false;
     private readonly List<Rigidbody> objectsOnPlate = new();
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        var rb = other.attachedRigidbody;
+        var rb = collision.rigidbody;
         if (rb != null && !objectsOnPlate.Contains(rb))
         {
             objectsOnPlate.Add(rb);
             UpdateState();
         }
     }
-
-    private void OnTriggerExit(Collider other)
+    private void OnCollisionExit(Collision collision)
     {
-        var rb = other.attachedRigidbody;
+        var rb = collision.rigidbody;
         if (rb != null && objectsOnPlate.Contains(rb))
         {
-            objectsOnPlate.Remove(rb);
+            objectsOnPlate.Add(rb);
             UpdateState();
         }
     }
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    var rb = other.attachedRigidbody;
+    //    if (rb != null && !objectsOnPlate.Contains(rb))
+    //    {
+    //        objectsOnPlate.Remove(rb);
+    //        UpdateState();
+    //    }
+    //}
+
+    //private void OnTriggerExit(Collider other)
+    //{
+    //    var rb = other.attachedRigidbody;
+    //    if (rb != null && objectsOnPlate.Contains(rb))
+    //    {
+    //        objectsOnPlate.Remove(rb);
+    //        UpdateState();
+    //    }
+    //}
 
     private void UpdateState()
     {
@@ -47,8 +66,23 @@ public class PressurePlate : MonoBehaviour
         if (heavyEnoughObjectFound != isActivated)
         {
             isActivated = heavyEnoughObjectFound;
-            animator?.SetBool("IsPressed", isActivated);
-            plateGroup?.NotifyPlateStateChanged();
+            if(plateGroup != null)
+            {
+                animator?.SetBool("IsPressed", isActivated);
+                plateGroup?.NotifyPlateStateChanged();
+            }
+          
         }
+    }
+
+    public void ActivateEffectParticle()
+    {
+        if (particles == null) return;
+        particles.Play();
+    }
+    public void DesactivateEffectParticle()
+    {
+        if (particles == null) return;
+        particles.Stop();
     }
 }

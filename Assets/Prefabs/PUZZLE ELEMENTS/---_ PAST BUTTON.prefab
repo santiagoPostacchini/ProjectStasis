@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 8573980661237617212}
   - component: {fileID: 1640321844698934971}
   - component: {fileID: 8419941407453382545}
-  - component: {fileID: 739702772323462530}
+  - component: {fileID: 739798555544924826}
+  - component: {fileID: 3205419607659767559}
   m_Layer: 6
-  m_Name: Button_low
+  m_Name: PlateButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 61595557033862203}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071067, y: -0.000000030908616, z: 0.000000030908623, w: 0.7071068}
-  m_LocalPosition: {x: -13.055746, y: 49.158, z: -6.5}
+  m_LocalPosition: {x: -13.05575, y: 49.158, z: -6.5}
   m_LocalScale: {x: 200, y: 199.99997, z: 199.99997}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -107,7 +108,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.0060907668, y: 0.006090766, z: 0.0005096311}
   m_Center: {x: -9.606106e-18, y: 0.0000000037252903, z: 0.0013519372}
---- !u!114 &739702772323462530
+--- !u!114 &739798555544924826
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -121,8 +122,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   activationMassThreshold: 0.6
   plateGroup: {fileID: 0}
-  animator: {fileID: 0}
+  animator: {fileID: 3205419607659767559}
+  particles: {fileID: 5862326315814754956}
   isFrozen: 0
+--- !u!95 &3205419607659767559
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 61595557033862203}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 5788de082ea5c3043a661547f8277aee, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &83528634310181694
 GameObject:
   m_ObjectHideFlags: 0
@@ -253,7 +276,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 528756081480731168}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1.359, y: -49.06, z: 10.641}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -345,7 +368,7 @@ GameObject:
   - component: {fileID: 8260808371523303605}
   - component: {fileID: 5759492333852685618}
   m_Layer: 0
-  m_Name: Plate_BaseButton
+  m_Name: BaseButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -432,7 +455,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -611,7 +634,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 1
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
