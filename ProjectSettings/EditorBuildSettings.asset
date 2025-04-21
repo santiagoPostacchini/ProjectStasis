@@ -11,13 +11,13 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/UI-Template.unity
     guid: acc7c74972f2f254eb4865239290e2b5
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/MenuConcept.unity
     guid: d0fbf7ff8f4fce94bb063c78c194d68b
   - enabled: 1
     path: Assets/Scenes/Prototipe.unity
     guid: 1d2f81083a74a2442a7b6b84956dced8
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Levels.unity
     guid: 31c0e9273dfe4394fba30600ff071ad5
   m_configObjects: {}
