@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.17276844, g: 0.21589246, b: 0.2978263, a: 1}
+  m_IndirectSpecularColor: {r: 0.17276813, g: 0.21589187, b: 0.29782563, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -22938,23 +22938,13 @@ PrefabInstance:
     - target: {fileID: 528756081480731168, guid: 552154b544866d14e8fe51183313e00b,
         type: 3}
       propertyPath: m_Name
-      value: ---_ PAST BUTTON
+      value: PAST BUTTON
       objectReference: {fileID: 0}
     - target: {fileID: 739798555544924826, guid: 552154b544866d14e8fe51183313e00b,
         type: 3}
       propertyPath: plateGroup
       value: 
       objectReference: {fileID: 1908681121}
-    - target: {fileID: 1640321844698934971, guid: 552154b544866d14e8fe51183313e00b,
-        type: 3}
-      propertyPath: m_Materials.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1640321844698934971, guid: 552154b544866d14e8fe51183313e00b,
-        type: 3}
-      propertyPath: m_Materials.Array.data[2]
-      value: 
-      objectReference: {fileID: 2100000, guid: ede74eb79b9d0e94694f3cb677c03bb2, type: 2}
     - target: {fileID: 5716578258265172005, guid: 552154b544866d14e8fe51183313e00b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -23003,11 +22993,6 @@ PrefabInstance:
     - target: {fileID: 5716578258265172005, guid: 552154b544866d14e8fe51183313e00b,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8419941407453382545, guid: 552154b544866d14e8fe51183313e00b,
-        type: 3}
-      propertyPath: m_IsTrigger
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -30596,7 +30581,7 @@ PrefabInstance:
     - target: {fileID: 1076837491718014255, guid: 84b559dc94de4274a8030798b133c1c0,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -44.763
+      value: -44.513
       objectReference: {fileID: 0}
     - target: {fileID: 1076837491718014255, guid: 84b559dc94de4274a8030798b133c1c0,
         type: 3}
@@ -30638,25 +30623,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2767517342592535269, guid: 84b559dc94de4274a8030798b133c1c0,
+    - target: {fileID: 2594608240188366766, guid: 84b559dc94de4274a8030798b133c1c0,
         type: 3}
-      propertyPath: m_Materials.Array.size
-      value: 2
+      propertyPath: IsHittingRB
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2767517342592535269, guid: 84b559dc94de4274a8030798b133c1c0,
+    - target: {fileID: 2594608240188366766, guid: 84b559dc94de4274a8030798b133c1c0,
         type: 3}
-      propertyPath: m_Materials.Array.data[1]
-      value: 
-      objectReference: {fileID: 2100000, guid: ede74eb79b9d0e94694f3cb677c03bb2, type: 2}
+      propertyPath: IsHittingNOTRB
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6158015544614653846, guid: 84b559dc94de4274a8030798b133c1c0,
         type: 3}
       propertyPath: m_Name
       value: PAST.CUBE
-      objectReference: {fileID: 0}
-    - target: {fileID: 6158015544614653846, guid: 84b559dc94de4274a8030798b133c1c0,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
