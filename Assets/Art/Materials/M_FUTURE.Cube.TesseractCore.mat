@@ -35,7 +35,7 @@ Material:
     m_Floats:
     - _ContourDarkness: 0.938
     - _DisplaceNoiseScale: 1
-    - _DisplaceStrength: 0.075
+    - _DisplaceStrength: 0.01
     - _DisplaceType: 0
     - _DistortionScale: 1
     - _DistortionStrength: 0.129
