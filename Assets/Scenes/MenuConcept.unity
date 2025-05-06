@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731715, g: 0.13414735, b: 0.121078536, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1159,7 +1159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e6fc59c42991c24895b6226a2c00972, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startDelay: 0.8
+  startDelay: 0.6
   moveDistance: 100
   duration: 1
   direction: {x: -1, y: 0}
@@ -1435,7 +1435,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e6fc59c42991c24895b6226a2c00972, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startDelay: 1.2
+  startDelay: 1
   moveDistance: 100
   duration: 1
   direction: {x: -1, y: 0}
@@ -1848,7 +1848,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e6fc59c42991c24895b6226a2c00972, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startDelay: 0.4
+  startDelay: 0.2
   moveDistance: 100
   duration: 1
   direction: {x: -1, y: 0}
@@ -2814,7 +2814,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e6fc59c42991c24895b6226a2c00972, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startDelay: 0.6
+  startDelay: 0.4
   moveDistance: 100
   duration: 1
   direction: {x: -1, y: 0}
@@ -3303,7 +3303,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e6fc59c42991c24895b6226a2c00972, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startDelay: 1
+  startDelay: 0.8
   moveDistance: 100
   duration: 1
   direction: {x: -1, y: 0}
