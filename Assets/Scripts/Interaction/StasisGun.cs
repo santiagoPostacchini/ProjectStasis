@@ -44,7 +44,7 @@ public class StasisGun : MonoBehaviour
 
     public void TryApplyStasis(Transform playerCameraTransform)
     {
-        if (Physics.Raycast(playerCameraTransform.position, playerCameraTransform.forward, out RaycastHit hit, _stasisRange))
+        if (Physics.SphereCast(playerCameraTransform.position, 0.4f, playerCameraTransform.forward, out RaycastHit hit, _stasisRange))
         {
             GameObject hitObject = hit.collider.gameObject;
 
@@ -53,6 +53,15 @@ public class StasisGun : MonoBehaviour
                 ApplyStasisEffect(hitObject, stasisComponent);
             }
         }
+        //if (Physics.Raycast(playerCameraTransform.position, playerCameraTransform.forward, out RaycastHit hit, _stasisRange))
+        //{
+        //    GameObject hitObject = hit.collider.gameObject;
+
+        //    if (hitObject.TryGetComponent<IStasis>(out IStasis stasisComponent))
+        //    {
+        //        ApplyStasisEffect(hitObject, stasisComponent);
+        //    }
+        //}
     }
 
     void ApplyStasisEffect(GameObject newObject, IStasis newStasisComponent)

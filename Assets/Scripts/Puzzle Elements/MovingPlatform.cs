@@ -9,7 +9,8 @@ public class MovingPlatform : MonoBehaviour
     [SerializeField] private Transform pointB;
     [SerializeField] private float speed = 3f;
     [HideInInspector] public bool canMove;
-
+    public GameObject objectTransport;
+    public Transform pos;
     private Rigidbody rb;
     private Vector3 target;
 
@@ -17,10 +18,12 @@ public class MovingPlatform : MonoBehaviour
     {
         canMove = true;
         rb = GetComponent<Rigidbody>();
-        rb.isKinematic = true; 
         target = pointB.position;
     }
-
+    private void Update()
+    {
+        TransportObject();
+    }
     private void FixedUpdate()
     {
         if (!canMove) return;
@@ -30,6 +33,28 @@ public class MovingPlatform : MonoBehaviour
         if (Vector3.Distance(rb.position, target) < 0.1f)
         {
             target = target == pointA.position ? pointB.position : pointA.position;
+        }
+    }
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            transform.parent = collision.transform;
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            transform.parent = null;
+        }
+    }
+    public void TransportObject()
+    {
+        if(objectTransport != null && pos != null)
+        {
+            objectTransport.transform.position = pos.transform.position;
         }
     }
 }

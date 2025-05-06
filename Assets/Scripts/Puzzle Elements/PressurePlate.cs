@@ -20,6 +20,7 @@ public class PressurePlate : MonoBehaviour
            
             objectsOnPlate.Add(rb);
             UpdateState();
+            Debug.Log("Entro");
         }
     }
     private void OnCollisionExit(Collision collision)
