@@ -15,7 +15,7 @@ public abstract class PhysicsObject : MonoBehaviour
     public Material matStasis;
     private string OutlineThicknessName = "_BorderThickness";
     private MaterialPropertyBlock _mpb;
-    private Renderer _renderer;
+    [SerializeField]private Renderer _renderer;
 
     // Configuration for collision impulse handling
     public float collisionCheckDelay = 0.3f;
