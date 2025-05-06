@@ -52,7 +52,7 @@ Material:
     - _Offset_Depth_Position: 0.206
     - _Second_Text_Height: 0.211
     - _Second_Text_Threshold: 0.105
-    - _Tile: 0.025
+    - _Tile: 0.058
     m_Colors:
     - _Color: {r: 2, g: 2, b: 2, a: 1}
   m_BuildTextureStacks: []
