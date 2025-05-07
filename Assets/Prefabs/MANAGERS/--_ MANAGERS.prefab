@@ -360,25 +360,25 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5922209901894566883}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ec0a0a00618e271429315f1bf3321f0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   volume: {fileID: 5859991367193161814}
-  postExposure: -0.08
-  contrast: -9.4
-  hueShift: 0
-  saturation: 0.961
-  colorFilter: {r: 1, g: 1, b: 1, a: 1}
-  lift: {r: 0.6, g: 0.75, b: 1.1, a: 0}
-  gamma: {r: 0.95, g: 1, b: 1, a: 0}
-  gain: {r: 1.25, g: 1, b: 0.9, a: 0}
-  shadows: {r: 0.2, g: 0.6, b: 0.75, a: 0}
-  shadowsStart: 0
-  shadowsEnd: 0.35
+  postExposure: -0.72
+  contrast: -29
+  hueShift: -31
+  saturation: 23
+  colorFilter: {r: 0.4033019, g: 0.42561683, b: 0.5, a: 1}
+  lift: {r: 0.0019147248, g: 0.0019147248, b: 0.0019147248, a: 0}
+  gamma: {r: 0.055103473, g: 0.0077263443, b: 0.00077976467, a: 0}
+  gain: {r: 0.9811321, g: 0.41638172, b: 0, a: 0.5882353}
+  shadows: {r: 15.6981125, g: 15.6981125, b: 15.6981125, a: 0}
+  shadowsStart: 0.066
+  shadowsEnd: 0.309
   midtones: {r: 0.95, g: 0.9, b: 0.85, a: 0}
-  highlights: {r: 1, g: 0.3, b: 0.3, a: 0}
+  highlights: {r: 0.5, g: 0, b: 0, a: 0.43137255}
   highlightsStart: 0.7
   highlightsEnd: 1
 --- !u!1 &8993451501384527918
