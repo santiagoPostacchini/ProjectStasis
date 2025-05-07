@@ -7,13 +7,24 @@ public class StasisGun : MonoBehaviour
     [SerializeField] private float _stasisRange = 8f;
     [SerializeField] private float _stasisDuration = 5f;
 
+    [Header("Visual Settings")]
+    [SerializeField] private Transform _stasisOrigin; // Punto de origen del rayo (por ejemplo, la mano del jugador)
+    [SerializeField] private StasisBeam _beamRenderer; // Referencia al script StasisBeam
+    [SerializeField] private float _beamDuration = 0.2f; // Duración visible del rayo
+    [SerializeField] private GameObject _stasisBeamPrefab; // El prefab original
+
+
     private GameObject _firstFrozenObject;
     private IStasis _firstStasisComponent;
+
 
     private GameObject _secondFrozenObject;
     private IStasis _secondStasisComponent;
 
+    private StasisBeam _activeBeam; // Instancia activa
+
     private Coroutine _stasisTimerCoroutine;
+    private Coroutine _beamCoroutine;
 
     private PlayerInteractor _playerInteractor;
 
@@ -52,16 +63,12 @@ public class StasisGun : MonoBehaviour
             {
                 ApplyStasisEffect(hitObject, stasisComponent);
             }
-        }
-        //if (Physics.Raycast(playerCameraTransform.position, playerCameraTransform.forward, out RaycastHit hit, _stasisRange))
-        //{
-        //    GameObject hitObject = hit.collider.gameObject;
 
-        //    if (hitObject.TryGetComponent<IStasis>(out IStasis stasisComponent))
-        //    {
-        //        ApplyStasisEffect(hitObject, stasisComponent);
-        //    }
-        //}
+            if (_beamCoroutine != null)
+                StopCoroutine(_beamCoroutine);
+
+            _beamCoroutine = StartCoroutine(PlayStasisBeam(hit.point));
+        }
     }
 
     void ApplyStasisEffect(GameObject newObject, IStasis newStasisComponent)
@@ -79,6 +86,7 @@ public class StasisGun : MonoBehaviour
             UnfreezeObject(newObject, newStasisComponent);
         }
     }
+
     void ApplyIndefiniteStasis(GameObject newObject, IStasis newStasisComponent)
     {
         if (_firstFrozenObject != null && _firstFrozenObject != newObject)
@@ -126,7 +134,6 @@ public class StasisGun : MonoBehaviour
         }
     }
 
-
     private IEnumerator UnfreezeBothAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
@@ -147,6 +154,19 @@ public class StasisGun : MonoBehaviour
 
         _stasisTimerCoroutine = null;
     }
+
+    private IEnumerator PlayStasisBeam(Vector3 endPoint)
+    {
+        GameObject beamInstance = Instantiate(_stasisBeamPrefab, _stasisOrigin.position, Quaternion.identity);
+        StasisBeam beam = beamInstance.GetComponent<StasisBeam>();
+
+        beam.SetBeam(_stasisOrigin.position, endPoint);
+
+        yield return new WaitForSeconds(_beamDuration);
+
+        Destroy(beamInstance);
+    }
+
 
     private void OnDisable()
     {
