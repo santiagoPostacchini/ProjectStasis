@@ -9,19 +9,16 @@ public class StasisGun : MonoBehaviour
 
     [Header("Visual Settings")]
     [SerializeField] private Transform _stasisOrigin; // Punto de origen del rayo (por ejemplo, la mano del jugador)
-    [SerializeField] private StasisBeam _beamRenderer; // Referencia al script StasisBeam
+    [SerializeField] private GameObject _stasisBeamPrefab; // Prefab del rayo
     [SerializeField] private float _beamDuration = 0.2f; // Duración visible del rayo
-    [SerializeField] private GameObject _stasisBeamPrefab; // El prefab original
-
 
     private GameObject _firstFrozenObject;
     private IStasis _firstStasisComponent;
 
-
     private GameObject _secondFrozenObject;
     private IStasis _secondStasisComponent;
 
-    private StasisBeam _activeBeam; // Instancia activa
+    private StasisBeam _activeBeam; // Instancia activa del rayo
 
     private Coroutine _stasisTimerCoroutine;
     private Coroutine _beamCoroutine;
@@ -64,10 +61,23 @@ public class StasisGun : MonoBehaviour
                 ApplyStasisEffect(hitObject, stasisComponent);
             }
 
-            if (_beamCoroutine != null)
-                StopCoroutine(_beamCoroutine);
+            // Si ya hay un rayo activo, destrúyelo
+            if (_activeBeam != null)
+            {
+                Destroy(_activeBeam.gameObject);
+            }
 
-            _beamCoroutine = StartCoroutine(PlayStasisBeam(hit.point));
+            // Instanciar y configurar el nuevo rayo
+            GameObject beamInstance = Instantiate(_stasisBeamPrefab, _stasisOrigin.position, Quaternion.identity);
+            _activeBeam = beamInstance.GetComponent<StasisBeam>();
+            _activeBeam.SetBeam(_stasisOrigin.position, hit.point);
+
+            // Iniciar la corrutina para desactivar el rayo después de un tiempo
+            if (_beamCoroutine != null)
+            {
+                StopCoroutine(_beamCoroutine);
+            }
+            _beamCoroutine = StartCoroutine(DisableBeamAfterDuration(_beamDuration));
         }
     }
 
@@ -155,18 +165,16 @@ public class StasisGun : MonoBehaviour
         _stasisTimerCoroutine = null;
     }
 
-    private IEnumerator PlayStasisBeam(Vector3 endPoint)
+    private IEnumerator DisableBeamAfterDuration(float duration)
     {
-        GameObject beamInstance = Instantiate(_stasisBeamPrefab, _stasisOrigin.position, Quaternion.identity);
-        StasisBeam beam = beamInstance.GetComponent<StasisBeam>();
+        yield return new WaitForSeconds(duration);
 
-        beam.SetBeam(_stasisOrigin.position, endPoint);
-
-        yield return new WaitForSeconds(_beamDuration);
-
-        Destroy(beamInstance);
+        if (_activeBeam != null)
+        {
+            Destroy(_activeBeam.gameObject);
+            _activeBeam = null;
+        }
     }
-
 
     private void OnDisable()
     {

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1848759811983836850}
   - component: {fileID: 3305977581845920079}
   - component: {fileID: 6003625185299814558}
-  - component: {fileID: 3129842753565331437}
+  - component: {fileID: 4995183658270781365}
   m_Layer: 8
   m_Name: StasisBeam
   m_TagString: Untagged
@@ -81,52 +81,61 @@ LineRenderer:
   - {x: 0, y: 0, z: 1}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.051693425
+    widthMultiplier: 0.015
     widthCurve:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 1
+        time: 0.003410641
+        value: 0.37007892
         inSlope: 0
         outSlope: 0
         tangentMode: 0
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.5600272
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 1, b: 1, a: 1}
-      key1: {r: 1, g: 1, b: 1, a: 1}
-      key2: {r: 0, g: 0, b: 0, a: 0}
+      key0: {r: 0.18613195, g: 1, b: 0, a: 0.5882353}
+      key1: {r: 1, g: 0.95106304, b: 0, a: 1}
+      key2: {r: 0.38475204, g: 1, b: 0, a: 0.5882353}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
       key5: {r: 0, g: 0, b: 0, a: 0}
       key6: {r: 0, g: 0, b: 0, a: 0}
       key7: {r: 0, g: 0, b: 0, a: 0}
       ctime0: 0
-      ctime1: 65535
-      ctime2: 0
+      ctime1: 32768
+      ctime2: 65535
       ctime3: 0
       ctime4: 0
       ctime5: 0
       ctime6: 0
       ctime7: 0
       atime0: 0
-      atime1: 65535
-      atime2: 0
+      atime1: 32768
+      atime2: 65535
       atime3: 0
       atime4: 0
       atime5: 0
       atime6: 0
       atime7: 0
       m_Mode: 0
-      m_ColorSpace: -1
-      m_NumColorKeys: 2
-      m_NumAlphaKeys: 2
+      m_ColorSpace: 0
+      m_NumColorKeys: 3
+      m_NumAlphaKeys: 3
     numCornerVertices: 10
     numCapVertices: 10
     alignment: 0
@@ -150,7 +159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95aae0ca8d04cf24b96902b2659fa503, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &3129842753565331437
+--- !u!114 &4995183658270781365
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -162,5 +171,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21caf201ac56e264884cf78a9e237e32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scrollSpeed: 2
+  scrollSpeed: 1
   scrollDirection: {x: 1, y: 0}

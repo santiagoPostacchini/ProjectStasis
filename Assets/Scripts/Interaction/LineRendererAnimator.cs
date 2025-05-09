@@ -29,12 +29,12 @@ public class LineRendererAnimator : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        if (lineMaterial != null)
-        {
-            currentOffset += scrollDirection.normalized * scrollSpeed * Time.deltaTime;
-            lineMaterial.SetTextureOffset("_MainTex", currentOffset);
-        }
-    }
+    //void Update()
+    //{
+    //    if (lineMaterial != null)
+    //    {
+    //        currentOffset += scrollDirection.normalized * scrollSpeed * Time.deltaTime;
+    //        lineMaterial.SetTextureOffset("_MainTex", currentOffset);
+    //    }
+    //}
 }
