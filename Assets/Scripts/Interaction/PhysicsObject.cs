@@ -32,6 +32,7 @@ public abstract class PhysicsObject : MonoBehaviour
     // Variables for saving Rigidbody state (used by stasis objects)
     private Vector3 _savedVelocity;
     private Vector3 _savedAngularVelocity;
+    private bool _savedKinematic;
     private float _savedDrag;
 
     protected virtual void Start()
@@ -144,6 +145,7 @@ public abstract class PhysicsObject : MonoBehaviour
     {
         if (objRB != null)
         {
+             _savedKinematic = GetComponent<Rigidbody>().isKinematic;
             _savedVelocity = objRB.velocity;
             _savedAngularVelocity = objRB.angularVelocity;
             _savedDrag = objRB.drag;
@@ -155,9 +157,11 @@ public abstract class PhysicsObject : MonoBehaviour
     {
         if (objRB != null)
         {
+            
             objRB.velocity = _savedVelocity;
             objRB.angularVelocity = _savedAngularVelocity;
             objRB.drag = _savedDrag;
+            objRB.isKinematic = _savedKinematic;
             objRB.WakeUp();
         }
     }

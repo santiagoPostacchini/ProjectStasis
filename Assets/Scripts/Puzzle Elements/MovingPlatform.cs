@@ -13,7 +13,7 @@ public class MovingPlatform : MonoBehaviour
     public Transform pos;
     private Rigidbody rb;
     private Vector3 target;
-
+    private Vector3 velocity = Vector3.zero;
     private void Start()
     {
         canMove = true;
@@ -24,16 +24,18 @@ public class MovingPlatform : MonoBehaviour
     {
         TransportObject();
     }
+
     private void FixedUpdate()
     {
-        if (!canMove) return;
-        Vector3 newPosition = Vector3.MoveTowards(rb.position, target, speed * Time.fixedDeltaTime);
-        rb.MovePosition(newPosition);
-
-        if (Vector3.Distance(rb.position, target) < 0.1f)
+        if (Vector3.Distance(rb.position, target) < 0.05f)
         {
+            // Cambia suavemente al nuevo objetivo cuando está muy cerca
             target = target == pointA.position ? pointB.position : pointA.position;
         }
+
+        // Movimiento suave hacia el objetivo
+        Vector3 newPosition = Vector3.SmoothDamp(rb.position, target, ref velocity, 0.1f, speed, Time.fixedDeltaTime);
+        rb.MovePosition(newPosition);
     }
     private void OnCollisionEnter(Collision collision)
     {
