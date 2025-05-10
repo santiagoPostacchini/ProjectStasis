@@ -1,0 +1,66 @@
+**Guía paso a paso para integrar el audio modular**
+
+1. **Crear el asset “Sound”**
+
+   * En tu proyecto, click derecho → **Create → Audio → Sound**
+   * Esto genera un ScriptableObject con campos:
+
+     * `soundName` (identificador)
+     * `clip` (AudioClip)
+     * `mixerGroup` (AudioMixerGroup: Ambient, Music, SFX…)
+     * `playOnAwake` (booleano)
+     * `loop` (booleano)
+     * `volume` (0–1)
+
+2. **Configurar cada sonido**
+
+   * Abre cada asset **Sound** y:
+
+     1. Pon un `soundName` claro (p.ej. “ForestWind”).
+     2. Arrastra el AudioClip que corresponda.
+     3. Selecciona el MixerGroup adecuado (Ambient, etc.).
+     4. Marca o desmarca **Play On Awake** y **Loop** según necesites.
+     5. Ajusta el **volume** inicial.
+
+3. **Preparar el AudioManager**
+
+   * Crea un GameObject vacío en la escena (p.ej. “AudioManager”).
+   * Añádele el componente `AudioManager.cs` que definimos.
+   * En el inspector verás un array **Ambient Sounds** (y en el futuro Music/SFX).
+
+4. **Registrar los sonidos en el AudioManager**
+
+   * Arrastra todos los assets **Sound** de ambiente al array **Ambient Sounds**.
+   * Al iniciar la escena, en `Awake()` el AudioManager:
+
+     1. Crea un AudioSource por cada Sound.
+     2. Configura clip, mixerGroup, loop, volume.
+     3. Añade el AudioSource a un diccionario con clave `soundName`.
+     4. Si `playOnAwake` está activo en el asset, reproduce ese AudioSource inmediatamente.
+
+5. **Reproducir y controlar sonidos**
+
+   * Para arrancar un ambiente desde cualquier script:
+
+     ```csharp
+     AudioManager.Instance.PlayAmbient("ForestWind");
+     ```
+   * Para detenerlo o hacer fade-out:
+
+     ```csharp
+     AudioManager.Instance.StopAmbient("ForestWind");
+     AudioManager.Instance.FadeOutAmbient("ForestWind", 2f);
+     ```
+   * En canales futuros (Música, SFX, UI) solo tendrás que:
+
+     1. Añadir nuevos arrays `Sound[]` al AudioManager.
+     2. Crear métodos `PlayMusic(name)`, `PlaySfx(name)` siguiendo el mismo patrón.
+
+---
+
+**Así tu equipo** podrá:
+
+* **Crear** y **configurar** sonidos sin tocar código.
+* **Ver** en el inspector todos los parámetros de cada clip.
+* **Reproducir** o **detener** cualquier efecto con llamadas sencillas.
+* **Escalar** el sistema a nuevos tipos de audio (voz, UI, etc.) de forma inmediata.
