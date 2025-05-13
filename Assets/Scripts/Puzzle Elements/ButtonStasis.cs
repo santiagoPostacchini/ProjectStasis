@@ -6,8 +6,8 @@ public class ButtonStasis : PhysicsObject, IStasis
 {
     private Vector3 freezePosition;
     private Quaternion freezeRotation;
-    private bool _isFreezed;
     [SerializeField]private PressurePlate pressurePlate;
+
     public void StatisEffectActivate()
     {
         FreezeObject();
@@ -54,4 +54,5 @@ public class ButtonStasis : PhysicsObject, IStasis
             SetOutlineThickness(1f); // Reset visual cue.
         }
     }
+    
 }

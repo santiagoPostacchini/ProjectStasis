@@ -11,6 +11,7 @@ public abstract class PhysicsObject : MonoBehaviour
     protected CollisionDetector collisionDetector;
     protected Transform objGrabPointTransform;
 
+    public bool _isFreezed;
     // For outline visual effects
     public Material matStasis;
     private string OutlineThicknessName = "_BorderThickness";
@@ -30,10 +31,15 @@ public abstract class PhysicsObject : MonoBehaviour
     protected bool _canCheckCollisions = false;
 
     // Variables for saving Rigidbody state (used by stasis objects)
-    private Vector3 _savedVelocity;
-    private Vector3 _savedAngularVelocity;
-    private bool _savedKinematic;
-    private float _savedDrag;
+    protected Vector3 _savedVelocity;
+    protected Vector3 _savedAngularVelocity;
+    protected bool _savedKinematic;
+    protected float _savedDrag;
+
+
+
+
+
 
     protected virtual void Start()
     {
@@ -167,13 +173,14 @@ public abstract class PhysicsObject : MonoBehaviour
     }
 
     // Updates the outline effect (visual feedback) on the object.
-    protected void SetOutlineThickness(float thickness)
+    public void SetOutlineThickness(float thickness)
     {
         if (_renderer != null && _mpb != null)
         {
             _renderer.GetPropertyBlock(_mpb);
             _mpb.SetFloat(OutlineThicknessName, thickness);
             _renderer.SetPropertyBlock(_mpb);
+            Glow(false, 1);
         }
     }
 
@@ -182,4 +189,41 @@ public abstract class PhysicsObject : MonoBehaviour
     {
         get { return objGrabPointTransform != null; }
     }
+    public void Glow(bool enable, float intensity = 1f)
+    {
+        if (_renderer != null && _renderer.materials.Length > 0)
+        {
+            Material[] mats = _renderer.materials;
+            Material baseMat = mats[0];
+
+            if (enable)
+            {
+                if (_isFreezed) return;
+                // Habilitar el efecto emissive
+                baseMat.EnableKeyword("_EMISSION");
+
+                // Verificar si ya tiene color de emisión
+                Color currentEmission = baseMat.GetColor("_EmissionColor");
+
+                // Si no tiene color de emisión, empezar con un valor bajo como el gris
+                if (currentEmission == Color.black)
+                    currentEmission = new Color(1f,0f,0f); 
+
+                // Aplicar la intensidad al color de emisión (multiplicamos por la intensidad)
+                baseMat.SetColor("_EmissionColor", currentEmission * intensity);
+            }
+            else
+            {
+                // Deshabilitar el efecto emissive
+                baseMat.DisableKeyword("_EMISSION");
+
+                // Apagar la emisión (ponemos el color a negro)
+                baseMat.SetColor("_EmissionColor", Color.black);
+            }
+
+            // Actualizar los materiales del renderer
+            _renderer.materials = mats;
+        }
+    }
+
 }

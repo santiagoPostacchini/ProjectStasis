@@ -52,7 +52,7 @@ public class StasisGun : MonoBehaviour
 
     public void TryApplyStasis(Transform playerCameraTransform)
     {
-        if (Physics.SphereCast(playerCameraTransform.position, 0.4f, playerCameraTransform.forward, out RaycastHit hit, _stasisRange))
+        if (Physics.Raycast(playerCameraTransform.position, playerCameraTransform.forward, out RaycastHit hit, _stasisRange))
         {
             GameObject hitObject = hit.collider.gameObject;
 

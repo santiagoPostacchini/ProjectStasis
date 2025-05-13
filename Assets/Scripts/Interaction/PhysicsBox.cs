@@ -5,7 +5,13 @@ public class PhysicsBox : PhysicsObject, IStasis
 {
     private Vector3 freezePosition;
     private Quaternion freezeRotation;
-    private bool _isFreezed;
+    
+
+
+    [SerializeField]private LineRenderer _lineRenderer;
+    [SerializeField]private int _pointsCount = 50;
+    [SerializeField] private float _timeStep = 0.1f;
+    [SerializeField] LayerMask _collisionMask;
 
     public bool IsFreezed
     {
@@ -15,6 +21,7 @@ public class PhysicsBox : PhysicsObject, IStasis
     public override void Grab(Transform grabPoint)
     {
         base.Grab(grabPoint);
+        _lineRenderer.positionCount = 0;
         // Additional stasis-related logic on grab can be added here if needed.
     }
 
@@ -26,6 +33,10 @@ public class PhysicsBox : PhysicsObject, IStasis
             // Store the current transform values if the object is frozen.
             freezePosition = transform.position;
             freezeRotation = transform.rotation;
+            if (_savedVelocity.magnitude > 0.5f)
+            {
+                DrawTrajectory(transform.position, _savedVelocity, objRB.drag);
+            }
         }
     }
 
@@ -81,6 +92,11 @@ public class PhysicsBox : PhysicsObject, IStasis
             objRB.angularVelocity = Vector3.zero;
             objRB.useGravity = false;
             _isFreezed = true;
+            if(_savedVelocity.magnitude > 0.5f)
+            {
+                DrawTrajectory(transform.position, _savedVelocity, objRB.drag);
+            }
+            
             SetOutlineThickness(1.05f); // Optionally update the visual to indicate stasis.
         }
     }
@@ -94,6 +110,45 @@ public class PhysicsBox : PhysicsObject, IStasis
             if(objRB)
                 objRB.useGravity = true;
             SetOutlineThickness(1f); // Reset the visual effect.
+            _lineRenderer.positionCount = 0;
         }
+    }
+    public void DrawTrajectory(Vector3 startPos, Vector3 startVelocity, float drag)
+    {
+        Vector3[] points = new Vector3[_pointsCount];
+        Vector3 currentPosition = startPos;
+        Vector3 velocity = startVelocity;
+
+        Vector3 gravity = Physics.gravity;
+        points[0] = currentPosition;
+        int i = 1;
+
+        for (; i < _pointsCount; i++)
+        {
+            // Aplicar drag: reducción exponencial por unidad de tiempo
+            velocity *= 1f / (1f + drag * _timeStep);
+
+            // Aplicar gravedad
+            Vector3 nextVelocity = velocity + gravity * _timeStep;
+
+            // Posición estimada con gravedad y drag
+            Vector3 nextPosition = currentPosition + velocity * _timeStep + 0.5f * gravity * (_timeStep * _timeStep);
+            Vector3 segment = nextPosition - currentPosition;
+
+            // Comprobar colisión
+            if (Physics.Raycast(currentPosition, segment.normalized, out RaycastHit hit, segment.magnitude, _collisionMask))
+            {
+                points[i] = hit.point;
+                i++;
+                break;
+            }
+
+            points[i] = nextPosition;
+            currentPosition = nextPosition;
+            velocity = nextVelocity;
+        }
+
+        _lineRenderer.positionCount = i;
+        _lineRenderer.SetPositions(points);
     }
 }

@@ -15,7 +15,6 @@ public class MovableTrampoline : PhysicsObject, IStasis
     // Stasis-related variables
     private Vector3 freezePosition;
     private Quaternion freezeRotation;
-    private bool _isFreezed;
 
     /// <summary>
     /// When an object collides, determine a realistic bounce direction using the contact normal.
@@ -143,4 +142,6 @@ public class MovableTrampoline : PhysicsObject, IStasis
             objRB.AddForce(throwVelocity);
         }
     }
+
+    
 }
