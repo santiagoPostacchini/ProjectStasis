@@ -1,7 +1,8 @@
 // AudioManager.cs
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
+
 
 public class AudioManager : MonoBehaviour
 {
@@ -9,18 +10,19 @@ public class AudioManager : MonoBehaviour
 
     [Header("Sonidos de Ambiente")]
     public Sound[] ambientSounds;
-
-    // (En el futuro puedes añadir arrays para música, SFX, etc.)
+    [Header("Sonidos SFX")]
+    public Sound[] sfxSounds;
 
     private Dictionary<string, AudioSource> _sources = new Dictionary<string, AudioSource>();
 
-    void Awake()
+    private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
             RegisterSounds(ambientSounds);
+            RegisterSounds(sfxSounds);
         }
         else
         {
@@ -32,41 +34,49 @@ public class AudioManager : MonoBehaviour
     {
         foreach (var s in sounds)
         {
-            // Añadimos un AudioSource nuevo por cada Sound
             var src = gameObject.AddComponent<AudioSource>();
             src.clip = s.clip;
             src.outputAudioMixerGroup = s.mixerGroup;
             src.loop = s.loop;
             src.volume = s.volume;
-            src.playOnAwake = false;        // Siempre false aquí
+            src.playOnAwake = false;
             _sources[s.soundName] = src;
 
-            // Si el asset pide reproducir en Awake, lo lanzamos manualmente
             if (s.playOnAwake)
                 src.Play();
         }
     }
 
-    // Métodos para Ambiente
+    // Ambiente
     public void PlayAmbient(string name)
     {
-        if (_sources.TryGetValue(name, out var src))
-            src.Play();
-        else
-            Debug.LogWarning($"[AudioManager] No existe ambient sound '{name}'");
+        if (_sources.TryGetValue(name, out var src)) src.Play();
+        else Debug.LogWarning($"[AudioManager] No ambient sound '{name}'");
     }
 
     public void StopAmbient(string name)
     {
-        if (_sources.TryGetValue(name, out var src))
-            src.Stop();
+        if (_sources.TryGetValue(name, out var src)) src.Stop();
+        else Debug.LogWarning($"[AudioManager] No ambient sound '{name}'");
     }
 
     public void FadeOutAmbient(string name, float duration)
     {
         if (_sources.TryGetValue(name, out var src))
             StartCoroutine(Fader.FadeOut(src, duration));
+        else Debug.LogWarning($"[AudioManager] No ambient sound '{name}'");
     }
 
-    // Aquí podrías añadir PlayMusic, PlaySfx, etc.
+    // SFX
+    public void PlaySfx(string name)
+    {
+        if (_sources.TryGetValue(name, out var src)) src.PlayOneShot(src.clip, src.volume);
+        else Debug.LogWarning($"[AudioManager] No SFX '{name}'");
+    }
+
+    public void StopSfx(string name)
+    {
+        if (_sources.TryGetValue(name, out var src)) src.Stop();
+        else Debug.LogWarning($"[AudioManager] No SFX '{name}'");
+    }
 }
