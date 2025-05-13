@@ -32,13 +32,21 @@ public class SlidingDoorController : MonoBehaviour
     public bool isOpen = false;
     private bool lastState = false;
 
-    [Header("Autocierre")]
+    [Header("Autocierre por Trigger")]
     public bool autoClose = true;
     [Tooltip("Retraso antes de cerrar tras detectar al jugador")]
     public float autoCloseDelay = 1f;
 
+    [Header("Cierre temporizado")]
+    [Tooltip("Si true, la puerta se cerrará automáticamente tras abrirse")]
+    public bool hasTimedClose = false;
+    [Tooltip("Tiempo en segundos que la puerta permanece abierta antes de cerrarse")]
+    public float timedCloseDelay = 5f;
+
     // Posiciones iniciales
     private Vector3 leftClosedPos, rightClosedPos;
+    // Para cancelar cierres temporizados antiguos
+    private Coroutine timedCloseCoroutine;
 
     private void Start()
     {
@@ -55,6 +63,10 @@ public class SlidingDoorController : MonoBehaviour
         if (isOpen != lastState)
         {
             StopAllCoroutines();
+            // Cancelar cualquier cierre programado anterior
+            if (timedCloseCoroutine != null)
+                StopCoroutine(timedCloseCoroutine);
+
             StartCoroutine(RunDoorSequence(isOpen));
             lastState = isOpen;
         }
@@ -64,28 +76,32 @@ public class SlidingDoorController : MonoBehaviour
     {
         if (opening)
         {
-            // Giro de engranajes antes de abrir
+            // 1) Giro de engranajes antes de abrir
             foreach (var gear in gears)
             {
                 AudioManager.Instance.PlaySfx(gearSoundName);
                 yield return RotateGear(gear, true);
             }
 
-            // Sonido de apertura
+            // 2) Sonido de apertura
             AudioManager.Instance.PlaySfx(openSoundName);
 
-            // Deslizamiento abriendo
+            // 3) Deslizamiento abriendo
             yield return SlideDoors(true);
+
+            // 4) Si tiene cierre temporizado, arrancamos rutina
+            if (hasTimedClose)
+                timedCloseCoroutine = StartCoroutine(TimedCloseRoutine());
         }
         else
         {
-            // Sonido de cierre
+            // 1) Sonido de cierre
             AudioManager.Instance.PlaySfx(closeSoundName);
 
-            // Deslizamiento cerrando
+            // 2) Deslizamiento cerrando
             yield return SlideDoors(false);
 
-            // Giro de engranajes al final del cierre
+            // 3) Giro de engranajes al final del cierre
             foreach (var gear in gears)
             {
                 AudioManager.Instance.PlaySfx(gearSoundName);
@@ -94,10 +110,15 @@ public class SlidingDoorController : MonoBehaviour
         }
     }
 
+    private IEnumerator TimedCloseRoutine()
+    {
+        yield return new WaitForSeconds(timedCloseDelay);
+        isOpen = false;
+    }
+
     private IEnumerator RotateGear(Transform gear, bool opening)
     {
         float elapsed = 0f;
-        // Leemos el ángulo actual sobre Z
         float from = gear.localEulerAngles.z;
         float to = opening ? from + gearRotationAngle : from - gearRotationAngle;
 
@@ -107,12 +128,10 @@ public class SlidingDoorController : MonoBehaviour
             float t = Mathf.SmoothStep(0f, 1f, elapsed / gearRotateDuration);
             float angle = Mathf.LerpUnclamped(from, to, t);
             var e = gear.localEulerAngles;
-            // Rotamos sobre Z
             gear.localEulerAngles = new Vector3(e.x, e.y, angle);
             yield return null;
         }
 
-        // Ajuste final para evitar redondeos
         var final = gear.localEulerAngles;
         gear.localEulerAngles = new Vector3(final.x, final.y, to);
     }
@@ -122,7 +141,6 @@ public class SlidingDoorController : MonoBehaviour
         Vector3 leftStart = leftDoor.localPosition;
         Vector3 rightStart = rightDoor.localPosition;
 
-        // Izquierda +X, derecha -X al abrir
         Vector3 leftEnd = opening ? leftClosedPos + Vector3.right * slideDistance : leftClosedPos;
         Vector3 rightEnd = opening ? rightClosedPos + Vector3.left * slideDistance : rightClosedPos;
 
