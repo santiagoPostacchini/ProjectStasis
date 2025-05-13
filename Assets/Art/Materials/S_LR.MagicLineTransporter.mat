@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: S_StasisBeam
+  m_Name: S_LR.MagicLineTransporter
   m_Shader: {fileID: -6465566751694194690, guid: 118e97b241dd86a4cba4cbc7cfadaeeb,
     type: 3}
   m_Parent: {fileID: 0}
@@ -52,13 +52,13 @@ Material:
     m_Ints: []
     m_Floats:
     - _Electricity_Amount: 2
-    - _Electricity_Scale: 20
+    - _Electricity_Scale: 120
     - _Electricity_Speed: 0.5
-    - _Electricity_Thikness: 1
-    - _Noise_Speed: 0.1
-    - _Power_Edges: 1
+    - _Electricity_Thikness: 0.414
+    - _Noise_Speed: 0.136
+    - _Power_Edges: 2.5
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
-    - _Color: {r: 1.6055588, g: 1.6055588, b: 1.6055588, a: 1}
+    - _Color: {r: 2, g: 1.5615084, b: 0.9339622, a: 1}
   m_BuildTextureStacks: []
