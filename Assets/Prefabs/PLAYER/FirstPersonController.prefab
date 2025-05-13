@@ -151,7 +151,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mouseSensitivity: 50
-  moveSpeed: 3
   walkSpeed: 3
   sprintSpeed: 5
   crouchSpeed: 1.5
@@ -161,16 +160,15 @@ MonoBehaviour:
   slideDuration: 0.7
   slideFovBoost: 5
   slideTiltAngle: 5
-  gravity: -9.81
-  jumpHeight: 1.5
-  airControl: 1
+  jumpSpeed: 4
+  gravity: 9.81
   coyoteTimeEnabled: 1
   coyoteTimeDuration: 0.2
   normalFov: 60
   sprintFov: 70
   fovChangeSpeed: 5
-  bobAmount: 0.1
-  bobSpeed: 2
+  walkingBobbingSpeed: 14
+  bobbingAmount: 0.05
   canSlide: 1
   canJump: 1
   canSprint: 1
