@@ -3,83 +3,72 @@ using UnityEngine;
 
 public partial class FirstPersonController : MonoBehaviour
 {
-    [Header("Look Settings")]
+    [Header("Move Settings")]
+    [Tooltip("Movimientos básicos del Player")]
     [Range(0, 100)] public float mouseSensitivity = 25f;
     [Range(0f, 200f)] private float snappiness = 100f;
-
-    [Header("Speeds")]
-    [Range(0f, 20f)] public float walkSpeed = 5f;
-    [Range(0f, 30f)] public float sprintSpeed = 10f;
-    [Range(0f, 10f)] public float crouchSpeed = 3f;
-    public float slideSpeed = 9f;
-    [Range(0f, 15f)] public float jumpSpeed = 3f;
-
-    [Header("Crouch / Slide / FOV")]
+    [Range(0f, 20f)] public float walkSpeed = 10f;
+    [Range(0f, 30f)] public float sprintSpeed = 15f;
+    [Range(0f, 10f)] public float crouchSpeed = 6f;
     public float crouchHeight = 1f;
     public float crouchCameraHeight = 0.5f;
+    public float slideSpeed = 9f;
     public float slideDuration = 0.7f;
     public float slideFovBoost = 5f;
     public float slideTiltAngle = 5f;
-    public float normalFov = 60f;
-    public float sprintFov = 70f;
-    public float fovChangeSpeed = 5f;
 
-    [Header("Gravity & Times")]
+    [Header("Tilt Settings")]
+    [Tooltip("Intensidad del tilt lateral al moverse horizontalmente")]
+    public float lateralTiltAmount = 2f;
+
+    [Header("Speed Settings")]
+    [Tooltip("Velocidades básicas del Player")]
+    [Range(0f, 15f)] public float jumpSpeed = 3f;
     [Range(0f, 50f)] public float gravity = 9.81f;
     public bool coyoteTimeEnabled = true;
     public float coyoteTimeDuration = 0.25f;
-
-    [Header("Head Bob")]
-    public float walkingBobbingSpeed = 9f;
-    public float bobbingAmount = 0.01f;
-    [Tooltip("Intensidad del tilt lateral al caminar")]
-    public float horizontalTiltAmount = 2f;  
-
-    [Header("Capsule & Layers")]
-    public Transform groundCheck;
-    public float groundDistance = 0.3f;
-    public LayerMask groundMask;
-
-    [Header("References")]
-    public Transform playerCamera;
-    public Transform cameraParent;
-
-    [Header("Toggles")]
+    public float normalFov = 60f;
+    public float sprintFov = 70f;
+    public float fovChangeSpeed = 5f;
+    public float walkingBobbingSpeed = 14f;
+    public float bobbingAmount = 0.05f;
+    private float sprintBobMultiplier = 1.2f;
+    private float recoilReturnSpeed = 8f;
     public bool canSlide = true;
     public bool canJump = true;
     public bool canSprint = true;
     public bool canCrouch = true;
+    public Transform groundCheck;
+    public float groundDistance = 0.3f;
+    public LayerMask groundMask;
+    public Transform playerCamera;
+    public Transform cameraParent;
 
-    [Header("Movement Smoothing")]
-    public float accelTime = 0.1f;
-    public float deccelTime = 0.2f;
-    public float airControlMultiplier = 2f;
-    private Vector3 horizontalVelocity;
-    private Vector3 moveVelocityRef;
-
-    [Header("Jump Buffer")]
-    public float jumpBufferDuration = 0.1f;
-    private float jumpBufferTimer;
-
+    [Header("In Air Settings")]
+    [Tooltip("Acciones del Playerr")]
     private float rotX, rotY;
     private float xVelocity, yVelocity;
     private CharacterController characterController;
     private Vector3 moveDirection = Vector3.zero;
     private bool isGrounded;
     private Vector2 moveInput;
-    public bool isCrouching, isSliding;
-    private float slideTimer, postSlideCrouchTimer, coyoteTimer;
+    public bool isSprinting;
+    public bool isCrouching;
+    public bool isSliding;
+    private float slideTimer;
+    private float postSlideCrouchTimer;
     private Vector3 slideDirection;
-    private float originalHeight, originalCameraParentHeight;
+    private float originalHeight;
+    private float originalCameraParentHeight;
+    private float coyoteTimer;
     private Camera cam;
     private AudioSource slideAudioSource;
     private float bobTimer;
+    private float defaultPosY;
     private Vector3 recoil = Vector3.zero;
     private bool isLook = true, isMove = true;
-    private bool isWalking; // ahora accesible globalmente
 
-    public float CurrentCameraHeight =>
-        isCrouching || isSliding ? crouchCameraHeight : originalCameraParentHeight;
+    public float CurrentCameraHeight => isCrouching || isSliding ? crouchCameraHeight : originalCameraParentHeight;
 
     private void Awake()
     {
@@ -87,112 +76,109 @@ public partial class FirstPersonController : MonoBehaviour
         cam = playerCamera.GetComponent<Camera>();
         originalHeight = characterController.height;
         originalCameraParentHeight = cameraParent.localPosition.y;
+        defaultPosY = cameraParent.localPosition.y;
+
         slideAudioSource = gameObject.AddComponent<AudioSource>();
         slideAudioSource.playOnAwake = false;
         slideAudioSource.loop = false;
+
         Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void Update()
     {
-        isGrounded = characterController.isGrounded;
-
-        if (canJump && Input.GetKeyDown(KeyCode.Space))
-            jumpBufferTimer = jumpBufferDuration;
-        else
-            jumpBufferTimer -= Time.deltaTime;
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        if (isGrounded && moveDirection.y < 0)
+        {
+            moveDirection.y = -2f;
+            coyoteTimer = coyoteTimeEnabled ? coyoteTimeDuration : 0f;
+        }
+        else if (coyoteTimeEnabled)
+        {
+            coyoteTimer -= Time.deltaTime;
+        }
 
         if (isLook)
         {
-            float mX = Input.GetAxis("Mouse X") * 10f * mouseSensitivity * Time.deltaTime;
-            float mY = Input.GetAxis("Mouse Y") * 10f * mouseSensitivity * Time.deltaTime;
-            rotX += mX; rotY -= mY;
+            float mouseX = Input.GetAxis("Mouse X") * 10 * mouseSensitivity * Time.deltaTime;
+            float mouseY = Input.GetAxis("Mouse Y") * 10 * mouseSensitivity * Time.deltaTime;
+
+            rotX += mouseX;
+            rotY -= mouseY;
             rotY = Mathf.Clamp(rotY, -90f, 90f);
 
             xVelocity = Mathf.Lerp(xVelocity, rotX, snappiness * Time.deltaTime);
             yVelocity = Mathf.Lerp(yVelocity, rotY, snappiness * Time.deltaTime);
 
-            playerCamera.localRotation = Quaternion.Euler(yVelocity, 0f, isSliding ? -slideTiltAngle : 0f);
+            if (isSliding)
+            {
+                playerCamera.transform.localRotation = Quaternion.Lerp(
+                    playerCamera.transform.localRotation,
+                    Quaternion.Euler(yVelocity - slideTiltAngle, 0f, 0f),
+                    Time.deltaTime * 10f
+                );
+            }
+            else
+            {
+                playerCamera.transform.localRotation = Quaternion.Euler(yVelocity, 0f, 0f);
+            }
             transform.rotation = Quaternion.Euler(0f, rotX, 0f);
         }
 
         HandleHeadBob();
-        HandleCrouchAndSlideSetup();
-        HandleSlide();
-        HandleCrouchTransition();
-        HandleFov();
-        HandleMovement();
-    }
 
-    private void HandleMovement()
-    {
-        moveInput.x = Input.GetAxis("Horizontal");
-        moveInput.y = Input.GetAxis("Vertical");
+        bool wantsToCrouch = canCrouch && Input.GetKey(KeyCode.LeftControl) && !isSliding;
+        Vector3 point1 = transform.position + characterController.center - Vector3.up * (characterController.height * 0.5f);
+        Vector3 point2 = point1 + Vector3.up * (characterController.height * 0.6f);
+        float capsuleRadius = characterController.radius * 0.95f;
+        float castDistance = isSliding ? originalHeight + 0.2f : originalHeight - crouchHeight + 0.2f;
+        bool hasCeiling = Physics.CapsuleCast(point1, point2, capsuleRadius, Vector3.up, castDistance, groundMask);
 
-        bool isWalking = canSprint &&
-                         Input.GetKey(KeyCode.LeftShift) &&
-                         moveInput.y > 0.1f &&
-                         isGrounded &&
-                         !isCrouching &&
-                         !isSliding;
-
-        float speed = isCrouching ? crouchSpeed : (isWalking ? walkSpeed : sprintSpeed);
-
-        if (isGrounded)
+        if (isSliding)
         {
-            moveDirection.y = -2f;
-            coyoteTimer = coyoteTimeEnabled ? coyoteTimeDuration : 0f;
+            postSlideCrouchTimer = 0.1f;
+        }
 
-            if (jumpBufferTimer > 0f && canJump)
-            {
-                moveDirection.y = jumpSpeed;
-                jumpBufferTimer = 0f;
-                coyoteTimer = 0f;
-            }
+        if (postSlideCrouchTimer > 0)
+        {
+            postSlideCrouchTimer -= Time.deltaTime;
+            isCrouching = canCrouch;
         }
         else
         {
-            if (coyoteTimeEnabled)
-                coyoteTimer -= Time.deltaTime;
-
-            if (jumpBufferTimer > 0f && coyoteTimer > 0f && canJump)
-            {
-                moveDirection.y = jumpSpeed;
-                jumpBufferTimer = 0f;
-                coyoteTimer = 0f;
-            }
-
-            moveDirection.y -= gravity * Time.deltaTime;
+            isCrouching = canCrouch && (wantsToCrouch || (hasCeiling && !isSliding));
         }
 
-        Vector3 dir = new Vector3(moveInput.x, 0f, moveInput.y).normalized;
-        bool inAir = !isGrounded && coyoteTimer <= 0f;
-        float smoothT = (dir.magnitude > 0.1f ? accelTime : deccelTime) * (inAir ? airControlMultiplier : 1f);
-        Vector3 targetV = transform.TransformDirection(dir) * speed;
-        horizontalVelocity = Vector3.SmoothDamp(horizontalVelocity, targetV, ref moveVelocityRef, smoothT);
-
-        if (dir.magnitude < 0.1f && isGrounded)
+        if (canSlide && isSprinting && Input.GetKeyDown(KeyCode.LeftControl) && isGrounded)
         {
-            horizontalVelocity = Vector3.MoveTowards(horizontalVelocity, Vector3.zero, (speed / deccelTime) * Time.deltaTime);
+            isSliding = true;
+            slideTimer = slideDuration;
+            slideDirection = moveInput.magnitude > 0.1f
+                ? (transform.right * moveInput.x + transform.forward * moveInput.y).normalized
+                : transform.forward;
         }
 
-        moveDirection.x = horizontalVelocity.x;
-        moveDirection.z = horizontalVelocity.z;
+        if (isSliding)
+        {
+            slideTimer -= Time.deltaTime;
+            if (slideTimer <= 0f || !isGrounded)
+                isSliding = false;
 
-        characterController.Move(moveDirection * Time.deltaTime);
-    }
+            float slideProgress = slideTimer / slideDuration;
+            float currentSlideSpeed = slideSpeed * Mathf.Lerp(0.5f, 1f, slideProgress * slideProgress);
+            characterController.Move(slideDirection * currentSlideSpeed * Time.deltaTime);
+        }
 
-    private void HandleFov()
-    {
-        bool isWalking = canSprint &&
-                         Input.GetKey(KeyCode.LeftShift) &&
-                         moveInput.y > 0.1f &&
-                         isGrounded &&
-                         !isCrouching &&
-                         !isSliding;
+        float targetHeight = isCrouching || isSliding ? crouchHeight : originalHeight;
+        characterController.height = Mathf.Lerp(characterController.height, targetHeight, Time.deltaTime * 15f);
+        characterController.center = new Vector3(0f, characterController.height * 0.5f, 0f);
 
-        float target = isWalking ? normalFov : (isSliding ? sprintFov + slideFovBoost : sprintFov);
-        cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, target, Time.deltaTime * fovChangeSpeed);
+        float targetFov = isSprinting
+            ? sprintFov
+            : (isSliding ? sprintFov + slideFovBoost : normalFov);
+        cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, targetFov, Time.deltaTime * fovChangeSpeed);
+
+        HandleMovement();
     }
 
     private void HandleHeadBob()
@@ -206,91 +192,103 @@ public partial class FirstPersonController : MonoBehaviour
                 cameraParent.localPosition.z
             );
             recoil = Vector3.zero;
-            cameraParent.localRotation = Quaternion.RotateTowards(cameraParent.localRotation, Quaternion.Euler(recoil), walkingBobbingSpeed * Time.deltaTime);
+            cameraParent.localRotation = Quaternion.RotateTowards(
+                cameraParent.localRotation,
+                Quaternion.Euler(recoil),
+                recoilReturnSpeed * Time.deltaTime
+            );
             return;
         }
 
-        bool moving = Mathf.Abs(characterController.velocity.x) > 0.1f || Mathf.Abs(characterController.velocity.z) > 0.1f;
-        if (moving)
+        if (Mathf.Abs(characterController.velocity.x) > 0.1f || Mathf.Abs(characterController.velocity.z) > 0.1f)
         {
-            float speedMult = Input.GetKey(KeyCode.LeftShift) ? 1f : 1.2f;
-            bobTimer += Time.deltaTime * walkingBobbingSpeed * speedMult;
+            float bobSpeed = walkingBobbingSpeed * (isSprinting ? sprintBobMultiplier : 1f);
+            bobTimer += Time.deltaTime * bobSpeed;
+
             cameraParent.localPosition = new Vector3(
                 cameraParent.localPosition.x,
                 CurrentCameraHeight + Mathf.Sin(bobTimer) * bobbingAmount,
                 cameraParent.localPosition.z
             );
-            recoil.z = moveInput.x * -2f;
+
+            // Aquí usamos la variable pública lateralTiltAmount en lugar del valor fijo
+            recoil.z = moveInput.x * -lateralTiltAmount;
         }
         else
         {
             bobTimer = 0f;
-            recoil = Vector3.zero;
             cameraParent.localPosition = new Vector3(
                 cameraParent.localPosition.x,
                 Mathf.Lerp(cameraParent.localPosition.y, CurrentCameraHeight, Time.deltaTime * walkingBobbingSpeed),
                 cameraParent.localPosition.z
             );
+            recoil = Vector3.zero;
         }
 
-        cameraParent.localRotation = Quaternion.RotateTowards(cameraParent.localRotation, Quaternion.Euler(recoil), walkingBobbingSpeed * Time.deltaTime);
+        cameraParent.localRotation = Quaternion.RotateTowards(
+            cameraParent.localRotation,
+            Quaternion.Euler(recoil),
+            recoilReturnSpeed * Time.deltaTime
+        );
     }
 
-    private void HandleCrouchAndSlideSetup()
+    private void HandleMovement()
     {
-        bool wantsToCrouch = canCrouch && Input.GetKey(KeyCode.LeftControl) && !isSliding;
-        Vector3 p1 = transform.position + characterController.center - Vector3.up * (characterController.height * 0.5f);
-        Vector3 p2 = p1 + Vector3.up * characterController.height * 0.6f;
-        float capR = characterController.radius * 0.95f;
-        float castDist = isSliding ? originalHeight + 0.2f : originalHeight - crouchHeight + 0.2f;
-        bool hasCeiling = Physics.CapsuleCast(p1, p2, capR, Vector3.up, castDist, groundMask);
+        moveInput.x = Input.GetAxis("Horizontal");
+        moveInput.y = Input.GetAxis("Vertical");
+        isSprinting = canSprint && Input.GetKey(KeyCode.LeftShift) && moveInput.y > 0.1f && isGrounded && !isCrouching && !isSliding;
 
-        if (isSliding) postSlideCrouchTimer = 0.1f;
+        float currentSpeed = isCrouching
+            ? crouchSpeed
+            : (isSprinting ? sprintSpeed : walkSpeed);
+        if (!isMove) currentSpeed = 0f;
 
-        if (postSlideCrouchTimer > 0f)
+        Vector3 direction = new Vector3(moveInput.x, 0f, moveInput.y);
+        Vector3 moveVector = transform.TransformDirection(direction) * currentSpeed;
+        moveVector = Vector3.ClampMagnitude(moveVector, currentSpeed);
+
+        if (isGrounded || coyoteTimer > 0f)
         {
-            postSlideCrouchTimer -= Time.deltaTime;
-            isCrouching = canCrouch;
+            if (canJump && Input.GetKeyDown(KeyCode.Space) && !isSliding)
+            {
+                moveDirection.y = jumpSpeed;
+            }
+            else if (moveDirection.y < 0)
+            {
+                moveDirection.y = -2f;
+            }
         }
         else
         {
-            isCrouching = canCrouch && (wantsToCrouch || (hasCeiling && !isSliding));
+            moveDirection.y -= gravity * Time.deltaTime;
         }
 
-        if (canSlide && !isWalking && Input.GetKeyDown(KeyCode.LeftControl) && isGrounded)
+        if (!isSliding)
         {
-            isSliding = true;
-            slideTimer = slideDuration;
-            slideDirection = moveInput.magnitude > 0.1f ? (transform.right * moveInput.x + transform.forward * moveInput.y).normalized : transform.forward;
+            moveDirection = new Vector3(moveVector.x, moveDirection.y, moveVector.z);
+            characterController.Move(moveDirection * Time.deltaTime);
         }
     }
 
-    private void HandleSlide()
+    public void SetControl(bool newState)
     {
-        if (!isSliding) return;
-
-        slideTimer -= Time.deltaTime;
-        if (slideTimer <= 0f || !isGrounded)
-            isSliding = false;
-
-        float t = slideTimer / slideDuration;
-        float speed = slideSpeed * Mathf.Lerp(0.5f, 1f, t * t);
-        characterController.Move(slideDirection * speed * Time.deltaTime);
+        SetLookControl(newState);
+        SetMoveControl(newState);
     }
 
-    private void HandleCrouchTransition()
+    public void SetLookControl(bool newState)
     {
-        float targetH = isCrouching || isSliding ? crouchHeight : originalHeight;
-        characterController.height = Mathf.Lerp(characterController.height, targetH, Time.deltaTime * 15f);
-        characterController.center = new Vector3(0f, characterController.height * 0.5f, 0f);
+        isLook = newState;
     }
 
-    public void SetControl(bool s) { SetLookControl(s); SetMoveControl(s); }
-    public void SetLookControl(bool s) => isLook = s;
-    public void SetMoveControl(bool s) => isMove = s;
-    public void SetCursorVisibility(bool v)
+    public void SetMoveControl(bool newState)
     {
-        Cursor.lockState = v ? CursorLockMode.None : CursorLockMode.Locked;
-        Cursor.visible = v;
+        isMove = newState;
+    }
+
+    public void SetCursorVisibility(bool newVisibility)
+    {
+        Cursor.lockState = newVisibility ? CursorLockMode.None : CursorLockMode.Locked;
+        Cursor.visible = newVisibility;
     }
 }

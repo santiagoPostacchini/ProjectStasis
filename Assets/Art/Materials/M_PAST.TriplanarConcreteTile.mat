@@ -49,7 +49,7 @@ Material:
     m_Floats:
     - _Blend: 0.28
     - _Main_Smoothness: 0.2
-    - _Offset_Depth_Position: 0.001
+    - _Offset_Depth_Position: 1
     - _Second_Text_Height: 0.211
     - _Second_Text_Threshold: 0.105
     - _Tile: 0.081
