@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using UnityEngine;
 
 public class StasisGun : MonoBehaviour
@@ -10,7 +10,7 @@ public class StasisGun : MonoBehaviour
     [Header("Visual Settings")]
     [SerializeField] private Transform _stasisOrigin; // Punto de origen del rayo (por ejemplo, la mano del jugador)
     [SerializeField] private GameObject _stasisBeamPrefab; // Prefab del rayo
-    [SerializeField] private float _beamDuration = 0.2f; // Duración visible del rayo
+    [SerializeField] private float _beamDuration = 0.2f; // DuraciÃ³n visible del rayo
 
     private GameObject _firstFrozenObject;
     private IStasis _firstStasisComponent;
@@ -61,7 +61,7 @@ public class StasisGun : MonoBehaviour
                 ApplyStasisEffect(hitObject, stasisComponent);
             }
 
-            // Si ya hay un rayo activo, destrúyelo
+            // Si ya hay un rayo activo, destrÃºyelo
             if (_activeBeam != null)
             {
                 Destroy(_activeBeam.gameObject);
@@ -72,7 +72,10 @@ public class StasisGun : MonoBehaviour
             _activeBeam = beamInstance.GetComponent<StasisBeam>();
             _activeBeam.SetBeam(_stasisOrigin.position, hit.point);
 
-            // Iniciar la corrutina para desactivar el rayo después de un tiempo
+            //  Reproducir sonido del rayo
+            AudioManager.Instance?.PlaySfx("LaserFX");
+
+            // Iniciar la corrutina para desactivar el rayo despuÃ©s de un tiempo
             if (_beamCoroutine != null)
             {
                 StopCoroutine(_beamCoroutine);
@@ -80,6 +83,7 @@ public class StasisGun : MonoBehaviour
             _beamCoroutine = StartCoroutine(DisableBeamAfterDuration(_beamDuration));
         }
     }
+
 
     void ApplyStasisEffect(GameObject newObject, IStasis newStasisComponent)
     {

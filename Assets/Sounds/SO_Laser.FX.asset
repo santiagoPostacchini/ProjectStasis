@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7594319d8ede23c40ae874f3ffd3150c, type: 3}
+  m_Name: SO_Laser.FX
+  m_EditorClassIdentifier: 
+  soundName: LaserFX
+  clip: {fileID: 8300000, guid: 207e9d083a360ee4283263fb8b983df3, type: 3}
+  mixerGroup: {fileID: -6319808297377166825, guid: f380811a388512f45bca0ea436ce452b,
+    type: 2}
+  playOnAwake: 0
+  loop: 0
+  volume: 1
