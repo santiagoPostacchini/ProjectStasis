@@ -1,14 +1,14 @@
 // PlayerSlide.cs
 using UnityEngine;
 [RequireComponent(typeof(CharacterController), typeof(PlayerMovement))]
-public class PlayerSlide : MonoBehaviour
+public class PlayerSlide : MonoBehaviour, ISlideModule
 {
     [Header("Slide Settings")]
     [Tooltip("Velocidad durante el slide")] public float slideSpeed = 9f;
     [Tooltip("Duración del slide en segundos")] public float slideDuration = 0.7f;
     [Tooltip("Permite deslizamiento")] public bool canSlide = true;
 
-    [HideInInspector] public bool IsSliding;
+    public bool IsSliding { get; private set; }
 
     private float slideTimer;
     private Vector3 slideDirection;
@@ -39,9 +39,9 @@ public class PlayerSlide : MonoBehaviour
         {
             IsSliding = true;
             slideTimer = slideDuration;
-            Vector2 input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-            slideDirection = input.magnitude > 0.1f
-                ? (transform.right * input.x + transform.forward * input.y).normalized
+            Vector2 inp = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+            slideDirection = inp.magnitude > 0.1f
+                ? (transform.right * inp.x + transform.forward * inp.y).normalized
                 : transform.forward;
         }
     }
