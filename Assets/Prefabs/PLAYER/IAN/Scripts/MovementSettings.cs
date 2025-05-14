@@ -22,6 +22,7 @@ public class MovementSettings : ScriptableObject
     [Header("Jump & Gravity")]
     public float JumpHeight = 1.5f;
     public float Gravity = -9.81f;
+   
     [Tooltip("Control aéreo, de 0 (ninguno) a 1 (igual que suelo)")]
     public float AirControl = 0.3f;
     public bool CoyoteTimeEnabled = true;
