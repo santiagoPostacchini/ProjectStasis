@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 public class PlayerInteractor : MonoBehaviour
@@ -12,7 +12,13 @@ public class PlayerInteractor : MonoBehaviour
      public PhysicsObject _objectGrabbable;
     private bool _isInteractableInView = false;
     [SerializeField] private Player player;
-    
+
+    private float timer;
+    private bool isPressingE = false;
+    private bool hasThrown = false;
+    private bool canFill = true;
+
+    [SerializeField] private FillAnimation _fillAnimation;
     void Update()
     {
         bool hitInteractable = false;
@@ -36,17 +42,53 @@ public class PlayerInteractor : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            HandleGrabOrDrop(hitObject);
+            timer = 0f;
+            isPressingE = true;
+            hasThrown = false;
+            canFill = true;
+            _fillAnimation.ResetBrokenFill();
+            if (_objectGrabbable != null && isPressingE && canFill)
+            {
+                _fillAnimation.ActivateGameObject();   // Mostrar animación de carga
+                _fillAnimation.IsPressed(true);        // Inicia la animación visual del fill
+            }
+            
         }
 
-        if (Input.GetMouseButtonDown(0))
+        if (isPressingE && Input.GetKey(KeyCode.E))
         {
-            if (_objectGrabbable != null)
-            {
-                _objectGrabbable.Throw(_objectGrabPointTransform, _throwForce);
+            timer += Time.deltaTime;
 
-                StartCoroutine(DelayedClearHands());
+            if (!hasThrown && timer >= 1f)
+            {
+                if (_objectGrabbable != null)
+                {
+                    _objectGrabbable.Throw(_objectGrabPointTransform, _throwForce);
+
+                    _fillAnimation.BrokenFill(true);     // Animación de carga completada (rotura)
+                    canFill = false;
+                    StartCoroutine(DelayedClearHands());
+                    hasThrown = true;
+                    isPressingE = false; // Evita que vuelva a lanzar mientras seguís presionando
+                }
             }
+        }
+
+        if (Input.GetKeyUp(KeyCode.E))
+        {
+            _fillAnimation.IsPressed(false); // Siempre se llama, pero internamente decide qué mostrar
+            timer = 0f;
+            isPressingE = false;
+
+           
+
+            if (!hasThrown)
+            {
+                HandleGrabOrDrop(hitObject);
+            }
+
+            hasThrown = false;
+            canFill = false;
         }
     }
 

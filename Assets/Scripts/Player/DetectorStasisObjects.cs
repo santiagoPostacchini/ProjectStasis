@@ -35,10 +35,14 @@ public class DetectorStasisObjects : MonoBehaviour
                 {
                     if (_physicObject.player.playerInteractor._objectGrabbable != null) return;
                 }
-                
-                _physicObject.Glow(true,2f);
-                
+
+                //_physicObject.Glow(true,2f);
+                Color softGreen = new Color(0.7f, 1f, 0.7f, 1f);
+                _physicObject.SetColorOutline(softGreen, 0.3f);
+                _physicObject.SetOutlineThickness(1.05f);
                
+
+
             }
             else
             {
@@ -46,7 +50,13 @@ public class DetectorStasisObjects : MonoBehaviour
 
                 if (_physicObject != null)
                 {
-                    _physicObject.Glow(false, 1);
+                    if (!_physicObject._isFreezed)
+                    {
+                        _physicObject.SetColorOutline(Color.green, 1);
+                        _physicObject.SetOutlineThickness(1f);
+                    }
+                    
+                   // _physicObject.Glow(false, 1);
 
                     _physicObject = null;
                 } 

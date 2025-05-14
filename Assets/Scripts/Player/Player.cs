@@ -53,6 +53,7 @@ public class Player : MonoBehaviour
     public PlayerInteractor playerInteractor;
 
 
+
     public MovementState state;
     public enum MovementState
     {

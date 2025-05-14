@@ -96,7 +96,7 @@ public class PhysicsBox : PhysicsObject, IStasis
             {
                 DrawTrajectory(transform.position, _savedVelocity, objRB.drag);
             }
-            
+            SetColorOutline(Color.green, 1f);
             SetOutlineThickness(1.05f); // Optionally update the visual to indicate stasis.
         }
     }

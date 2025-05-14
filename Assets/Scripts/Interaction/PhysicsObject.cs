@@ -171,7 +171,7 @@ public abstract class PhysicsObject : MonoBehaviour
             objRB.WakeUp();
         }
     }
-
+    
     // Updates the outline effect (visual feedback) on the object.
     public void SetOutlineThickness(float thickness)
     {
@@ -179,9 +179,18 @@ public abstract class PhysicsObject : MonoBehaviour
         {
             _renderer.GetPropertyBlock(_mpb);
             _mpb.SetFloat(OutlineThicknessName, thickness);
+           // _mpb.SetColor("_Color", Color.green);
             _renderer.SetPropertyBlock(_mpb);
-            Glow(false, 1);
+            //Glow(false, 1);
         }
+    }
+    public void SetColorOutline(Color color, float alpha)
+    {
+        _renderer.GetPropertyBlock(_mpb);
+        //_mpb.SetFloat("_Alpha", alpha);
+       
+        _mpb.SetColor("_Color", color);
+        _renderer.SetPropertyBlock(_mpb);
     }
 
     // Indicates whether the object is currently grabbed.
