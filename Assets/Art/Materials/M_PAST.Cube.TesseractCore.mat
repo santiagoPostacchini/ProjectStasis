@@ -34,13 +34,13 @@ Material:
     m_Ints: []
     m_Floats:
     - _ContourDarkness: 0.938
-    - _DisplaceNoiseScale: 1
-    - _DisplaceStrength: 0.025
+    - _DisplaceNoiseScale: 0.4
+    - _DisplaceStrength: 0.035
     - _DisplaceType: 1
     - _DistortionScale: 1
     - _DistortionStrength: 0.129
     - _EdgeDarkness: 0.4
-    - _EmissionIntensity: 6.09
+    - _EmissionIntensity: 3.35
     - _FresnelFactor: 0.95
     - _FresnelIntensity: 1
     - _FresnelPower: 3
@@ -49,7 +49,7 @@ Material:
     - _GlowPulseSpeed: 1
     - _GlowScale: 1.1
     - _GlowSpeed: 0.028
-    - _LayerCount: 1.09
+    - _LayerCount: 0.21
     - _RotationSpeed: 0.01
     m_Colors:
     - _CoreColor: {r: 1, g: 0.62386006, b: 0, a: 1}

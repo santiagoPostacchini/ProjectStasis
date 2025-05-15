@@ -59,11 +59,6 @@ public class DetectObs : MonoBehaviour
     }
 
 
-
-
-
-
-
     void OnTriggerExit(Collider col)
     {
         if (col == colnow)
