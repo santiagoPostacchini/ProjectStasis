@@ -66,9 +66,11 @@ public class FreezablePlatform : PhysicsObject, IStasis
             objRB.velocity = Vector3.zero;
             objRB.angularVelocity = Vector3.zero;
             _isFreezed = true;
+
             SetOutlineThickness(1.05f); // Visual cue for stasis.
         }
     }
+    
 
     /// <summary>
     /// Unfreezes the trampoline by restoring its state and re-enabling gravity.
@@ -81,6 +83,7 @@ public class FreezablePlatform : PhysicsObject, IStasis
             RestoreRigidbodyState();
             _isFreezed = false;
             movingPlatform.canMove = true;
+            objRB.isKinematic = true;
             SetOutlineThickness(1f); // Reset visual cue.
         }
     }

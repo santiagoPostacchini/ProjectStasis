@@ -1,6 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
 [RequireComponent(typeof(BoxCollider))]
 [RequireComponent(typeof(Rigidbody))]
 public class MovingPlatform : MonoBehaviour
@@ -11,37 +11,77 @@ public class MovingPlatform : MonoBehaviour
     [HideInInspector] public bool canMove;
     public GameObject objectTransport;
     public Transform pos;
+
     private Rigidbody rb;
     private Vector3 target;
     private Vector3 velocity = Vector3.zero;
+    [SerializeField] private float pauseDuration = 0.5f;
+
+    private Coroutine moveCoroutine;
+
+    private Vector3 lastPosition;
+    private Vector3 platformVelocity;
+
+    private Rigidbody playerRbOnPlatform;
+
+    private FreezablePlatform freezeablePlatform;
+
     private void Start()
     {
         canMove = true;
         rb = GetComponent<Rigidbody>();
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
         target = pointB.position;
-    }
-    private void Update()
-    {
-        TransportObject();
+        lastPosition = rb.position;
+        moveCoroutine = StartCoroutine(MovePlatform());
+        freezeablePlatform = GetComponent<FreezablePlatform>();
     }
 
-    private void FixedUpdate()
+    private IEnumerator MovePlatform()
     {
-        if (Vector3.Distance(rb.position, target) < 0.05f)
+        float currentSpeed = 0f;
+        float accelerationTime = 0.5f;
+        
+        while (true)
         {
-            // Cambia suavemente al nuevo objetivo cuando está muy cerca
+
+            
+            while (Vector3.Distance(rb.position, target) > 0.05f)
+            {
+                currentSpeed = Mathf.MoveTowards(currentSpeed, speed, speed / accelerationTime * Time.fixedDeltaTime);
+                Vector3 newPosition = Vector3.MoveTowards(rb.position, target, currentSpeed * Time.fixedDeltaTime);
+                rb.MovePosition(newPosition);
+                yield return new WaitForFixedUpdate();
+            }
+
+            currentSpeed = 0f;
+            yield return new WaitForSeconds(pauseDuration);
+
             target = target == pointA.position ? pointB.position : pointA.position;
         }
-
-        // Movimiento suave hacia el objetivo
-        Vector3 newPosition = Vector3.SmoothDamp(rb.position, target, ref velocity, 0.1f, speed, Time.fixedDeltaTime);
-        rb.MovePosition(newPosition);
     }
+
+    //private void FixedUpdate()
+    //{
+    //    platformVelocity = (rb.position - lastPosition) / Time.fixedDeltaTime;
+    //    lastPosition = rb.position;
+
+    //    if (playerRbOnPlatform != null)
+    //    {
+    //        Vector3 horizontalVel = new Vector3(platformVelocity.x, 0f, platformVelocity.z);
+    //        playerRbOnPlatform.velocity += horizontalVel;
+    //    }
+    //}
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            transform.parent = collision.transform;
+            Rigidbody otherRb = collision.gameObject.GetComponent<Rigidbody>();
+            if (otherRb != null)
+            {
+                playerRbOnPlatform = otherRb;
+            }
         }
     }
 
@@ -49,14 +89,19 @@ public class MovingPlatform : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            transform.parent = null;
+            Rigidbody otherRb = collision.gameObject.GetComponent<Rigidbody>();
+            if (otherRb == playerRbOnPlatform)
+            {
+                playerRbOnPlatform = null;
+            }
         }
     }
+
     public void TransportObject()
     {
-        if(objectTransport != null && pos != null)
+        if (objectTransport != null && pos != null)
         {
-            objectTransport.transform.position = pos.transform.position;
+            objectTransport.transform.position = pos.position;
         }
     }
 }
