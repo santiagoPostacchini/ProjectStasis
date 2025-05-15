@@ -62,7 +62,7 @@ public class CubeGenerator : MonoBehaviour
         var CubeOn = Instantiate(vfxCubeOn, transform.position, transform.rotation);
         CubeOn.transform.position = posRespawn.transform.position;
         StartCoroutine(CubeOn.ActivateParticlesVFXcubeOn());
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(1.5f);
         box.transform.position = CubeOn.transform.position;
         box.transform.localScale = CubeOn.maxScale;
         box.GetComponent<Rigidbody>().useGravity = true;

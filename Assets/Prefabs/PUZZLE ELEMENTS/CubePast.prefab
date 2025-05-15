@@ -506,7 +506,7 @@ MonoBehaviour:
   collisionCheckDelay: 1
   IsUnderHighPressure: 0
   _rigidbodyPressureThreshold: 500
-  _nonRigidbodyPressureThreshold: 400
+  _nonRigidbodyPressureThreshold: 350
   _lineRenderer: {fileID: 6732834382305253887}
   _pointsCount: 100
   _timeStep: 0.1

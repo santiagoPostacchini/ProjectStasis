@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class PlayerCam : MonoBehaviour
 {
-    public float sensX;
-    public float sensY;
+    //public float sensX;
+    //public float sensY;
 
-    public float sens = 1000f;
+    public float sens = 700f;
 
     public Transform orientation;
     [SerializeField] private MouseSensibilityUI mouseSensibilityUI;

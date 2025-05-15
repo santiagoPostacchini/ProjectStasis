@@ -99,7 +99,9 @@ public class DetectorStasisObjects : MonoBehaviour
                         po.player?.playerInteractor._objectGrabbable == null)
                     {
                         _physicObject = po;
-                        po.Glow(true, 2f);
+                        Color softGreen = new Color(0.7f, 1f, 0.7f, 1f);
+                        _physicObject.SetColorOutline(softGreen, 0.3f);
+                        _physicObject.SetOutlineThickness(1.05f);
                         AudioManager.Instance?.PlaySfx("SelectStasiable");
                     }
                 }
@@ -114,7 +116,14 @@ public class DetectorStasisObjects : MonoBehaviour
 
             if (_physicObject != null)
             {
-                _physicObject.Glow(false, 1f);
+                if (!_physicObject._isFreezed)
+                {
+                    _physicObject.SetColorOutline(Color.green, 1);
+                    _physicObject.SetOutlineThickness(1f);
+                }
+
+                // _physicObject.Glow(false, 1);
+
                 _physicObject = null;
             }
         }

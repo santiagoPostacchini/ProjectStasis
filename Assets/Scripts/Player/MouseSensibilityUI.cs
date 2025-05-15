@@ -15,7 +15,7 @@ public class MouseSensibilityUI : MonoBehaviour
         Cursor.visible = false;
         cameraController = GetComponent<PlayerCam>();
         sensibilitySlider.minValue = 0.5f;
-        sensibilitySlider.maxValue = 1000f;
+        sensibilitySlider.maxValue = 700f;
         cameraController.sens = 500;
         //sensibilidadSlider.onValueChanged.AddListener(UpdateSensitivity);
     }
