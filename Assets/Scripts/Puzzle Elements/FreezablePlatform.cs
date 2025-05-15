@@ -66,7 +66,7 @@ public class FreezablePlatform : PhysicsObject, IStasis
             objRB.velocity = Vector3.zero;
             objRB.angularVelocity = Vector3.zero;
             _isFreezed = true;
-
+            SetColorOutline(Color.green, 1);
             SetOutlineThickness(1.05f); // Visual cue for stasis.
         }
     }
