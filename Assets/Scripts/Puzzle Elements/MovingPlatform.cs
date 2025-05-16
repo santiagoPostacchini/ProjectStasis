@@ -12,7 +12,8 @@ public class MovingPlatform : MonoBehaviour
     private Vector3 target;
 
     public bool canMove;
-
+    public GameObject objectTransport;
+    public Transform pos;
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -22,7 +23,10 @@ public class MovingPlatform : MonoBehaviour
         target = pointB.position;
         canMove = true;
     }
-
+    private void Update()
+    {
+        TransportObject();
+    }
     private void FixedUpdate()
     {
         if (!canMove) return;
@@ -68,6 +72,13 @@ public class MovingPlatform : MonoBehaviour
         if (player != null && player.transform.parent == transform)
         {
             player.transform.SetParent(null);
+        }
+    }
+    public void TransportObject()
+    {
+        if (objectTransport != null && pos != null)
+        {
+            objectTransport.transform.position = pos.transform.position;
         }
     }
 }

@@ -36,6 +36,7 @@ public class ButtonStasis : PhysicsObject, IStasis
             objRB.angularVelocity = Vector3.zero;
             objRB.useGravity = false;
             _isFreezed = true;
+            SetColorOutline(Color.green, 0.75f);
             SetOutlineThickness(1.05f); // Visual cue for stasis.
         }
     }

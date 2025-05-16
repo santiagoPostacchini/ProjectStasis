@@ -85,6 +85,7 @@ public class FreezablePlatform : PhysicsObject, IStasis
             movingPlatform.canMove = true;
             objRB.isKinematic = false;
             SetOutlineThickness(1f); // Reset visual cue.
+            //
         }
     }
 
