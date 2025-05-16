@@ -67,7 +67,11 @@ public class MovingPlatform : MonoBehaviour
     private void OnCollisionExit(Collision collision)
     {
         Player player = collision.gameObject.GetComponent<Player>();
-        player.transform.SetParent(null);
-        _player = null;
+        if(player!= null)
+        {
+            player.transform.SetParent(null);
+            _player = null;
+        }
+        
     }
 }

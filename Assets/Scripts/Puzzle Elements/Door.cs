@@ -3,14 +3,18 @@ using UnityEngine;
 public class Door : MonoBehaviour
 {
     [SerializeField] private Animator animator;
-
+    [SerializeField] private SlidingDoorController doorController;
+    private void Start()
+    {
+        doorController = GetComponentInParent<SlidingDoorController>();
+    }
     public void Open()
     {
-        animator?.SetBool("IsOpen", true);
+        doorController.isOpen = true;
     }
 
     public void Close()
     {
-        animator?.SetBool("IsOpen", false);
+        doorController.isOpen = false;
     }
 }
