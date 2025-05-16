@@ -41,6 +41,9 @@ public class DetectorStasisObjects : MonoBehaviour
     private float animProgress = 0f;
     private PhysicsObject _physicObject;
 
+    [SerializeField] private Player _player;
+
+
     void Start()
     {
         // Inicializa todas las imágenes en estado reposo
@@ -82,6 +85,7 @@ public class DetectorStasisObjects : MonoBehaviour
 
     void DetectStasisObjects(Transform cam)
     {
+        
         bool hitStasis = false;
         if (Physics.Raycast(cam.position, cam.forward, out RaycastHit hit, detectionDistance))
         {
@@ -95,6 +99,8 @@ public class DetectorStasisObjects : MonoBehaviour
                     isAiming = true;
                     AudioManager.Instance?.PlayAmbient(tickingSoundName);
 
+
+
                     if (!po._isFreezed &&
                         po.player?.playerInteractor._objectGrabbable == null)
                     {
@@ -107,7 +113,10 @@ public class DetectorStasisObjects : MonoBehaviour
                 }
             }
         }
-
+        if(_player.playerInteractor._objectGrabbable != null)
+        {
+            AudioManager.Instance?.StopAmbient(tickingSoundName);
+        }
         if (!hitStasis && isAiming)
         {
             // Termina la animación y detiene el sonido

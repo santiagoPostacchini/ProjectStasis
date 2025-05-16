@@ -110,7 +110,11 @@ public class PhysicsBox : PhysicsObject, IStasis
             if(objRB)
                 objRB.useGravity = true;
             SetOutlineThickness(1f); // Reset the visual effect.
-            _lineRenderer.positionCount = 0;
+            if(_lineRenderer != null)
+            {
+                _lineRenderer.positionCount = 0;
+            }
+            
         }
     }
     public void DrawTrajectory(Vector3 startPos, Vector3 startVelocity, float drag)

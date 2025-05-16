@@ -10,68 +10,64 @@ public class MovingPlatform : MonoBehaviour
 
     private Rigidbody rb;
     private Vector3 target;
-    private Coroutine moveCoroutine;
-    private Player _player;
 
     public bool canMove;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        rb.isKinematic = false;
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
+
         target = pointB.position;
-        moveCoroutine = StartCoroutine(MovePlatform());
         canMove = true;
     }
 
-    private IEnumerator MovePlatform()
+    private void FixedUpdate()
     {
-        while (true)
+        if (!canMove) return;
+
+        Vector3 direction = (target - rb.position).normalized;
+        float distance = Vector3.Distance(rb.position, target);
+
+        if (distance > 0.05f)
         {
-            // Mover hacia el objetivo
-            while (Vector3.Distance(rb.position, target) > 0.05f)
-            {
-                Vector3 newPosition = Vector3.MoveTowards(rb.position, target, speed * Time.fixedDeltaTime);
-                rb.MovePosition(newPosition);
-                yield return new WaitForFixedUpdate();
-            }
-
-            // Llegó al límite, pausa
-            yield return new WaitForSeconds(pauseDuration);
-
-            // Cambiar dirección
-            target = target == pointA.position ? pointB.position : pointA.position;
-            if(_player != null)
-            {
-                Rigidbody rbPlayer = _player.GetComponent<Rigidbody>();
-                if (rbPlayer != null)
-                {
-                    rbPlayer.velocity = rb.velocity;
-                }
-                Debug.Log("La inercia del player es " + _player.GetComponent<Rigidbody>().velocity);
-            }
-
-            
-
+            rb.velocity = direction * speed;
         }
+        else
+        {
+            rb.velocity = Vector3.zero;
+            StartCoroutine(SwapTargetAfterPause());
+        }
+    }
+
+    private IEnumerator SwapTargetAfterPause()
+    {
+        canMove = false;
+        yield return new WaitForSeconds(pauseDuration);
+        target = target == pointA.position ? pointB.position : pointA.position;
+        canMove = true;
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         Player player = collision.gameObject.GetComponent<Player>();
-        if (player !=null)
+        if (player != null)
         {
-            player.transform.SetParent(transform);
-            _player = player;
+            // Solo seteamos si no tiene padre o no está ya en esta plataforma
+            if (player.transform.parent != transform)
+            {
+                player.transform.SetParent(transform);
+            }
         }
     }
 
     private void OnCollisionExit(Collision collision)
     {
         Player player = collision.gameObject.GetComponent<Player>();
-        if(player!= null)
+        if (player != null && player.transform.parent == transform)
         {
             player.transform.SetParent(null);
-            _player = null;
         }
-        
     }
 }

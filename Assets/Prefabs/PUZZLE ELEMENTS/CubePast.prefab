@@ -505,7 +505,7 @@ MonoBehaviour:
   _renderer: {fileID: 8879733978912548260}
   collisionCheckDelay: 1
   IsUnderHighPressure: 0
-  _rigidbodyPressureThreshold: 500
+  _rigidbodyPressureThreshold: 400
   _nonRigidbodyPressureThreshold: 350
   _lineRenderer: {fileID: 6732834382305253887}
   _pointsCount: 100
@@ -560,7 +560,7 @@ LineRenderer:
   - {x: 0, y: 0, z: 1}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.05
+    widthMultiplier: 0.08
     widthCurve:
       serializedVersion: 2
       m_Curve:
