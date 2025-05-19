@@ -13,6 +13,31 @@ public class PhysicsBox : PhysicsObject, IStasis
     [SerializeField] private float _timeStep = 0.1f;
     [SerializeField] LayerMask _collisionMask;
 
+    //[Header("Soporte de flotación")]
+    //[Tooltip("Transform que marca la posición en la que debe ‘flotar’ el cubo al agarrarlo")]
+    //[SerializeField] private Transform cubeSupport;
+    //[Tooltip("Offset local desde el soporte")]
+    //[SerializeField] private Vector3 supportOffset = Vector3.zero;
+
+    //[Header("Partículas de energía")]
+    //[Tooltip("ParticleSystem que genera el campo de energía")]
+    //[SerializeField] private ParticleSystem energyFieldParticles;
+
+    //private void Awake()
+    //{
+    //    if (cubeSupport != null)
+    //    {
+    //        // Posición global + offset local
+    //        Vector3 initialPos = cubeSupport.position + cubeSupport.rotation * supportOffset;
+    //        transform.position = initialPos;
+    //        transform.rotation = cubeSupport.rotation;
+    //        // Asegura también la posición del Rigidbody
+    //        objRB.MovePosition(initialPos);
+    //        objRB.MoveRotation(cubeSupport.rotation);
+    //    }
+    //}
+
+
     public bool IsFreezed
     {
         get => _isFreezed;
@@ -22,6 +47,12 @@ public class PhysicsBox : PhysicsObject, IStasis
     {
         base.Grab(grabPoint);
         _lineRenderer.positionCount = 0;
+
+        //// Detenemos el campo de partículas
+        //if (energyFieldParticles != null && energyFieldParticles.isPlaying)
+        //{
+        //    energyFieldParticles.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+        //}
         // Additional stasis-related logic on grab can be added here if needed.
     }
 
@@ -52,6 +83,7 @@ public class PhysicsBox : PhysicsObject, IStasis
 
     protected override void FixedUpdate()
     {
+        // 1) Si está siendo agarrado, usar el grabPoint (Lerp hacia él)
         if (objGrabPointTransform != null)
         {
             Vector3 newPos = Vector3.Lerp(transform.position, objGrabPointTransform.position, Time.fixedDeltaTime * 10f);
@@ -59,9 +91,16 @@ public class PhysicsBox : PhysicsObject, IStasis
             objRB.MovePosition(newPos);
             objRB.MoveRotation(newRot);
         }
+        //// 2) Si no está agarrado y no está en stasis, volver al soporte
+        //else if (!_isFreezed && cubeSupport != null)
+        //{
+        //    Vector3 targetPos = cubeSupport.position + cubeSupport.rotation * supportOffset;
+        //    objRB.MovePosition(targetPos);
+        //    objRB.MoveRotation(cubeSupport.rotation);
+        //}
+        // 3) Si está en stasis, mantener posición/rotación congeladas
         else if (_isFreezed)
         {
-            // Maintain the frozen position and rotation.
             objRB.MovePosition(freezePosition);
             objRB.MoveRotation(freezeRotation);
             objRB.velocity = Vector3.zero;

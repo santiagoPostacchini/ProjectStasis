@@ -38,6 +38,7 @@ Material:
     - _Blend: 0
     - _Main_Smoothness: 0
     - _Offset_Depth_Position: 0.001
+    - _QueueControl: 0
     - _Tile: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}

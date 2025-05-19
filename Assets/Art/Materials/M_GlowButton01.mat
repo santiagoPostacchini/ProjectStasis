@@ -29,6 +29,6 @@ Material:
     - _FadeEnd: 0.5
     - _FadeStart: 0.8
     m_Colors:
-    - _BaseColor: {r: 0.21960786, g: 0.21960786, b: 0.21960786, a: 1}
-    - _EmissionColor: {r: 255.99997, g: 44.124355, b: 0, a: 1}
+    - _BaseColor: {r: 1, g: 0, b: 0, a: 1}
+    - _EmissionColor: {r: 15.999998, g: 0.31307518, b: 0, a: 1}
   m_BuildTextureStacks: []
