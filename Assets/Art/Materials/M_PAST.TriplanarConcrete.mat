@@ -38,11 +38,11 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _Color_Map:
-        m_Texture: {fileID: 2800000, guid: cd287018f835cb243a588dce40a89e05, type: 3}
+        m_Texture: {fileID: 2800000, guid: 971707340915f37498844221fb99bfbc, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Normal_Map:
-        m_Texture: {fileID: 2800000, guid: 3995a7128a676df488f57b603c6b7490, type: 3}
+        m_Texture: {fileID: 2800000, guid: b6cfdd37d94335d4085193c1a26166a1, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
@@ -54,5 +54,5 @@ Material:
     - _Second_Text_Threshold: 0.105
     - _Tile: 0.058
     m_Colors:
-    - _Color: {r: 2, g: 2, b: 2, a: 1}
+    - _Color: {r: 0.26414022, g: 0.26845434, b: 0.32747206, a: 1}
   m_BuildTextureStacks: []

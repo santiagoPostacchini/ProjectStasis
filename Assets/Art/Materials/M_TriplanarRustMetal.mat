@@ -71,21 +71,21 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Blend: 0.1
+    - _Blend: 3.96
     - _Blend_1: 0
     - _Intersection_Depth_Power: 90
     - _Intersection_Depth_Strenght: 1
     - _Intersection_Output: 0
-    - _Main_Smoothness: 0.09
+    - _Main_Smoothness: 0
     - _Offset_Depth_Position: 0.001
     - _QueueControl: 0
     - _QueueOffset: 0
     - _Second_Smoothness: 0
     - _Second_Text_Height: 0.25
     - _Second_Text_Threshold: 0.634
-    - _Tile: 0.014
+    - _Tile: 0.061
     - _Tile_1: 0
     - _Tilling: 0.5
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 0.13056247, g: 0.13499182, b: 0.16981131, a: 1}
   m_BuildTextureStacks: []

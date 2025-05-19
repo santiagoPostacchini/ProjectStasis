@@ -47,12 +47,12 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Blend: 0.28
-    - _Main_Smoothness: 0.2
-    - _Offset_Depth_Position: 1
+    - _Blend: 0
+    - _Main_Smoothness: 0.019
+    - _Offset_Depth_Position: 0.001
     - _Second_Text_Height: 0.211
     - _Second_Text_Threshold: 0.105
-    - _Tile: 0.081
+    - _Tile: 0.1
     m_Colors:
-    - _Color: {r: 0.3526623, g: 0.3526623, b: 0.3526623, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

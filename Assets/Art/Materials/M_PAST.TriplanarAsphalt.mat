@@ -54,5 +54,5 @@ Material:
     - _Second_Text_Threshold: 0.105
     - _Tile: 0.38
     m_Colors:
-    - _Color: {r: 0.9068457, g: 0.42640665, b: 0.40551397, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
