@@ -11,7 +11,7 @@ public class PlayerInteractor : MonoBehaviour
 
      public PhysicsObject _objectGrabbable;
     private bool _isInteractableInView = false;
-    [SerializeField] private Player player;
+    [SerializeField] private Player.Player player;
 
     private float timer;
     private bool isPressingE = false;

@@ -27,7 +27,7 @@ public class TriggerTutorial : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Player player = other.GetComponentInParent<Player>();
+        Player.Player player = other.GetComponentInParent<Player.Player>();
         if(player != null)
         {
             if (DictionaryByTypeUI.TryGetValue(typeUI, out GameObject uiElement))

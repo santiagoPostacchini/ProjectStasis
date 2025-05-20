@@ -1,263 +1,283 @@
 using System.Collections;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+namespace Player
 {
-    [Header("Movement")]
-    private float moveSpeed;
-    [SerializeField] private float walkSpeed;
-    [SerializeField] private float sprintSpeed;
-    [SerializeField] private float groundDrag;
-    [SerializeField] private float airDrag;
-
-    [Header("Jumping")]
-    [SerializeField] private float jumpForce;
-    [SerializeField] private float jumpCooldown;
-    [SerializeField] private float airMultiplier;
-    private bool readyToJump;
-
-    [Header("Crouching")]
-    [SerializeField] private float crouchSpeed;
-    [SerializeField] private float crouchYScale;
-    private float startYScale;
-    [SerializeField] private float transitionDuration;
-
-    [Header("Keybinds")]
-    [SerializeField] private KeyCode jumpKey = KeyCode.Space;
-    [SerializeField] private KeyCode walkKey = KeyCode.LeftShift;
-    [SerializeField] private KeyCode crouchKey = KeyCode.LeftControl;
-
-    [Header("Ground Check")]
-    private float playerHeight;
-    public LayerMask whatIsGround;
-    private bool grounded;
-
-    [Header("Slope Handling")]
-    [SerializeField] private float maxSlopeAngle;
-    private RaycastHit slopeHit;
-    private bool exitingSlope;
-
-    [SerializeField] private Transform orientation;
-
-    [SerializeField] private CapsuleCollider body;
-
-    float horizontalInput;
-    float verticalInput;
-
-    Vector3 moveDirection;
-
-    Rigidbody rb;
-    Coroutine currentTransition;
-
-    TeleportJumpWeapon teleportWeapon;
-    public PlayerInteractor playerInteractor;
-
-
-
-    public MovementState state;
-    public enum MovementState
+    public class Player : MonoBehaviour
     {
-        walking,
-        sprinting,
-        crouching,
-        air
-    }
+        [Header("Movement")]
+        [SerializeField] private float sprintSpeed = 7f;
+        [SerializeField] private float crouchSpeed = 3f;
+        [SerializeField] private float acceleration = 20f;
+        [SerializeField] private float deceleration = 30f;
+        [SerializeField] private float groundDrag = 6f;
+        [SerializeField] private float crouchDrag = 8f;  // Mayor drag al agacharse para mejor control
+        [SerializeField] private float airDrag = 0.5f;
 
-    private void Start()
-    {
-        rb = GetComponent<Rigidbody>();
-        rb.freezeRotation = true;
-        
-        readyToJump = true;
+        [Header("Jumping")]
+        [SerializeField] private float jumpForce = 8f;
+        [SerializeField] private float jumpCooldown = 0.25f;
+        [SerializeField] private float airMultiplier = 0.8f;
+        private bool _readyToJump = true;
 
-        startYScale = transform.localScale.y;
+        [Header("Crouching")]
+        private float _startYScale;
+        [SerializeField] private float crouchYScale = 0.5f;
+        [SerializeField] private float transitionDuration = 0.1f;
 
-        teleportWeapon = GetComponent<TeleportJumpWeapon>();
+        [Header("Step Climb")]
+        [SerializeField] private float stepSmooth = 0.1f;
+        [SerializeField] private float stepHeight = 0.5f;
+        [Tooltip("Lower raycast Transform (place near the player's feet, slightly in front)")]
+        public Transform stepRayLower;
+        [Tooltip("Upper raycast Transform (place at a max step height, same x/z as lower)")]
+        public Transform stepRayUpper;
 
-        playerHeight = body.height;
-    }
+        [Header("Custom Gravity")]
+        [SerializeField] private float gravity = -18f;
 
-    private void Update()
-    {
-        // ground check
-        //grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
-        grounded = Physics.SphereCast(transform.position, 0.5f, Vector3.down, out RaycastHit hit, playerHeight * 0.25f + 0.2f, whatIsGround);
+        [Header("Keybinds")]
+        [SerializeField] private KeyCode jumpKey = KeyCode.Space;
+        [SerializeField] private KeyCode crouchKey = KeyCode.LeftControl;
 
-        MyInput();
-        SpeedControl();
-        StateHandler();
+        [Header("Ground Check")]
+        public LayerMask whatIsGround;
+        [SerializeField] private CapsuleCollider body;
+        private bool _grounded;
+        private float _playerHeight;
 
-        // handle drag
-        if (grounded)
-            rb.drag = groundDrag;
-        else
-            rb.drag = airDrag;
-    }
+        [Header("Slope Handling")]
+        [SerializeField] private float maxSlopeAngle = 45f;
+        private RaycastHit _slopeHit;
+        private bool _exitingSlope;
 
-    private void FixedUpdate()
-    {
-        MovePlayer();
-    }
+        [SerializeField] private Transform orientation;
 
-    private void MyInput()
-    {
-        horizontalInput = Input.GetAxisRaw("Horizontal");
-        verticalInput = Input.GetAxisRaw("Vertical");
+        private float _horizontalInput;
+        private float _verticalInput;
+        private Vector3 _moveDirection;
+        private Vector3 _desiredVelocity;
+        private Vector3 _currentVelocity;
 
-        // when to jump
-        if (Input.GetKey(jumpKey) && readyToJump && grounded)
+        private Rigidbody _rb;
+        private Coroutine _currentTransition;
+
+        public enum MovementState
         {
-            readyToJump = false;
+            Sprinting,
+            Crouching,
+            Air
+        }
+        public MovementState state;
 
-            Jump();
-
-            Invoke(nameof(ResetJump), jumpCooldown);
+        private void Start()
+        {
+            _rb = GetComponent<Rigidbody>();
+            _rb.freezeRotation = true;
+            _rb.useGravity = false;
+            _readyToJump = true;
+            _startYScale = transform.localScale.y;
+            _playerHeight = body.height;
+            
+            stepRayUpper.position = new Vector3(stepRayUpper.position.x, stepHeight, stepRayUpper.position.z);
         }
 
-        if (Input.GetKeyDown(crouchKey))
+        private void Update()
         {
-            if (currentTransition != null)
-                StopCoroutine(currentTransition);
-            currentTransition = StartCoroutine(SmoothScaleChange(crouchYScale));
-            rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
-        }
-        else if (Input.GetKeyUp(crouchKey))
-        {
-            if (currentTransition != null)
-                StopCoroutine(currentTransition);
-            currentTransition = StartCoroutine(SmoothScaleChange(startYScale));
-            rb.AddForce(Vector3.up * 5f, ForceMode.Impulse);
-        }
+            // Sphere cast to check if the player is grounded
+            _grounded = Physics.SphereCast(transform.position, 0.5f, Vector3.down, out _, _playerHeight * 0.25f + 0.2f, whatIsGround);
+            
+            MyInput();
+            StateHandler();
 
-        if (Input.GetKeyDown(KeyCode.T) && teleportWeapon != null)
-        {
-            teleportWeapon.ActivateTeleport();
-        }
-    }
-
-    private IEnumerator SmoothScaleChange(float targetYScale)
-    {
-        float elapsed = 0f;
-        Vector3 initialScale = transform.localScale;
-        Vector3 targetScale = new Vector3(initialScale.x, targetYScale, initialScale.z);
-
-        while (elapsed < transitionDuration)
-        {
-            transform.localScale = Vector3.Lerp(initialScale, targetScale, elapsed / transitionDuration);
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-        transform.localScale = targetScale;
-    }
-
-    private void StateHandler()
-    {
-        // Mode - Crouching
-        if (Input.GetKey(crouchKey))
-        {
-            state = MovementState.crouching;
-            moveSpeed = crouchSpeed;
+            // Establecer el drag apropiado según el estado
+            if (!_grounded)
+                _rb.drag = airDrag;
+            else if (state == MovementState.Crouching)
+                _rb.drag = crouchDrag;   // Más alto que groundDrag
+            else
+                _rb.drag = groundDrag;
         }
 
-        // Mode - Walking
-        else if (grounded && Input.GetKey(walkKey))
+        private void FixedUpdate()
         {
-            state = MovementState.walking;
-            moveSpeed = walkSpeed;
+            MovePlayer();
+            SpeedControl();
+            ApplyGravity();
+            StepClimb();
         }
 
-        // Mode - Sprinting
-        else if (grounded)
+        private void MyInput()
         {
-            state = MovementState.sprinting;
-            moveSpeed = sprintSpeed;
-        }
-
-        // Mode - Air
-        else
-        {
-            state = MovementState.air;
-        }
-    }
-
-    private void MovePlayer()
-    {
-        // calculate movement direction
-        moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
-
-        // on slope
-        if (OnSlope() && !exitingSlope)
-        {
-            rb.AddForce(GetSlopeMoveDirection() * moveSpeed * 20f, ForceMode.Force);
-
-            if (rb.velocity.y > 0)
-                rb.AddForce(Vector3.down * 80f, ForceMode.Force);
-        }
-
-        // on ground
-        else if (grounded)
-            rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
-
-        // in air
-        else if (!grounded)
-            rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
-
-        // turn gravity off while on slope
-        rb.useGravity = !OnSlope();
-    }
-
-    private void SpeedControl()
-    {
-        // limiting speed on slope
-        if (OnSlope() && !exitingSlope)
-        {
-            if (rb.velocity.magnitude > moveSpeed)
-                rb.velocity = rb.velocity.normalized * moveSpeed;
-        }
-
-        // limiting speed on ground or in air
-        else
-        {
-            Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-
-            // limit velocity if needed
-            if (flatVel.magnitude > moveSpeed)
+            _horizontalInput = Input.GetAxisRaw("Horizontal");
+            _verticalInput = Input.GetAxisRaw("Vertical");
+            
+            if (Input.GetKeyDown(jumpKey) && _readyToJump && _grounded && state != MovementState.Crouching)
             {
-                Vector3 limitedVel = flatVel.normalized * moveSpeed;
-                rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
+                _readyToJump = false;
+                Jump();
+                Invoke(nameof(ResetJump), jumpCooldown);
+            }
+
+            // Crouch
+            if (Input.GetKeyDown(crouchKey))
+            {
+                if (_currentTransition != null)
+                    StopCoroutine(_currentTransition);
+                _currentTransition = StartCoroutine(SmoothScaleChange(crouchYScale));
+
+                if (_grounded)
+                    _rb.AddForce(Vector3.down * 2f, ForceMode.Impulse);
+                
+                Vector3 flatVel = new Vector3(_rb.velocity.x, 0, _rb.velocity.z);
+                float maxCrouch = crouchSpeed;
+                if (flatVel.magnitude > maxCrouch)
+                {
+                    flatVel = flatVel.normalized * maxCrouch;
+                    _rb.velocity = new Vector3(flatVel.x, _rb.velocity.y, flatVel.z);
+                }
+            }
+            else if (Input.GetKeyUp(crouchKey))
+            {
+                if (!Physics.Raycast(transform.position, Vector3.up, _playerHeight, whatIsGround))
+                {
+                    if (_currentTransition != null)
+                        StopCoroutine(_currentTransition);
+                    _currentTransition = StartCoroutine(SmoothScaleChange(_startYScale));
+                }
             }
         }
-    }
 
-    private void Jump()
-    {
-        exitingSlope = true;
-
-        // reset y velocity
-        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-
-        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
-    }
-    private void ResetJump()
-    {
-        readyToJump = true;
-
-        exitingSlope = false;
-    }
-
-    private bool OnSlope()
-    {
-        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.3f))
+        private IEnumerator SmoothScaleChange(float targetYScale)
         {
-            float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
-            return angle < maxSlopeAngle && angle != 0;
+            float elapsed = 0f;
+            Vector3 initialScale = transform.localScale;
+            Vector3 targetScale = new Vector3(initialScale.x, targetYScale, initialScale.z);
+
+            while (elapsed < transitionDuration)
+            {
+                transform.localScale = Vector3.Lerp(initialScale, targetScale, elapsed / transitionDuration);
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+            transform.localScale = targetScale;
         }
 
-        return false;
-    }
+        private void StateHandler()
+        {
+            if (Input.GetKey(crouchKey))
+            {
+                state = MovementState.Crouching;
+            }
+            else if (_grounded)
+            {
+                state = MovementState.Sprinting;
+            }
+            else
+            {
+                state = MovementState.Air;
+            }
+        }
 
-    private Vector3 GetSlopeMoveDirection()
-    {
-        return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;
+        private void MovePlayer()
+        {
+            _moveDirection = (orientation.forward * _verticalInput + orientation.right * _horizontalInput).normalized;
+            
+            if (_horizontalInput == 0 && _verticalInput == 0)
+                _moveDirection = Vector3.zero;
+        
+            float targetSpeed = (state == MovementState.Crouching) ? crouchSpeed : sprintSpeed;
+            _desiredVelocity = _moveDirection * targetSpeed;
+
+            _currentVelocity = _moveDirection.magnitude > 0.1f ? 
+                Vector3.MoveTowards(_currentVelocity, _desiredVelocity, acceleration * Time.fixedDeltaTime) : 
+                Vector3.MoveTowards(_currentVelocity, Vector3.zero, deceleration * Time.fixedDeltaTime);
+
+            Vector3 moveVel = _currentVelocity;
+            
+            if (OnSlope() && !_exitingSlope)
+            {
+                _rb.AddForce(GetSlopeMoveDirection() * (moveVel.magnitude * 20f), ForceMode.Force);
+            }
+            else if (_grounded)
+            {
+                _rb.AddForce(moveVel * 10f, ForceMode.Force);
+            }
+            else
+            {
+                _rb.AddForce(moveVel * (airMultiplier * 10f), ForceMode.Force);
+            }
+        }
+
+        private void SpeedControl()
+        {
+            Vector3 flatVel = new Vector3(_rb.velocity.x, 0f, _rb.velocity.z);
+
+            float maxSpeed = (state == MovementState.Crouching) ? crouchSpeed : sprintSpeed;
+
+            if (flatVel.magnitude > maxSpeed)
+            {
+                Vector3 limitedVel = flatVel.normalized * maxSpeed;
+                _rb.velocity = new Vector3(limitedVel.x, _rb.velocity.y, limitedVel.z);
+            }
+        }
+
+        private void StepClimb()
+        {
+            if (Physics.Raycast(stepRayLower.position, transform.TransformDirection(Vector3.forward), out _, 0.1f))
+            {
+                if (!Physics.Raycast(stepRayUpper.position, transform.TransformDirection(Vector3.forward), out _, 0.2f))
+                {
+                    _rb.position -= new Vector3(0f, -stepSmooth * Time.deltaTime, 0f);
+                }
+            }
+
+            if (Physics.Raycast(stepRayLower.position, transform.TransformDirection(1.5f,0,1), out _, 0.1f))
+            {
+                if (!Physics.Raycast(stepRayUpper.position, transform.TransformDirection(1.5f,0,1), out _, 0.2f))
+                {
+                    _rb.position -= new Vector3(0f, -stepSmooth * Time.deltaTime, 0f);
+                }
+            }
+
+            if (!Physics.Raycast(stepRayLower.position, transform.TransformDirection(-1.5f, 0, 1),
+                    out _, 0.1f)) return;
+
+            if (!Physics.Raycast(stepRayUpper.position, transform.TransformDirection(-1.5f,0,1), out _, 0.2f))
+            {
+                _rb.position -= new Vector3(0f, -stepSmooth * Time.deltaTime, 0f);
+            }
+        }
+
+        private void Jump()
+        {
+            _exitingSlope = true;
+            _rb.velocity = new Vector3(_rb.velocity.x, 0f, _rb.velocity.z);
+            _rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
+        
+        private void ResetJump()
+        {
+            _readyToJump = true;
+        }
+        
+        private bool OnSlope()
+        {
+            if (Physics.Raycast(transform.position, Vector3.down, out _slopeHit, _playerHeight * 0.5f + 0.3f))
+            {
+                float angle = Vector3.Angle(Vector3.up, _slopeHit.normal);
+                return angle < maxSlopeAngle && angle != 0;
+            }
+            return false;
+        }
+        private Vector3 GetSlopeMoveDirection()
+        {
+            return Vector3.ProjectOnPlane(_moveDirection, _slopeHit.normal).normalized;
+        }
+
+        private void ApplyGravity()
+        {
+            _rb.AddForce(Vector3.up * gravity, ForceMode.Acceleration);
+        }
     }
 }

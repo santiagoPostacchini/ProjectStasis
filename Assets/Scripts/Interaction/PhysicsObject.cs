@@ -5,7 +5,7 @@ using System.Collections;
 [RequireComponent(typeof(CollisionDetector))]
 public abstract class PhysicsObject : MonoBehaviour
 {
-    public Player player;
+    public Player.Player player;
     // Common physics components
     protected Rigidbody objRB;
     protected CollisionDetector collisionDetector;
@@ -211,14 +211,14 @@ public abstract class PhysicsObject : MonoBehaviour
                 // Habilitar el efecto emissive
                 baseMat.EnableKeyword("_EMISSION");
 
-                // Verificar si ya tiene color de emisión
+                // Verificar si ya tiene color de emisiï¿½n
                 Color currentEmission = baseMat.GetColor("_EmissionColor");
 
-                // Si no tiene color de emisión, empezar con un valor bajo como el gris
+                // Si no tiene color de emisiï¿½n, empezar con un valor bajo como el gris
                 if (currentEmission == Color.black)
                     currentEmission = new Color(1f,0f,0f); 
 
-                // Aplicar la intensidad al color de emisión (multiplicamos por la intensidad)
+                // Aplicar la intensidad al color de emisiï¿½n (multiplicamos por la intensidad)
                 baseMat.SetColor("_EmissionColor", currentEmission * intensity);
             }
             else
@@ -226,7 +226,7 @@ public abstract class PhysicsObject : MonoBehaviour
                 // Deshabilitar el efecto emissive
                 baseMat.DisableKeyword("_EMISSION");
 
-                // Apagar la emisión (ponemos el color a negro)
+                // Apagar la emisiï¿½n (ponemos el color a negro)
                 baseMat.SetColor("_EmissionColor", Color.black);
             }
 

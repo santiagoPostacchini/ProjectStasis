@@ -261,7 +261,7 @@ GameObject:
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
-  m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 419385456094870383, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -306,7 +306,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 112
@@ -323,26 +323,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acdbcc1a222ef994eb9c820e022f9dfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 3.5
-  sprintSpeed: 5
+  sprintSpeed: 6
+  crouchSpeed: 4
+  acceleration: 150
+  deceleration: 100
   groundDrag: 3
   airDrag: 1
   jumpForce: 10.5
   jumpCooldown: 0.4
   airMultiplier: 0.4
-  crouchSpeed: 4
   crouchYScale: 0.5
   transitionDuration: 0.3
+  stepHeight: 0.3
+  stepSmooth: 0.15
+  stepCheckDistance: 0.4
+  gravity: -18
+  fallMultiplier: 2.5
+  lowJumpMultiplier: 2
   jumpKey: 32
-  walkKey: 304
   crouchKey: 306
   whatIsGround:
     serializedVersion: 2
     m_Bits: 64
+  body: {fileID: 4954360974999176610}
   maxSlopeAngle: 45
   orientation: {fileID: 6496956851434335168}
-  body: {fileID: 4954360974999176610}
-  playerInteractor: {fileID: 747103148822554541}
   state: 1
 --- !u!114 &1836135810446866248
 MonoBehaviour:
@@ -506,7 +511,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 982b31029ed655c429de6e8515243064, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sens: 700
+  sens: 50
   orientation: {fileID: 6496956851434335168}
   mouseSensibilityUI: {fileID: 362613789462377265}
 --- !u!114 &747103148822554541
@@ -652,6 +657,7 @@ MonoBehaviour:
   highlightColor: {r: 0.4235294, g: 1, b: 0, a: 0.8509804}
   rotationSpeed: 90
   tickingSoundName: Ticking.Pulse
+  playerInteractor: {fileID: 0}
 --- !u!1 &9057293013084862463
 GameObject:
   m_ObjectHideFlags: 0

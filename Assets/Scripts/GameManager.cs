@@ -12,11 +12,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float delayBeforeSceneLoad = 2f;
 
     [Header("Video Components")]
-    [SerializeField] private VideoPlayer videoPlayer;         // Asigna aquí tu VideoPlayer
-    [SerializeField] private RawImage videoRawImage;          // Asigna aquí el RawImage (que muestra el video)
+    [SerializeField] private VideoPlayer videoPlayer;         // Asigna aquï¿½ tu VideoPlayer
+    [SerializeField] private RawImage videoRawImage;          // Asigna aquï¿½ el RawImage (que muestra el video)
     [SerializeField] private RenderTexture videoRenderTexture;// Asigna la RenderTexture del video
 
-    // Método que llamará el botón OnClick
+    // Mï¿½todo que llamarï¿½ el botï¿½n OnClick
     public void OnButtonClick()
     {
         StartCoroutine(ShowVideoAndLoadScene());
@@ -24,13 +24,13 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator ShowVideoAndLoadScene()
     {
-        if (videoPlayer != null)
+        if (videoPlayer)
         {
             // Aseguramos que el VideoPlayer use la RenderTexture (por si no lo configuraste en el Inspector)
             videoPlayer.targetTexture = videoRenderTexture;
 
             // Activamos el objeto que contiene la Raw Image (para que se vea el video)
-            if (videoRawImage != null)
+            if (videoRawImage)
             {
                 videoRawImage.gameObject.SetActive(true);
                 videoRawImage.texture = videoRenderTexture;
@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
             videoPlayer.Play();
 
             // Esperamos a que el video termine de reproducirse
-            // (Si el clip está configurado en Loop, esta condición nunca se cumplirá)
+            // (Si el clip estï¿½ configurado en Loop, esta condiciï¿½n nunca se cumplirï¿½)
             yield return new WaitUntil(() => !videoPlayer.isPlaying);
 
             // Opcional: desactivamos el RawImage otra vez, si no quieres que quede en pantalla
@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            // Si por algún motivo no hay VideoPlayer, hacemos un delay "de cortesía"
+            // Si por algï¿½n motivo no hay VideoPlayer, hacemos un delay "de cortesï¿½a"
             yield return new WaitForSeconds(delayBeforeSceneLoad);
         }
 

@@ -9,7 +9,7 @@ public class InvisibleObject : MonoBehaviour
     
     private void OnTriggerEnter(Collider other)
     {
-        var player = other.GetComponentInParent<Player>();
+        var player = other.GetComponentInParent<Player.Player>();
         if(player != null)
         {
             //Debug.Log("Esta colisionando");

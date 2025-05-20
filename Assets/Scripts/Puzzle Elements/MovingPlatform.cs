@@ -55,10 +55,10 @@ public class MovingPlatform : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Player player = collision.gameObject.GetComponent<Player>();
+        Player.Player player = collision.gameObject.GetComponent<Player.Player>();
         if (player != null)
         {
-            // Solo seteamos si no tiene padre o no está ya en esta plataforma
+            // Solo seteamos si no tiene padre o no estï¿½ ya en esta plataforma
             if (player.transform.parent != transform)
             {
                 player.transform.SetParent(transform);
@@ -68,7 +68,7 @@ public class MovingPlatform : MonoBehaviour
 
     private void OnCollisionExit(Collision collision)
     {
-        Player player = collision.gameObject.GetComponent<Player>();
+        Player.Player player = collision.gameObject.GetComponent<Player.Player>();
         if (player != null && player.transform.parent == transform)
         {
             player.transform.SetParent(null);

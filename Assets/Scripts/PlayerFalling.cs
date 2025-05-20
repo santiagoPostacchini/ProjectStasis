@@ -10,7 +10,7 @@ public class PlayerFalling : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Player player = collision.gameObject.GetComponentInParent<Player>();
+        Player.Player player = collision.gameObject.GetComponentInParent<Player.Player>();
         if(player != null)
         {
             player.gameObject.transform.position = t.position;

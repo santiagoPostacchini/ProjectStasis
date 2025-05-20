@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 90844743}
-  m_IndirectSpecularColor: {r: 0.07797491, g: 0.091784865, b: 0.11758989, a: 1}
+  m_IndirectSpecularColor: {r: 0.0779747, g: 0.091784775, b: 0.11758982, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4088,6 +4088,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile.BasicArrow.Sign (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 1947761849856876482, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 7251088779503841255, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -4635,6 +4640,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Tile.BasicArrow.Sign (10)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1947761849856876482, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7251088779503841255, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
         type: 3}
@@ -8949,6 +8959,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile.BasicArrow.Sign (22)
       objectReference: {fileID: 0}
+    - target: {fileID: 1947761849856876482, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 7251088779503841255, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -11103,6 +11118,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Tile.BasicArrow.Sign (23)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1947761849856876482, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7251088779503841255, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
         type: 3}
@@ -13504,25 +13524,25 @@ PrefabInstance:
       propertyPath: _fillAnimation
       value: 
       objectReference: {fileID: 1633688346}
-    - target: {fileID: 5325565980538983568, guid: b66b9b9b9e52c56449e9b51ff57be6a0,
+    - target: {fileID: 4954360974999176610, guid: b66b9b9b9e52c56449e9b51ff57be6a0,
         type: 3}
-      propertyPath: sens
-      value: 50
+      propertyPath: m_Radius
+      value: 0.28
       objectReference: {fileID: 0}
     - target: {fileID: 6617804030325529290, guid: b66b9b9b9e52c56449e9b51ff57be6a0,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -46.28
+      value: -8.9
       objectReference: {fileID: 0}
     - target: {fileID: 6617804030325529290, guid: b66b9b9b9e52c56449e9b51ff57be6a0,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.06
+      value: 1.004
       objectReference: {fileID: 0}
     - target: {fileID: 6617804030325529290, guid: b66b9b9b9e52c56449e9b51ff57be6a0,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 40
+      value: 28.2
       objectReference: {fileID: 0}
     - target: {fileID: 6617804030325529290, guid: b66b9b9b9e52c56449e9b51ff57be6a0,
         type: 3}
@@ -13571,20 +13591,19 @@ PrefabInstance:
       objectReference: {fileID: 1827849951}
     - target: {fileID: 7471954370213840871, guid: b66b9b9b9e52c56449e9b51ff57be6a0,
         type: 3}
-      propertyPath: m_Icon
-      value: 
-      objectReference: {fileID: 419385456094870383, guid: 0000000000000000d000000000000000,
-        type: 0}
-    - target: {fileID: 7471954370213840871, guid: b66b9b9b9e52c56449e9b51ff57be6a0,
-        type: 3}
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 8009462911006117329, guid: b66b9b9b9e52c56449e9b51ff57be6a0,
         type: 3}
-      propertyPath: _player
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8009462911006117329, guid: b66b9b9b9e52c56449e9b51ff57be6a0,
+        type: 3}
+      propertyPath: playerInteractor
       value: 
-      objectReference: {fileID: 470005027}
+      objectReference: {fileID: 1175946677}
     - target: {fileID: 8009462911006117329, guid: b66b9b9b9e52c56449e9b51ff57be6a0,
         type: 3}
       propertyPath: reticleImages.Array.data[0]
@@ -13595,10 +13614,87 @@ PrefabInstance:
       propertyPath: reticleImages.Array.data[1]
       value: 
       objectReference: {fileID: 531473622}
+    - target: {fileID: 9016404985424508209, guid: b66b9b9b9e52c56449e9b51ff57be6a0,
+        type: 3}
+      propertyPath: state
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9016404985424508209, guid: b66b9b9b9e52c56449e9b51ff57be6a0,
+        type: 3}
+      propertyPath: jumpForce
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 9016404985424508209, guid: b66b9b9b9e52c56449e9b51ff57be6a0,
+        type: 3}
+      propertyPath: groundDrag
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9016404985424508209, guid: b66b9b9b9e52c56449e9b51ff57be6a0,
+        type: 3}
+      propertyPath: stepHeight
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 9016404985424508209, guid: b66b9b9b9e52c56449e9b51ff57be6a0,
+        type: 3}
+      propertyPath: stepSmooth
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9016404985424508209, guid: b66b9b9b9e52c56449e9b51ff57be6a0,
+        type: 3}
+      propertyPath: crouchSpeed
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 9016404985424508209, guid: b66b9b9b9e52c56449e9b51ff57be6a0,
+        type: 3}
+      propertyPath: sprintSpeed
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 9016404985424508209, guid: b66b9b9b9e52c56449e9b51ff57be6a0,
+        type: 3}
+      propertyPath: acceleration
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 9016404985424508209, guid: b66b9b9b9e52c56449e9b51ff57be6a0,
+        type: 3}
+      propertyPath: stepRayLower
+      value: 
+      objectReference: {fileID: 1614862474}
+    - target: {fileID: 9016404985424508209, guid: b66b9b9b9e52c56449e9b51ff57be6a0,
+        type: 3}
+      propertyPath: stepRayUpper
+      value: 
+      objectReference: {fileID: 507874391}
+    - target: {fileID: 9016404985424508209, guid: b66b9b9b9e52c56449e9b51ff57be6a0,
+        type: 3}
+      propertyPath: airMultiplier
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9016404985424508209, guid: b66b9b9b9e52c56449e9b51ff57be6a0,
+        type: 3}
+      propertyPath: fallMultiplier
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9016404985424508209, guid: b66b9b9b9e52c56449e9b51ff57be6a0,
+        type: 3}
+      propertyPath: stepCheckDistance
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 4838504523810038479, guid: b66b9b9b9e52c56449e9b51ff57be6a0,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1614862474}
+    - targetCorrespondingSourceObject: {fileID: 4838504523810038479, guid: b66b9b9b9e52c56449e9b51ff57be6a0,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 507874391}
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1588138508269699303, guid: b66b9b9b9e52c56449e9b51ff57be6a0,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 853275103}
   m_SourcePrefab: {fileID: 100100000, guid: b66b9b9b9e52c56449e9b51ff57be6a0, type: 3}
 --- !u!114 &470005027 stripped
 MonoBehaviour:
@@ -14174,6 +14270,37 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 57707380}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &507874390
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 507874391}
+  m_Layer: 0
+  m_Name: stepUp
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &507874391
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 507874390}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.7, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 853275100}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &509462922
 GameObject:
   m_ObjectHideFlags: 0
@@ -14722,7 +14849,7 @@ Transform:
   m_GameObject: {fileID: 517592645}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -21.99, y: 2.6, z: 27.75}
+  m_LocalPosition: {x: -21.99, y: 2.78, z: 27.75}
   m_LocalScale: {x: 1.8039707, y: 1.3115785, z: 8.724006}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -16991,6 +17118,11 @@ PrefabInstance:
       propertyPath: energyFieldParticles
       value: 
       objectReference: {fileID: 504102103}
+    - target: {fileID: 6732834382305253887, guid: e6b4b8dd15628204598d0ab88aa61f61,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9127899646503719052, guid: e6b4b8dd15628204598d0ab88aa61f61,
         type: 3}
       propertyPath: m_Name
@@ -17683,6 +17815,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Tile.BasicArrow.Sign (26)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1947761849856876482, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7251088779503841255, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
         type: 3}
@@ -18549,6 +18686,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: CubePast
+      objectReference: {fileID: 0}
+    - target: {fileID: 9127899646503719052, guid: e6b4b8dd15628204598d0ab88aa61f61,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -19590,6 +19732,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Tile.BasicArrow.Sign (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1947761849856876482, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7251088779503841255, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
         type: 3}
@@ -21499,6 +21646,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Tile.BasicArrow.Sign (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1947761849856876482, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7251088779503841255, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
         type: 3}
@@ -24332,6 +24484,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile.BasicArrow.Sign (17)
       objectReference: {fileID: 0}
+    - target: {fileID: 1947761849856876482, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 7251088779503841255, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -24876,6 +25033,41 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1573181362}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &853275099 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1588138508269699303, guid: b66b9b9b9e52c56449e9b51ff57be6a0,
+    type: 3}
+  m_PrefabInstance: {fileID: 470005026}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &853275100 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4838504523810038479, guid: b66b9b9b9e52c56449e9b51ff57be6a0,
+    type: 3}
+  m_PrefabInstance: {fileID: 470005026}
+  m_PrefabAsset: {fileID: 0}
+--- !u!136 &853275103
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 853275099}
+  m_Material: {fileID: 13400000, guid: 11fa2ca4f8c418e43a64e6f286f0c09b, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.3
+  m_Height: 1.9
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.01, z: 0}
 --- !u!4 &853514935 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8349864444180286480, guid: 729eea97f1c553344bcdb54c52499eae,
@@ -27638,6 +27830,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile.BasicArrow.Sign (19)
       objectReference: {fileID: 0}
+    - target: {fileID: 1947761849856876482, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 7251088779503841255, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -28028,6 +28225,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Tile.BasicArrow.Sign (18)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1947761849856876482, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7251088779503841255, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
         type: 3}
@@ -29918,6 +30120,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Tile.BasicArrow.Sign (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1947761849856876482, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7251088779503841255, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
         type: 3}
@@ -34873,6 +35080,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile.BasicArrow.Sign (16)
       objectReference: {fileID: 0}
+    - target: {fileID: 1947761849856876482, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 7251088779503841255, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -34933,6 +35145,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ca347c8f7c1f4c7449b8594378fc0eb5, type: 3}
+--- !u!114 &1175946677 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 747103148822554541, guid: b66b9b9b9e52c56449e9b51ff57be6a0,
+    type: 3}
+  m_PrefabInstance: {fileID: 470005026}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c638e961c3c888c4882301e37ff8536f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1176507838
 GameObject:
   m_ObjectHideFlags: 0
@@ -35455,6 +35679,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Tile.BasicArrow.Sign
+      objectReference: {fileID: 0}
+    - target: {fileID: 1947761849856876482, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7251088779503841255, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
         type: 3}
@@ -38286,6 +38515,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile.BasicArrow.Sign (13)
       objectReference: {fileID: 0}
+    - target: {fileID: 1947761849856876482, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 7251088779503841255, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -40319,6 +40553,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Tile.BasicArrow.Sign (27)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1947761849856876482, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7251088779503841255, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
         type: 3}
@@ -42818,6 +43057,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile.BasicArrow.Sign (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 1947761849856876482, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 7251088779503841255, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -43912,6 +44156,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Tile.BasicArrow.Sign (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1947761849856876482, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7251088779503841255, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
         type: 3}
@@ -45123,6 +45372,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile.BasicArrow.Sign (25)
       objectReference: {fileID: 0}
+    - target: {fileID: 1947761849856876482, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 7251088779503841255, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -45829,6 +46083,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile.BasicArrow.Sign (29)
       objectReference: {fileID: 0}
+    - target: {fileID: 1947761849856876482, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 7251088779503841255, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -46455,6 +46714,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile.BasicArrow.Sign (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 1947761849856876482, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 7251088779503841255, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -46940,6 +47204,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1613346635}
   m_Mesh: {fileID: 3048851310703494, guid: 34bdea28961b4c946800d81c51cf2c9e, type: 3}
+--- !u!1 &1614862473
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1614862474}
+  m_Layer: 0
+  m_Name: stepDown
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1614862474
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1614862473}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.95, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 853275100}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1617038359
 GameObject:
   m_ObjectHideFlags: 0
@@ -48345,6 +48640,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Tile.BasicArrow.Sign (14)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1947761849856876482, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7251088779503841255, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
         type: 3}
@@ -50708,6 +51008,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Tile.BasicArrow.Sign (12)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1947761849856876482, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7251088779503841255, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
         type: 3}
@@ -53333,6 +53638,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile.BasicArrow.Sign (28)
       objectReference: {fileID: 0}
+    - target: {fileID: 1947761849856876482, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 7251088779503841255, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -53784,6 +54094,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile.BasicArrow.Sign (24)
       objectReference: {fileID: 0}
+    - target: {fileID: 1947761849856876482, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 7251088779503841255, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -53862,6 +54177,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Tile.BasicArrow.Sign (15)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1947761849856876482, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7251088779503841255, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
         type: 3}
@@ -54745,6 +55065,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Tile.BasicArrow.Sign (11)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1947761849856876482, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7251088779503841255, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
         type: 3}
@@ -55707,6 +56032,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Tile.BasicArrow.Sign (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1947761849856876482, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7251088779503841255, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
         type: 3}
@@ -56833,6 +57163,95 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1805637962}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1952855930
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1076837491718014255, guid: 84b559dc94de4274a8030798b133c1c0,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -41.91
+      objectReference: {fileID: 0}
+    - target: {fileID: 1076837491718014255, guid: 84b559dc94de4274a8030798b133c1c0,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.11
+      objectReference: {fileID: 0}
+    - target: {fileID: 1076837491718014255, guid: 84b559dc94de4274a8030798b133c1c0,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 40.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 1076837491718014255, guid: 84b559dc94de4274a8030798b133c1c0,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1076837491718014255, guid: 84b559dc94de4274a8030798b133c1c0,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1076837491718014255, guid: 84b559dc94de4274a8030798b133c1c0,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1076837491718014255, guid: 84b559dc94de4274a8030798b133c1c0,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1076837491718014255, guid: 84b559dc94de4274a8030798b133c1c0,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1076837491718014255, guid: 84b559dc94de4274a8030798b133c1c0,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1076837491718014255, guid: 84b559dc94de4274a8030798b133c1c0,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1265263244149295148, guid: 84b559dc94de4274a8030798b133c1c0,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 181fd9201e5327140b407589a4f5a66e, type: 2}
+    - target: {fileID: 1796397472565817090, guid: 84b559dc94de4274a8030798b133c1c0,
+        type: 3}
+      propertyPath: m_Mass
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6158015544614653846, guid: 84b559dc94de4274a8030798b133c1c0,
+        type: 3}
+      propertyPath: m_Name
+      value: PAST.CUBE (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7319416425547280969, guid: 84b559dc94de4274a8030798b133c1c0,
+        type: 3}
+      propertyPath: _isFreezed
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7319416425547280969, guid: 84b559dc94de4274a8030798b133c1c0,
+        type: 3}
+      propertyPath: _lineRenderer
+      value: 
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 232724646448539637, guid: 84b559dc94de4274a8030798b133c1c0, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 84b559dc94de4274a8030798b133c1c0, type: 3}
 --- !u!4 &1953684791 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6408842018022265544, guid: 8bc629d1c1a9aef43b3226b347224176,
@@ -57102,6 +57521,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Tile.BasicArrow.Sign (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1947761849856876482, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7251088779503841255, guid: ca347c8f7c1f4c7449b8594378fc0eb5,
         type: 3}
@@ -61980,7 +62404,7 @@ Transform:
   m_GameObject: {fileID: 2141987969}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.8986363, y: 0.34317106, z: 19.736876}
+  m_LocalPosition: {x: -3.8986363, y: -0.08, z: 19.736876}
   m_LocalScale: {x: 3.7027314, y: 0.6863421, z: 26.973755}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -93405,7 +93829,7 @@ MonoBehaviour:
   highlightColor: {r: 0, g: 1, b: 1, a: 1}
   rotationSpeed: 90
   tickingSoundName: Ticking.Pulse
-  _player: {fileID: 0}
+  playerInteractor: {fileID: 0}
 --- !u!114 &9156347144147895031
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -93743,6 +94167,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 1239835193173635365}
   - {fileID: 1633688342}
+  - {fileID: 1952855930}
   - {fileID: 470005026}
   - {fileID: 208356107}
   - {fileID: 693315330}

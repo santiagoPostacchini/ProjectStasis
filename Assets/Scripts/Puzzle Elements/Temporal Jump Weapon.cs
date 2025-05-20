@@ -136,7 +136,7 @@
 using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(Player))]
+[RequireComponent(typeof(Player.Player))]
 public class TeleportJumpWeapon : MonoBehaviour
 {
     /* ════════════════  REFERENCIAS  ════════════════ */
@@ -202,7 +202,7 @@ public class TeleportJumpWeapon : MonoBehaviour
         Transform origin = teleportToFuture ? pastAnchor : futureAnchor;
         Transform dest = teleportToFuture ? futureAnchor : pastAnchor;
 
-        Player player = GetComponent<Player>();
+        Player.Player player = GetComponent<Player.Player>();
 
         /* Offset horizontal relativo al anchor ------------------- */
         Vector3 hOffset = new Vector3(

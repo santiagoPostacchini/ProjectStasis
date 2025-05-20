@@ -5,7 +5,7 @@ using UnityEngine;
 public class TeleportScript : MonoBehaviour
 {
     [SerializeField] private Transform pos;
-    [SerializeField] private Player player;
+    [SerializeField] private Player.Player player;
 
     void Update()
     {

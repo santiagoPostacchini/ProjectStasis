@@ -30,7 +30,7 @@ public class CubeGenerator : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
-        Player player = collision.gameObject.GetComponentInParent<Player>();
+        Player.Player player = collision.gameObject.GetComponentInParent<Player.Player>();
         if (player != null)
         {
             isColision = true;
@@ -38,7 +38,7 @@ public class CubeGenerator : MonoBehaviour
     }
     private void OnCollisionExit(Collision collision)
     {
-        Player player = collision.gameObject.GetComponentInParent<Player>();
+        Player.Player player = collision.gameObject.GetComponentInParent<Player.Player>();
         if(player != null)
         {
             isColision = false;

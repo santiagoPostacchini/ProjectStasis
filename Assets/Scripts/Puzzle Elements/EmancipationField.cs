@@ -1,25 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class EmancipationField : MonoBehaviour
+namespace Puzzle_Elements
 {
-    [SerializeField] private Transform t;
-    
-    
-    private void OnTriggerEnter(Collider other)
+    public class EmancipationField : MonoBehaviour
     {
-        PhysicsObject physicObject = other.GetComponent<PhysicsObject>();
-        if (physicObject != null)
+        [SerializeField] private Transform t;
+    
+    
+        private void OnTriggerEnter(Collider other)
         {
-            Debug.Log("A");
-            if (physicObject.player.playerInteractor._objectGrabbable == null) return;
-            PhysicsBox box = physicObject as PhysicsBox;
-            if (box != null && box.IsFreezed) box.UnfreezeObject();
-            physicObject.player.playerInteractor._objectGrabbable.Drop();
-            physicObject.player.playerInteractor._objectGrabbable.gameObject.transform.position = t.position;
-            physicObject.player.playerInteractor.ClearHands();
+            PhysicsObject physicObject = other.GetComponent<PhysicsObject>();
+            if (physicObject)
+            {
+                Debug.Log("A");
+                if (!physicObject.player.GetComponent<PlayerInteractor>()._objectGrabbable) return;
+                PhysicsBox box = physicObject as PhysicsBox;
+                if (box && box.IsFreezed) box.UnfreezeObject();
+                physicObject.player.GetComponent<PlayerInteractor>()._objectGrabbable.Drop();
+                physicObject.player.GetComponent<PlayerInteractor>()._objectGrabbable.gameObject.transform.position = t.position;
+                physicObject.player.GetComponent<PlayerInteractor>().ClearHands();
 
+            }
         }
     }
 }
