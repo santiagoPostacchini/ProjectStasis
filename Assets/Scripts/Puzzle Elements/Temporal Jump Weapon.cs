@@ -135,6 +135,7 @@
  *───────────────────────────────────────────────────────────────*/
 
 using System.Collections;
+using Interaction;
 using UnityEngine;
 
 namespace Player

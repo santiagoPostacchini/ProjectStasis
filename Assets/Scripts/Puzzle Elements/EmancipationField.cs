@@ -1,3 +1,4 @@
+using Interaction;
 using UnityEngine;
 
 namespace Puzzle_Elements

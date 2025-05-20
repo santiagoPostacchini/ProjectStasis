@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Interaction;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Player
