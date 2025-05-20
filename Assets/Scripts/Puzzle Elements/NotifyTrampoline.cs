@@ -19,9 +19,9 @@ public class NotifyTrampoline : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        if (rb.velocity.y < -0.5f) // Est� cayendo
-        {
-            OnPlayerFalling?.Invoke(transform.position, rb);
-        }
-    }
+        //if (rb.velocity.y < -0.5f) // Est� cayendo
+        //{
+        //    OnPlayerFalling?.Invoke(transform.position, rb);
+        //}
+    } //Esta funcion es ineficiente, debería utilizar ontrigger para que no esté llamando al player desde cualquier lado
 }

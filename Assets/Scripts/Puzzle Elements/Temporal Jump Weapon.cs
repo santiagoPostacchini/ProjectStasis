@@ -133,107 +133,113 @@
  *  • Conserva la lógica de offset horizontal/vertical y el manejo
  *    de objetos que el jugador pueda estar sujetando.
  *───────────────────────────────────────────────────────────────*/
+
 using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(Player.Player))]
-public class TeleportJumpWeapon : MonoBehaviour
+namespace Player
 {
-    /* ════════════════  REFERENCIAS  ════════════════ */
-    [Header("Teleport Anchors")]
-    [Tooltip("Transform en el nivel FUTURO (su Y debe ser la altura del suelo).")]
-    [SerializeField] private Transform futureAnchor;
-
-    [Tooltip("Transform en el nivel PASADO (su Y debe ser la altura del suelo).")]
-    [SerializeField] private Transform pastAnchor;
-
-    [Header("Post‑procesado (Volume)")]
-    [SerializeField] private TimeTravelPostFXManager fxManager;   // arrastrar PP‑Manager
-    [SerializeField] private float blurInTime = 0.25f;
-    [SerializeField] private float blurOutTime = 0.40f;
-
-    /* ════════════════  AJUSTES  ════════════════ */
-    [Header("Teleport Settings")]
-    [Tooltip("Enfriamiento entre saltos (s).")]
-    [SerializeField] private float teleportCooldown = 0.5f;
-
-    [Tooltip("Umbral de offset mínimo (m).")]
-    [SerializeField] private float minOffsetThreshold = 0.1f;
-
-    [Tooltip("Offset de emergencia al frente (m).")]
-    [SerializeField] private float fallbackOffset = 2f;
-
-    /* ════════════════  ESTADO  ════════════════ */
-    public bool teleportToFuture = true;   // true = Pasado → Futuro
-    private bool canTeleport = true;
-
-    /* ============================================================ */
-    public void ActivateTeleport()
+    [RequireComponent(typeof(Player))]
+    public class TeleportJumpWeapon : MonoBehaviour
     {
-        if (canTeleport)
-            StartCoroutine(DoTeleport());
-    }
+        /* ════════════════  REFERENCIAS  ════════════════ */
+        [Header("Teleport Anchors")]
+        [Tooltip("Transform en el nivel FUTURO (su Y debe ser la altura del suelo).")]
+        [SerializeField] private Transform futureAnchor;
 
-    /* ============================================================ */
-    private IEnumerator DoTeleport()
-    {
-        canTeleport = false;
+        [Tooltip("Transform en el nivel PASADO (su Y debe ser la altura del suelo).")]
+        [SerializeField] private Transform pastAnchor;
 
-        /* ── 1) Fundido de desenfoque (entrada) ─────────────────── */
-        fxManager?.BeginBlur(blurInTime);
-        yield return new WaitForSecondsRealtime(blurInTime);
+        [Header("Post‑procesado (Volume)")]
+        [SerializeField] private TimeTravelPostFXManager fxManager;   // arrastrar PP‑Manager
+        [SerializeField] private float blurInTime = 0.25f;
+        [SerializeField] private float blurOutTime = 0.40f;
 
-        /* ── 2) Soltar objetos en la mano, si los hubiera ───────── */
-        PhysicsObject physObj = GetComponent<PhysicsObject>();
-        if (physObj != null && physObj.IsGrabbed)
+        /* ════════════════  AJUSTES  ════════════════ */
+        [Header("Teleport Settings")]
+        [Tooltip("Enfriamiento entre saltos (s).")]
+        [SerializeField] private float teleportCooldown = 0.5f;
+
+        [Tooltip("Umbral de offset mínimo (m).")]
+        [SerializeField] private float minOffsetThreshold = 0.1f;
+
+        [Tooltip("Offset de emergencia al frente (m).")]
+        [SerializeField] private float fallbackOffset = 2f;
+
+        [SerializeField] private LayerMask whatIsGround;
+
+        /* ════════════════  ESTADO  ════════════════ */
+        public bool teleportToFuture = true;   // true = Pasado → Futuro
+        private bool _canTeleport = true;
+
+        /* ============================================================ */
+        public void ActivateTeleport()
         {
-            physObj.Drop();
-            physObj.GetComponentInParent<PlayerInteractor>()?.ClearHands();
+            if (_canTeleport)
+                StartCoroutine(DoTeleport());
         }
 
-        PlayerInteractor interactor = GetComponentInChildren<PlayerInteractor>();
-        if (interactor?._objectGrabbable != null)
+        /* ============================================================ */
+        private IEnumerator DoTeleport()
         {
-            interactor._objectGrabbable.Drop();
-            interactor.ClearHands();
+            _canTeleport = false;
+
+            /* ── 1) Fundido de desenfoque (entrada) ─────────────────── */
+            fxManager?.BeginBlur(blurInTime);
+            yield return new WaitForSecondsRealtime(blurInTime);
+
+            /* ── 2) Soltar objetos en la mano, si los hubiera ───────── */
+            PhysicsObject physObj = GetComponent<PhysicsObject>();
+            if (physObj && physObj.IsGrabbed)
+            {
+                physObj.Drop();
+                physObj.GetComponentInParent<PlayerInteractor>()?.ClearHands();
+            }
+
+            PlayerInteractor interactor = GetComponentInChildren<PlayerInteractor>();
+            if (interactor?._objectGrabbable)
+            {
+                interactor._objectGrabbable.Drop();
+                interactor.ClearHands();
+            }
+
+            /* ── 3) Calcular origen / destino ───────────────────────── */
+            Transform origin = teleportToFuture ? pastAnchor : futureAnchor;
+            Transform dest = teleportToFuture ? futureAnchor : pastAnchor;
+
+            Player player = GetComponent<Player>();
+
+            /* Offset horizontal relativo al anchor ------------------- */
+            Vector3 hOffset = new Vector3(
+                player.transform.position.x - origin.position.x,
+                0f,
+                player.transform.position.z - origin.position.z);
+
+            if (hOffset.sqrMagnitude < minOffsetThreshold * minOffsetThreshold)
+                hOffset = player.transform.forward * fallbackOffset;
+
+            /* Offset vertical (altura sobre el piso) ----------------- */
+            float yOffset = 0f;
+            if (Physics.Raycast(player.transform.position, Vector3.down, out RaycastHit hit,
+                    100f, whatIsGround))
+            {
+                yOffset = player.transform.position.y - hit.point.y - 1f; // mitad cápsula
+            }
+
+            /* Mover al jugador --------------------------------------- */
+            Vector3 newPos = dest.position + hOffset;
+            newPos.y += yOffset;
+            player.transform.position = newPos;
+
+            teleportToFuture = !teleportToFuture;
+
+            /* ── 4) Fundido de desenfoque (salida) ─────────────────── */
+            fxManager?.EndBlur(blurOutTime);
+            yield return new WaitForSecondsRealtime(blurOutTime);
+
+            /* ── 5) Cool‑down final ────────────────────────────────── */
+            yield return new WaitForSecondsRealtime(teleportCooldown);
+            _canTeleport = true;
         }
-
-        /* ── 3) Calcular origen / destino ───────────────────────── */
-        Transform origin = teleportToFuture ? pastAnchor : futureAnchor;
-        Transform dest = teleportToFuture ? futureAnchor : pastAnchor;
-
-        Player.Player player = GetComponent<Player.Player>();
-
-        /* Offset horizontal relativo al anchor ------------------- */
-        Vector3 hOffset = new Vector3(
-            player.transform.position.x - origin.position.x,
-            0f,
-            player.transform.position.z - origin.position.z);
-
-        if (hOffset.sqrMagnitude < minOffsetThreshold * minOffsetThreshold)
-            hOffset = player.transform.forward * fallbackOffset;
-
-        /* Offset vertical (altura sobre el piso) ----------------- */
-        float yOffset = 0f;
-        if (Physics.Raycast(player.transform.position, Vector3.down, out RaycastHit hit,
-                            100f, player.whatIsGround))
-        {
-            yOffset = player.transform.position.y - hit.point.y - 1f; // mitad cápsula
-        }
-
-        /* Mover al jugador --------------------------------------- */
-        Vector3 newPos = dest.position + hOffset;
-        newPos.y += yOffset;
-        player.transform.position = newPos;
-
-        teleportToFuture = !teleportToFuture;
-
-        /* ── 4) Fundido de desenfoque (salida) ─────────────────── */
-        fxManager?.EndBlur(blurOutTime);
-        yield return new WaitForSecondsRealtime(blurOutTime);
-
-        /* ── 5) Cool‑down final ────────────────────────────────── */
-        yield return new WaitForSecondsRealtime(teleportCooldown);
-        canTeleport = true;
     }
 }

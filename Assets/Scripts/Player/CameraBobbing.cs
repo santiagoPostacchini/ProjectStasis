@@ -1,60 +1,61 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraBobbing : MonoBehaviour
+namespace Player
 {
-    [SerializeField] private bool _isEnabled = true;
-    [SerializeField, Range(0, 0.1f)] private float _amplitude;
-    [SerializeField, Range(0, 30)] private float _frecuency;
-
-    [SerializeField] private Transform _camera;
-    [SerializeField] private Transform _cameraHolder;
-
-    private float _toggleSpeed = 1f;
-
-    private Rigidbody _rb;
-    private Vector3 _startPos;
-
-    private void Awake()
-    { 
-        _rb = GetComponent<Rigidbody>();
-        _startPos = _camera.localPosition;
-    }
-
-    private void Update()
+    public class CameraBobbing : MonoBehaviour
     {
-        if(!_isEnabled) return;
+        private bool _isEnabled = true;
+        [SerializeField, Range(0, 0.1f)] private float amplitude;
+        [SerializeField, Range(0, 30)] private float frecuency;
 
-        CheckMotion();
-        ResetPosition();
-    }
+        [SerializeField] private Transform camera;
+        [SerializeField] private Transform cameraHolder;
 
-    private Vector3 FootstepMotion()
-    {
-        Vector3 pos = Vector3.zero;
-        pos.y = Mathf.Sin(Time.time * _frecuency) * _amplitude;
-        pos.x = Mathf.Sin(Time.time * _frecuency / 2) * _amplitude / 2;
-        return pos;
-    }
+        private readonly float _toggleSpeed = 1f;
 
-    private void CheckMotion()
-    {
-        float speed = new Vector3(_rb.velocity.x, 0, _rb.velocity.z).magnitude;
+        private CharacterController _characterController;
+        private Vector3 _startPos;
 
-        if (speed < _toggleSpeed) return;
+        private void Awake()
+        { 
+            _characterController = GetComponent<CharacterController>();
+            _startPos = camera.localPosition;
+        }
 
-        PlayMotion(FootstepMotion());
-    }
+        private void Update()
+        {
+            if(!_isEnabled) return;
 
-    private void ResetPosition()
-    {
-        if (_camera.localPosition == _startPos) return;
-        _camera.localPosition = Vector3.Lerp(_camera.localPosition, _startPos, 1 * Time.deltaTime);
-    }
+            CheckMotion();
+            ResetPosition();
+        }
 
-    private void PlayMotion(Vector3 motion)
-    {
-        _camera.localPosition += motion;
+        private Vector3 FootstepMotion()
+        {
+            Vector3 pos = Vector3.zero;
+            pos.y = Mathf.Sin(Time.time * frecuency) * amplitude;
+            pos.x = Mathf.Sin(Time.time * frecuency / 2) * amplitude / 2;
+            return pos;
+        }
+
+        private void CheckMotion()
+        {
+            float speed = new Vector3(_characterController.velocity.x, 0, _characterController.velocity.z).magnitude;
+
+            if (speed < _toggleSpeed) return;
+
+            PlayMotion(FootstepMotion());
+        }
+
+        private void ResetPosition()
+        {
+            if (camera.localPosition == _startPos) return;
+            camera.localPosition = Vector3.Lerp(camera.localPosition, _startPos, 1 * Time.deltaTime);
+        }
+
+        private void PlayMotion(Vector3 motion)
+        {
+            camera.localPosition += motion;
+        }
     }
 }
