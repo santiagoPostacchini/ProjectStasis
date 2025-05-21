@@ -36,11 +36,6 @@ public abstract class PhysicsObject : MonoBehaviour
     protected bool _savedKinematic;
     protected float _savedDrag;
 
-
-
-
-
-
     protected virtual void Start()
     {
         objRB = GetComponent<Rigidbody>();
