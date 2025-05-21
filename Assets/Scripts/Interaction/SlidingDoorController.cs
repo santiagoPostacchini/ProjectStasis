@@ -158,16 +158,16 @@ public class SlidingDoorController : MonoBehaviour
         rightDoor.localPosition = rightEnd;
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (!other.CompareTag("Player"))
-            return;
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (!other.CompareTag("Player"))
+    //        return;
 
-        if (!isOpen)
-            isOpen = true;
-        else if (autoClose)
-            StartCoroutine(AutoCloseRoutine());
-    }
+    //    if (!isOpen)
+    //        isOpen = true;
+    //    else if (autoClose)
+    //        StartCoroutine(AutoCloseRoutine());
+    //}
 
     private IEnumerator AutoCloseRoutine()
     {
