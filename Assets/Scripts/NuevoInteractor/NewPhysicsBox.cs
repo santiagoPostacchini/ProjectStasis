@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace NuevoInteractor
 {
-    public class NewPhysicsBox : MonoBehaviour
+    public class NewPhysicsBox : MonoBehaviour, IStasis
     {
         [Header("Components")]
         [SerializeField] private Collider mainCollider;   // Colisiona con el ambiente SIEMPRE
@@ -12,36 +12,59 @@ namespace NuevoInteractor
         private Transform _objGrabPointTransform;
         private Player.Player _player;
         private Vector3 _velocity;
-
-        [Header("Grab Params")]
-        [SerializeField] private float followSpeed = 15f;
-        [SerializeField] private float rotateSpeed = 15f;
-
-        // Estado de colisión con jugador
+        
+        private bool _isFreezed;
+        
+        public Material matStasis;
+        private readonly string _outlineThicknessName = "_BorderThickness";
+        private MaterialPropertyBlock _mpb;
+        private Renderer _renderer;
+        private bool _savedKinematic;
+        private Vector3 _savedVelocity;
+        private Vector3 _savedAngularVelocity;
+        private float _savedDrag;
+        
         public bool IsCollidingWithPlayer { get; private set; }
 
-        public void Grab(Transform grabPoint)
+        private void Start()
         {
-            _objGrabPointTransform = grabPoint;
-            rb.isKinematic = true;
-            rb.detectCollisions = true; // Usually you want collisions ON when grabbed, but OFF with the player
-            rb.useGravity = false;
-            SetPlayerColliderState(true);
+            _renderer = GetComponent<Renderer>();
+            _mpb = new MaterialPropertyBlock();
+            SetOutlineThickness(1f);
         }
 
-
-        public void Drop()
+        public void Grab()
         {
-            _objGrabPointTransform = null;
-            _player = null;
-            rb.isKinematic = false;
-            rb.detectCollisions = true;
-            rb.useGravity = true;
+            transform.parent = _objGrabPointTransform;
+            transform.localPosition = Vector3.zero;
+            transform.localRotation = Quaternion.identity;
+            rb.isKinematic = true;
+            rb.useGravity = false;
             SetPlayerColliderState(false);
         }
 
+        public void Drop()
+        {
+            transform.parent = null;
+            if (!_isFreezed)
+            {
+                rb.isKinematic = false;
+                rb.useGravity = true;
+            }
+            SetPlayerColliderState(true);
+        }
+        
+        public void Throw(float force)
+        {
+            Drop();
+            if (!_isFreezed)
+            {
+                Vector3 throwVelocity = _objGrabPointTransform.forward * (force / rb.mass);
+                rb.AddForce(throwVelocity);
+            }
+        }
 
-        public void SetPlayerColliderState(bool asTrigger)
+        private void SetPlayerColliderState(bool asTrigger)
         {
             playerCollider.isTrigger = asTrigger;
         }
@@ -50,24 +73,6 @@ namespace NuevoInteractor
         {
             _player = assignedPlayer;
             _objGrabPointTransform = grabHolder;
-        }
-        
-        // Movimiento hacia el Holder y rotación automática
-        
-
-        private void Update()
-        {
-            if (_objGrabPointTransform)
-            {
-                transform.position = Vector3.SmoothDamp(transform.position, _objGrabPointTransform.position, ref _velocity, 0.05f);
-                
-                if (_player)
-                {
-                    Vector3 toPlayer = (_player.transform.position - transform.position).normalized;
-                    Quaternion lookRot = Quaternion.LookRotation(toPlayer);
-                    transform.rotation = Quaternion.Lerp(transform.rotation, lookRot, Time.deltaTime * rotateSpeed);
-                }
-            }
         }
         
         private void OnTriggerEnter(Collider other)
@@ -80,6 +85,69 @@ namespace NuevoInteractor
         {
             if (_objGrabPointTransform && _player && other == _player.GetComponent<Collider>())
                 IsCollidingWithPlayer = false;
+        }
+        
+        public void StatisEffectActivate()
+        {
+            FreezeObject();
+        }
+
+        // Deactivates the stasis effect and unfreezes the object.
+        public void StatisEffectDeactivate()
+        {
+            UnfreezeObject();
+        }
+
+        private void FreezeObject()
+        {
+            if (!_isFreezed)
+            {
+                SaveRigidbodyState();
+                rb.velocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+                rb.useGravity = false;
+                _isFreezed = true;
+                SetOutlineThickness(1.05f);
+            }
+        }
+
+        private void SaveRigidbodyState()
+        {
+            if (!rb) return;
+            _savedKinematic = GetComponent<Rigidbody>().isKinematic;
+            _savedVelocity = rb.velocity;
+            _savedAngularVelocity = rb.angularVelocity;
+            _savedDrag = rb.drag;
+        }
+
+        private void RestoreRigidbodyState()
+        {
+            if (!rb) return;
+            rb.velocity = _savedVelocity;
+            rb.angularVelocity = _savedAngularVelocity;
+            rb.drag = _savedDrag;
+            rb.isKinematic = _savedKinematic;
+            rb.WakeUp();
+        }
+
+        private void UnfreezeObject()
+        {
+            if (!_isFreezed) return;
+            RestoreRigidbodyState();
+            _isFreezed = false;
+            if(rb)
+                rb.useGravity = true;
+            SetOutlineThickness(1f);
+        }
+
+        private void SetOutlineThickness(float thickness)
+        {
+            if (!_renderer || _mpb == null) return;
+            _renderer.GetPropertyBlock(_mpb);
+            _mpb.SetFloat(_outlineThicknessName, thickness);
+            // _mpb.SetColor("_Color", Color.green);
+            _renderer.SetPropertyBlock(_mpb);
+            //Glow(false, 1);
         }
     }
 }

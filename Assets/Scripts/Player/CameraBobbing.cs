@@ -8,17 +8,16 @@ namespace Player
         [SerializeField, Range(0, 0.1f)] private float amplitude;
         [SerializeField, Range(0, 30)] private float frecuency;
 
-        [SerializeField] private Transform camera;
+        [SerializeField] private new Transform camera;
         [SerializeField] private Transform cameraHolder;
 
         private readonly float _toggleSpeed = 1f;
 
-        private CharacterController _characterController;
+        [SerializeField] private CharacterController characterController;
         private Vector3 _startPos;
 
         private void Awake()
-        { 
-            _characterController = GetComponent<CharacterController>();
+        {
             _startPos = camera.localPosition;
         }
 
@@ -40,7 +39,7 @@ namespace Player
 
         private void CheckMotion()
         {
-            float speed = new Vector3(_characterController.velocity.x, 0, _characterController.velocity.z).magnitude;
+            float speed = new Vector3(characterController.velocity.x, 0, characterController.velocity.z).magnitude;
 
             if (speed < _toggleSpeed) return;
 

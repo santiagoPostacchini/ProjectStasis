@@ -8,20 +8,22 @@ public class PlayerCam : MonoBehaviour
     public float sens = 700f;
 
     public Transform orientation;
-    [SerializeField] private MouseSensibilityUI mouseSensibilityUI;
+    //[SerializeField] private MouseSensibilityUI mouseSensibilityUI;
 
     float xRotation;
     float yRotation;
 
     private void Start()
     {
-        mouseSensibilityUI = GetComponent<MouseSensibilityUI>();
+        //mouseSensibilityUI = GetComponent<MouseSensibilityUI>();
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
   
 
     private void Update()
     {
-        if (mouseSensibilityUI.isActive) return;
+        //if (mouseSensibilityUI.isActive) return;
         float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sens;
         float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * sens;
 

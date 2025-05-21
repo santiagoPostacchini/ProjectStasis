@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 namespace Player
@@ -17,13 +16,21 @@ namespace Player
         [SerializeField] private float jumpCooldown = 0.25f;
         [SerializeField] private float gravity = -18f;
         private bool _readyToJump = true;
-
-        [Header("Crouching")]
-        private float _startYScale;
-        [SerializeField] private float crouchYScale = 0.5f;
-        [SerializeField] private float transitionDuration = 0.1f;
-        private Coroutine _currentTransition;
-
+        
+        [Header("Crouch")]
+        [SerializeField] private float standHeight = 2f;
+        [SerializeField] private float crouchHeight = 1f;
+        [SerializeField] private float standCenterY;
+        [SerializeField] private float crouchCenterY = 0.5f;
+        [SerializeField] private float eyeOffset = 0.6f;
+        [SerializeField] private Transform cameraTransform;
+        [SerializeField, Range(0.05f, 0.2f)] private float crouchSmoothTime = 0.08f;
+        
+        private float _crouchTargetHeight = 2f;
+        private float _crouchTargetCenterY;
+        private float _heightSmoothVelocity;
+        private float _centerYSmoothVelocity;
+        
         [SerializeField] private Transform orientation;
 
         private float _horizontalInput;
@@ -33,6 +40,7 @@ namespace Player
         private float _verticalVelocity;
 
         private CharacterController _controller;
+        private Coroutine _currentCrouchRoutine;
 
         public enum MovementState { Sprinting, Crouching, Air }
         public MovementState state;
@@ -40,7 +48,7 @@ namespace Player
         private void Start()
         {
             _controller = GetComponent<CharacterController>();
-            _startYScale = transform.localScale.y;
+            UpdateCameraHeight();
         }
 
         private void Update()
@@ -50,24 +58,23 @@ namespace Player
             HandleJump();
             ApplyGravity();
             HandleMovement();
+            HandleCrouchTransition();
         }
 
         private void HandleInput()
         {
             _horizontalInput = Input.GetAxisRaw("Horizontal");
             _verticalInput = Input.GetAxisRaw("Vertical");
-            
+
             if (Input.GetKeyDown(KeyCode.LeftControl))
             {
-                if (_currentTransition != null)
-                    StopCoroutine(_currentTransition);
-                _currentTransition = StartCoroutine(SmoothScaleChange(crouchYScale));
+                _crouchTargetHeight = crouchHeight;
+                _crouchTargetCenterY = crouchCenterY;
             }
             else if (Input.GetKeyUp(KeyCode.LeftControl))
             {
-                if (_currentTransition != null)
-                    StopCoroutine(_currentTransition);
-                _currentTransition = StartCoroutine(SmoothScaleChange(_startYScale));
+                _crouchTargetHeight = standHeight;
+                _crouchTargetCenterY = standCenterY;
             }
         }
 
@@ -76,8 +83,7 @@ namespace Player
             _moveDirection = (orientation.forward * _verticalInput + orientation.right * _horizontalInput).normalized;
             float targetSpeed = (state == MovementState.Crouching) ? crouchSpeed : sprintSpeed;
             Vector3 desiredVelocity = _moveDirection * targetSpeed;
-
-            // Aplica air control multiplier si está en el aire
+            
             float effectiveAcceleration = acceleration;
             float effectiveDeceleration = deceleration;
             if (!_controller.isGrounded)
@@ -85,16 +91,14 @@ namespace Player
                 effectiveAcceleration *= airControlMultiplier;
                 effectiveDeceleration *= airControlMultiplier;
             }
-
-            // Suavizado de aceleración/desaceleración en plano XZ
+            
             var flatCurrentVel = new Vector3(_currentVelocity.x, 0, _currentVelocity.z);
             var flatDesiredVel = new Vector3(desiredVelocity.x, 0, desiredVelocity.z);
 
             flatCurrentVel = _moveDirection.magnitude > 0.1f ? Vector3.MoveTowards(flatCurrentVel, flatDesiredVel, effectiveAcceleration * Time.deltaTime) : Vector3.MoveTowards(flatCurrentVel, Vector3.zero, effectiveDeceleration * Time.deltaTime);
 
             _currentVelocity = new Vector3(flatCurrentVel.x, _currentVelocity.y, flatCurrentVel.z);
-
-            // Combina el movimiento horizontal con el vertical (gravedad/jump)
+            
             Vector3 finalVelocity = new Vector3(flatCurrentVel.x, _verticalVelocity, flatCurrentVel.z);
             _controller.Move(finalVelocity * Time.deltaTime);
         }
@@ -118,20 +122,38 @@ namespace Player
             _verticalVelocity += gravity * Time.deltaTime;
         }
 
-        private IEnumerator SmoothScaleChange(float targetYScale)
+        private void HandleCrouchTransition()
         {
-            float elapsed = 0f;
-            Vector3 initialScale = transform.localScale;
-            Vector3 targetScale = new Vector3(initialScale.x, targetYScale, initialScale.z);
+            _controller.height = Mathf.SmoothDamp(
+                _controller.height,
+                _crouchTargetHeight,
+                ref _heightSmoothVelocity,
+                crouchSmoothTime
+            );
 
-            while (elapsed < transitionDuration)
-            {
-                transform.localScale = Vector3.Lerp(initialScale, targetScale, elapsed / transitionDuration);
-                elapsed += Time.deltaTime;
-                yield return null;
-            }
-            transform.localScale = targetScale;
+            _controller.center = new Vector3(
+                0f,
+                Mathf.SmoothDamp(
+                    _controller.center.y,
+                    _crouchTargetCenterY,
+                    ref _centerYSmoothVelocity,
+                    crouchSmoothTime
+                ),
+                0f
+            );
+
+            UpdateCameraHeight();
         }
+
+        private void UpdateCameraHeight()
+        {
+            cameraTransform.localPosition = new Vector3(
+                cameraTransform.localPosition.x,
+                _controller.center.y + eyeOffset,
+                cameraTransform.localPosition.z
+            );
+        }
+
 
         private void StateHandler()
         {
