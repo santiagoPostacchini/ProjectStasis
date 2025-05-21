@@ -105,11 +105,11 @@ namespace Player
 
 
                         if (!po._isFreezed &&
-                            po.player.GetComponent<PlayerInteractor>()._objectGrabbable)
+                            !po.player?.GetComponentInChildren<PlayerInteractor>()._objectGrabbable)
                         {
                             _physicObject = po;
                             Color softGreen = new Color(0.7f, 1f, 0.7f, 1f);
-                            _physicObject.SetColorOutline(softGreen, 0.3f);
+                            _physicObject.SetColorOutline(softGreen, 1f);
                             _physicObject.SetOutlineThickness(1.05f);
                             AudioManager.Instance?.PlaySfx("SelectStasiable");
                         }
