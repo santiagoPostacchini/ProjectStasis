@@ -7,7 +7,7 @@ public abstract class PhysicsObject : MonoBehaviour
 {
     public Player.Player player;
     // Common physics components
-    protected Rigidbody objRB;
+    public Rigidbody objRB;
     protected CollisionDetector collisionDetector;
     protected Transform objGrabPointTransform;
 
