@@ -57,7 +57,7 @@ namespace Player
         /// </summary>
         public void HandleVisualStasisFeedback(PhysicsObject lookedPhysicsObject, bool isGrabbing)
         {
-            bool hitStasis = (lookedPhysicsObject && lookedPhysicsObject is IStasis);
+            bool hitStasis = (lookedPhysicsObject != null && lookedPhysicsObject is IStasis);
 
             // Solo reacciona si cambió el estado de highlight
             if (hitStasis != _isAiming)
