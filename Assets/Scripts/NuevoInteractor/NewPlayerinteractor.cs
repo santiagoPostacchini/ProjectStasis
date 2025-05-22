@@ -1,11 +1,17 @@
+using Interaction;
 using UnityEngine;
 
 namespace NuevoInteractor
 {
     public class NewPlayerInteractor : MonoBehaviour
     {
-        [Header("Interaction Settings")] [SerializeField]
-        private float pickUpRange = 4f;
+        [Header("Interaction Settings")]
+        [SerializeField] private float throwCharge;
+        [SerializeField] private float pickUpRange = 4f;
+        [SerializeField] private float holdTime;
+        [SerializeField] private float throwHoldThreshold = 0.15f;
+        public float ThrowCharge => Mathf.Clamp01(throwCharge / throwHoldThreshold);
+        private bool _isHoldingThrow;
 
         [SerializeField] private float throwForce = 10f;
         [SerializeField] private Transform objectGrabPointTransform;
@@ -24,15 +30,16 @@ namespace NuevoInteractor
         [Header("Environment")] [SerializeField]
         private LayerMask environmentMask;
 
-        [Header("Smoothing")] [SerializeField] private float positionSmoothTime = 0.1f;
+        [Header("Smoothing")]
         [SerializeField] private float rotationSmoothSpeed = 10f;
-        
-        [Header("Custom Movement")]
-        [SerializeField] private AnimationCurve holdMoveCurve = AnimationCurve.Linear(0, 0, 1, 1);
+
+        [Header("Custom Movement")] [SerializeField]
+        private AnimationCurve holdMoveCurve = AnimationCurve.Linear(0, 0, 1, 1);
+
         [SerializeField] private float headDropStartDist = 0.5f;
         [SerializeField] private float maxHeadDrop = 0.5f;
 
-        
+
         private Vector3 _frontLocalPos;
         private Vector3 _backLocalPos;
         private Vector3 _localSmoothVel;
@@ -41,19 +48,19 @@ namespace NuevoInteractor
 
         void Start()
         {
-            _frontLocalPos       = objectGrabPointTransform.localPosition;      // debería ser (0,0,1.5)
-            _backLocalPos        = objectGrabPointBackTransform.localPosition;  // debería ser (0,0,-0.7)
-            _rotationSmoothQuat  = objectGrabPointTransform.rotation;
+            _frontLocalPos = objectGrabPointTransform.localPosition;
+            _backLocalPos = objectGrabPointBackTransform.localPosition;
+            _rotationSmoothQuat = objectGrabPointTransform.rotation;
         }
+
         void Update()
         {
             GameObject hitObject = null;
 
             if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, pickUpRange))
-            {
                 hitObject = hit.collider.gameObject;
-            }
-            
+
+            // 1. PRESIONAR E (iniciar agarrar o hold)
             if (Input.GetKeyDown(KeyCode.E))
             {
                 if (!_objectGrabbable)
@@ -62,22 +69,57 @@ namespace NuevoInteractor
                 }
                 else
                 {
-                    TryDropObject();
+                    _isHoldingThrow = true;
+                    holdTime = 0f;
+                    throwCharge = 0f;
+                }
+            }
+
+            // 2. MANTENER E (incrementa carga)
+            if (_isHoldingThrow && _objectGrabbable)
+            {
+                holdTime += Time.deltaTime;
+                throwCharge = holdTime;
+                ThrowUISlider.Instance?.SetFill(Mathf.Clamp01(throwCharge/throwHoldThreshold));
+                
+                if (holdTime >= throwHoldThreshold)
+                {
+                    if (_objectGrabbable && !_objectGrabbable.IsCollidingWithPlayer)
+                    {
+                        _objectGrabbable.Throw(throwForce);
+                        _objectGrabbable = null;
+                        _isHoldingThrow = false;
+                        holdTime = 0f;
+                        throwCharge = 0f;
+                        ThrowUISlider.Instance?.SetFill(0);
+                    }
                 }
             }
             
+            if (Input.GetKeyUp(KeyCode.E) && _objectGrabbable && _isHoldingThrow)
+            {
+                if (holdTime < throwHoldThreshold)
+                {
+                    TryDropObject();
+                }
+                _isHoldingThrow = false;
+                holdTime = 0f;
+                throwCharge = 0f;
+            }
+
+            // Actualiza posición de holder si corresponde
             if (_objectGrabbable)
             {
                 UpdateHolderPosition();
             }
         }
 
+        
         private void TryGrabObject(GameObject hitObject)
         {
             if (hitObject && hitObject.TryGetComponent(out NewPhysicsBox physicsObject))
             {
                 objectGrabPointTransform.position = hitObject.transform.position;
-
                 physicsObject.SetReferences(player, objectGrabPointTransform);
                 physicsObject.Grab();
 
@@ -89,6 +131,7 @@ namespace NuevoInteractor
         {
             if (_objectGrabbable && !_objectGrabbable.IsCollidingWithPlayer)
             {
+                ThrowUISlider.Instance?.SetFill(0);
                 _objectGrabbable.Drop();
                 _objectGrabbable = null;
             }
@@ -98,18 +141,19 @@ namespace NuevoInteractor
         {
             // 1) Raycast para ajustar targetDistance
             float targetDistance = maxHoldDistance;
-            if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, maxHoldDistance, environmentMask))
+            if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, maxHoldDistance,
+                    environmentMask))
             {
                 targetDistance = Mathf.Clamp(hit.distance - holderOffset, minHoldDistance, maxHoldDistance);
             }
 
-            // 2) Calcula t puro [0..1] y lo remapeas con tu curve
-            float t       = Mathf.InverseLerp(maxHoldDistance, minHoldDistance, targetDistance);
-            float curveT  = holdMoveCurve.Evaluate(t);
+            // 2) Calcula t puro [0..1] y lo remap con tu curve
+            float t = Mathf.InverseLerp(maxHoldDistance, minHoldDistance, targetDistance);
+            float curveT = holdMoveCurve.Evaluate(t);
 
             // 3) Define front/back en world space
             Vector3 frontPos = transform.position + transform.forward * maxHoldDistance;
-            Vector3 backPos  = objectGrabPointBackTransform.position;
+            Vector3 backPos = objectGrabPointBackTransform.position;
 
             // 4) Interpola usando curveT
             Vector3 desiredPos = Vector3.Lerp(frontPos, backPos, curveT);
@@ -117,22 +161,24 @@ namespace NuevoInteractor
             // 5) Si estás muy cerca, aplica “head drop”
             if (targetDistance < headDropStartDist)
             {
-                // headT sube de 0 a 1 cuandao targetDistance va de headDropStartDist a 0
-                float headT    = Mathf.InverseLerp(headDropStartDist, minHoldDistance, targetDistance);
-                float dropAmt  = Mathf.Lerp(0f, maxHeadDrop, headT);
-                desiredPos.y  -= dropAmt;
+                // headT sube de 0 a 1 cuando targetDistance va de headDropStartDist a 0
+                float headT = Mathf.InverseLerp(headDropStartDist, minHoldDistance, targetDistance);
+                float dropAmt = Mathf.Lerp(0f, maxHeadDrop, headT);
+                desiredPos.y -= dropAmt;
             }
 
             // 6) Rotación “mira al jugador” con up = Vector3.up
-            Vector3 dirToPlayer  = (transform.position - desiredPos).normalized;
+            Vector3 dirToPlayer = (transform.position - desiredPos).normalized;
             Quaternion targetRot = Quaternion.LookRotation(dirToPlayer, Vector3.up);
-            _rotationSmoothQuat  = Quaternion.Slerp(_rotationSmoothQuat, targetRot, Time.deltaTime * rotationSmoothSpeed);
+            _rotationSmoothQuat =
+                Quaternion.Slerp(_rotationSmoothQuat, targetRot, Time.deltaTime * rotationSmoothSpeed);
 
             // 7) Aplica al holder y al cubo
             objectGrabPointTransform.SetPositionAndRotation(desiredPos, _rotationSmoothQuat);
             _objectGrabbable.transform.SetPositionAndRotation(desiredPos, _rotationSmoothQuat);
         }
-        
-        public bool HasObjectInHand() => _objectGrabbable;
+
+        public bool HasObjectInHand() => _objectGrabbable && _objectGrabbable.gameObject.activeInHierarchy;
+
     }
 }

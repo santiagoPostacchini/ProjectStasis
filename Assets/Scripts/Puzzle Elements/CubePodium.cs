@@ -1,45 +1,44 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Interaction;
 using NuevoInteractor;
+using UnityEngine;
 
-public class CubePodium : MonoBehaviour, IInteractable
+namespace Puzzle_Elements
 {
-    [SerializeField] private NewPhysicsBox box;
-    [SerializeField] private Transform t;
-    [SerializeField] private ParticleSystem particle;
+    public class CubePodium : MonoBehaviour, IInteractable
+    {
+        [SerializeField] private NewPhysicsBox box;
+        [SerializeField] private Transform t;
+        [SerializeField] private ParticleSystem particle;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        SuspendObject();
-        particle.Play();
-    }
-    private void Update()
-    {
-        if (box == null) return;
-        float distance = Vector3.Distance(transform.position, box.transform.position);
-        if (distance > 2)
+        // Start is called before the first frame update
+        void Start()
         {
-            Interact();
+            SuspendObject();
+            particle.Play();
         }
-    }
-    private void SuspendObject()
-    {
-        if (box == null) return;
-        Rigidbody rb = box.GetComponent<Rigidbody>();
-        if (rb != null)
+        private void Update()
         {
-            rb.useGravity = false;
-            box.transform.position = t.transform.position;
+            if (!box) return;
+            float distance = Vector3.Distance(transform.position, box.transform.position);
+            if (distance > 2)
+            {
+                Interact();
+            }
+        }
+        private void SuspendObject()
+        {
+            if (!box) return;
+            Rigidbody rb = box.GetComponent<Rigidbody>();
+            if (rb)
+            {
+                rb.useGravity = false;
+                box.transform.position = t.transform.position;
+            }
+
         }
 
-    }
-
-    public void Interact()
-    {
-        particle?.Stop();
-
+        public void Interact()
+        {
+            particle?.Stop();
+        }
     }
 }

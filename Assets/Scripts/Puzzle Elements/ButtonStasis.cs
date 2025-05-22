@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Puzzle_Elements;
 using UnityEngine;
 
 public class ButtonStasis : PhysicsObject, IStasis

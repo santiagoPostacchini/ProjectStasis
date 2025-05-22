@@ -71,7 +71,7 @@ Transform:
   m_GameObject: {fileID: 2234969716670932815}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 1.5000002}
+  m_LocalPosition: {x: -0, y: 0, z: 1.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -215,9 +215,10 @@ GameObject:
   - component: {fileID: 7304058133669273201}
   - component: {fileID: 1705544926496965761}
   - component: {fileID: 7390858252915200763}
+  - component: {fileID: 246580235368776387}
   m_Layer: 7
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 419385456094870383, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -371,6 +372,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &246580235368776387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7471954370213840871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8884a302dbad9154881e0bc48b26e3ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7605596597607411720
 GameObject:
   m_ObjectHideFlags: 0
@@ -549,6 +562,7 @@ GameObject:
   - component: {fileID: 3684571510027206823}
   - component: {fileID: 6663444182057631544}
   - component: {fileID: 8009462911006117329}
+  - component: {fileID: 2350604656792327503}
   m_Layer: 7
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -658,7 +672,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42b6ba911740a324ba5cfe9e5c37c1c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stasisDuration: 5
   stasisOrigin: {fileID: 890691351840093068}
   stasisBeamPrefab: {fileID: 3727240094262313092, guid: ecbcfae19ee53e04e85df99288251078,
     type: 3}
@@ -720,7 +733,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62e2083a4b7fec14494c57fab9b0765d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  throwCharge: 0
   pickUpRange: 3
+  holdTime: 0
+  throwHoldThreshold: 0.3
   throwForce: 150
   objectGrabPointTransform: {fileID: 4755807727198483506}
   objectGrabPointBackTransform: {fileID: 6972389755522747709}
@@ -780,8 +796,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 032e4371c53f9aa4bb9d806503677826, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amplitude: 0.003
-  frecuency: 8
+  amplitude: 0.001
+  frecuency: 15
   camera: {fileID: 4974858125161302739}
   cameraHolder: {fileID: 7351367501652722227}
   characterController: {fileID: 8772484843695230119}
@@ -829,6 +845,54 @@ MonoBehaviour:
   highlightScale: 2
   normalColor: {r: 1, g: 1, b: 1, a: 0}
   highlightColor: {r: 0.4235294, g: 1, b: 0, a: 0.8509804}
+  rotationSpeed: 90
+  tickingSoundName: Ticking.Pulse
+--- !u!114 &2350604656792327503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8298380290158451531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e8b6ea915abfda4ab7a990d5959b7e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reticleImages:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  animCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  animSpeed: 2
+  normalScale: 1
+  highlightScale: 1.2
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  highlightColor: {r: 0, g: 1, b: 1, a: 1}
   rotationSpeed: 90
   tickingSoundName: Ticking.Pulse
 --- !u!1 &9057293013084862463

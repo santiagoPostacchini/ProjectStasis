@@ -14,7 +14,7 @@ namespace NuevoInteractor
         private Player.Player _player;
         private Vector3 _velocity;
 
-        public bool _isFreezed;
+        public bool isFreezed;
 
         public Material matStasis;
         private readonly string _outlineThicknessName = "_BorderThickness";
@@ -41,14 +41,25 @@ namespace NuevoInteractor
 
         public void Grab()
         {
+            if (!isFreezed)
+            {
+                _savedVelocity = Vector3.zero;
+                _savedAngularVelocity = Vector3.zero;
+            }
+
             originalLayer = gameObject.layer;
             gameObject.layer = _objGrabPointTransform.gameObject.layer;
+            foreach (Transform child in transform)
+            {
+                child.gameObject.layer = _objGrabPointTransform.gameObject.layer;
+            }
+
             transform.parent = _objGrabPointTransform;
             transform.localPosition = Vector3.zero;
             transform.localRotation = Quaternion.identity;
             rb.isKinematic = true;
             rb.useGravity = false;
-            trajectoryCube._lineRenderer.positionCount = 0;
+            trajectoryCube.lineRenderer.positionCount = 0;
             SetPlayerColliderState(true);
         }
 
@@ -56,10 +67,21 @@ namespace NuevoInteractor
         {
             transform.parent = null;
             gameObject.layer = originalLayer;
-            if (!_isFreezed)
+            foreach (Transform child in transform)
+            {
+                child.gameObject.layer = originalLayer;
+            }
+
+            if (!isFreezed)
             {
                 rb.isKinematic = false;
                 rb.useGravity = true;
+            }
+            else
+            {
+                float speed = _savedVelocity.magnitude;
+                _savedVelocity = -_objGrabPointTransform.forward * speed;
+
                 if (_savedVelocity.magnitude > 0.5f)
                 {
                     trajectoryCube.DrawTrajectory(transform.position, _savedVelocity, rb.drag);
@@ -72,9 +94,9 @@ namespace NuevoInteractor
         public void Throw(float force)
         {
             Drop();
-            if (!_isFreezed)
+            if (!isFreezed)
             {
-                Vector3 throwVelocity = _objGrabPointTransform.forward * (force / rb.mass);
+                Vector3 throwVelocity = -_objGrabPointTransform.forward * (force / rb.mass);
                 rb.AddForce(throwVelocity);
             }
         }
@@ -92,14 +114,14 @@ namespace NuevoInteractor
 
         private void OnTriggerEnter(Collider other)
         {
-            if (_player == null) return;
+            if (!_player) return;
             if (other.gameObject == _player.gameObject)
                 IsCollidingWithPlayer = true;
         }
 
         private void OnTriggerExit(Collider other)
         {
-            if (_player == null) return;
+            if (!_player) return;
             if (other.gameObject == _player.gameObject)
                 IsCollidingWithPlayer = false;
         }
@@ -108,8 +130,7 @@ namespace NuevoInteractor
         {
             FreezeObject();
         }
-
-        // Deactivates the stasis effect and unfreezes the object.
+        
         public void StatisEffectDeactivate()
         {
             UnfreezeObject();
@@ -117,17 +138,19 @@ namespace NuevoInteractor
 
         private void FreezeObject()
         {
-            if (!_isFreezed)
+            if (!isFreezed)
             {
                 SaveRigidbodyState();
                 rb.velocity = Vector3.zero;
                 rb.angularVelocity = Vector3.zero;
                 rb.useGravity = false;
-                _isFreezed = true;
+                rb.isKinematic = true;
+                isFreezed = true;
                 if (_savedVelocity.magnitude > 0.5f)
                 {
                     trajectoryCube.DrawTrajectory(transform.position, _savedVelocity, rb.drag);
                 }
+
                 SetOutlineThickness(1.05f);
             }
         }
@@ -135,7 +158,7 @@ namespace NuevoInteractor
         private void SaveRigidbodyState()
         {
             if (!rb) return;
-            _savedKinematic = GetComponent<Rigidbody>().isKinematic;
+            _savedKinematic = rb.isKinematic;
             _savedVelocity = rb.velocity;
             _savedAngularVelocity = rb.angularVelocity;
             _savedDrag = rb.drag;
@@ -144,29 +167,26 @@ namespace NuevoInteractor
         private void RestoreRigidbodyState()
         {
             if (!rb) return;
+            rb.isKinematic = _savedKinematic;
             rb.velocity = _savedVelocity;
             rb.angularVelocity = _savedAngularVelocity;
             rb.drag = _savedDrag;
-            rb.isKinematic = _savedKinematic;
             rb.WakeUp();
         }
 
         private void UnfreezeObject()
         {
-            if (!_isFreezed) return;
+            if (!isFreezed) return;
             RestoreRigidbodyState();
-            _isFreezed = false;
-            if (rb)
-            {
-                rb.useGravity = true;
-                rb.isKinematic = false;
-            }
+            isFreezed = false;
+            rb.useGravity = true;
+            rb.isKinematic = false;
             SetOutlineThickness(0f);
-            if (trajectoryCube._lineRenderer != null)
-            {
-                trajectoryCube._lineRenderer.positionCount = 0;
-            }
+
+            if (trajectoryCube.lineRenderer)
+                trajectoryCube.lineRenderer.positionCount = 0;
         }
+
 
         private void SetOutlineThickness(float thickness)
         {

@@ -1,20 +1,15 @@
 ﻿using System.Collections;
+using NuevoInteractor;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Interaction
 {
     public class StasisGun : MonoBehaviour
     {
-        [FormerlySerializedAs("_stasisDuration")]
-        [Header("Stasis Settings")]
-        [SerializeField] private float stasisDuration = 5f;
-
-        [FormerlySerializedAs("_stasisOrigin")]
         [Header("Visual Settings")]
-        [SerializeField] private Transform stasisOrigin; // Punto de origen del rayo (por ejemplo, la mano del jugador)
-        [SerializeField] private GameObject stasisBeamPrefab; // Prefab del rayo
-        [SerializeField] private float beamDuration = 0.2f; // Duración visible del rayo
+        [SerializeField] private Transform stasisOrigin;
+        [SerializeField] private GameObject stasisBeamPrefab;
+        [SerializeField] private float beamDuration = 0.2f;
 
         private GameObject _firstFrozenObject;
         private IStasis _firstStasisComponent;
@@ -22,35 +17,27 @@ namespace Interaction
         private GameObject _secondFrozenObject;
         private IStasis _secondStasisComponent;
 
-        private StasisBeam _activeBeam; // Instancia activa del rayo
-
-        private Coroutine _stasisTimerCoroutine;
+        private StasisBeam _activeBeam;
         private Coroutine _beamCoroutine;
 
-        private PlayerInteractor _playerInteractor;
-        private bool _isFirstFrozenObjectNotNull;
+        private NewPlayerInteractor _playerInteractor;
 
         private bool IsGunActive => this.enabled && this.gameObject.activeInHierarchy;
 
         void Start()
         {
-            _isFirstFrozenObjectNotNull = _firstFrozenObject;
-            _playerInteractor = GetComponent<PlayerInteractor>();
+            _playerInteractor = GetComponent<NewPlayerInteractor>();
         }
 
         void Update()
         {
             if (!IsGunActive)
-            {
                 return;
-            }
 
             if (Input.GetMouseButtonDown(0))
             {
                 if (_playerInteractor && _playerInteractor.HasObjectInHand())
-                {
                     return;
-                }
 
                 TryApplyStasis(Camera.main?.transform);
             }
@@ -66,113 +53,67 @@ namespace Interaction
                 {
                     ApplyStasisEffect(hitObject, stasisComponent);
                 }
-
-                // Si ya hay un rayo activo, destrúyelo
+                
                 if (_activeBeam)
                 {
                     Destroy(_activeBeam.gameObject);
                 }
 
-                // Instance y configurar el nuevo rayo
                 GameObject beamInstance = Instantiate(stasisBeamPrefab, stasisOrigin.position, Quaternion.identity);
                 _activeBeam = beamInstance.GetComponent<StasisBeam>();
                 _activeBeam.SetBeam(stasisOrigin.position, hit.point);
 
-                //  Reproducir sonido del rayo
                 AudioManager.Instance?.PlaySfx("LaserFX");
 
-                // Iniciar la coroutine para desactivar el rayo después de un tiempo
                 if (_beamCoroutine != null)
-                {
                     StopCoroutine(_beamCoroutine);
-                }
+
                 _beamCoroutine = StartCoroutine(DisableBeamAfterDuration(beamDuration));
             }
         }
 
-
         void ApplyStasisEffect(GameObject newObject, IStasis newStasisComponent)
         {
-            if (!_firstFrozenObject)
-            {
-                ApplyIndefiniteStasis(newObject, newStasisComponent);
-            }
-            else if (!_secondFrozenObject && newObject != _firstFrozenObject)
-            {
-                ApplyTimedStasis(newObject, newStasisComponent);
-            }
-            else
-            {
-                UnfreezeObject(newObject);
-            }
-        }
-
-        void ApplyIndefiniteStasis(GameObject newObject, IStasis newStasisComponent)
-        {
-            if (_firstFrozenObject && _firstFrozenObject != newObject)
+            if (newObject == _firstFrozenObject)
             {
                 _firstStasisComponent.StatisEffectDeactivate();
+                _firstFrozenObject = null;
+                _firstStasisComponent = null;
+                return;
             }
-
-            _firstFrozenObject = newObject;
-            _firstStasisComponent = newStasisComponent;
-            _firstStasisComponent.StatisEffectActivate();
-        }
-
-        void ApplyTimedStasis(GameObject newObject, IStasis newStasisComponent)
-        {
-            if (_secondFrozenObject == newObject)
+            if (newObject == _secondFrozenObject)
             {
-                UnfreezeObject(_secondFrozenObject);
+                _secondStasisComponent.StatisEffectDeactivate();
+                _secondFrozenObject = null;
+                _secondStasisComponent = null;
                 return;
             }
 
-            _secondFrozenObject = newObject;
-            _secondStasisComponent = newStasisComponent;
-            _secondStasisComponent.StatisEffectActivate();
-
-            if (_stasisTimerCoroutine != null)
-            {
-                StopCoroutine(_stasisTimerCoroutine);
-            }
-            _stasisTimerCoroutine = StartCoroutine(UnfreezeBothAfterDelay(stasisDuration));
-        }
-
-        void UnfreezeObject(GameObject obj)
-        {
-            if (obj == _firstFrozenObject)
+            // Si los dos slots están ocupados: liberar el primero
+            if (_firstFrozenObject && _secondFrozenObject)
             {
                 _firstStasisComponent.StatisEffectDeactivate();
-                _firstFrozenObject = null;
-                _firstStasisComponent = null;
-            }
-            else if (obj == _secondFrozenObject)
-            {
-                _secondStasisComponent.StatisEffectDeactivate();
-                _secondFrozenObject = null;
-                _secondStasisComponent = null;
-            }
-        }
 
-        private IEnumerator UnfreezeBothAfterDelay(float delay)
-        {
-            yield return new WaitForSeconds(delay);
-
-            if (_isFirstFrozenObjectNotNull && _firstStasisComponent != null)
-            {
-                _firstStasisComponent.StatisEffectDeactivate();
-                _firstFrozenObject = null;
-                _firstStasisComponent = null;
-            }
-
-            if (_secondFrozenObject && _secondStasisComponent != null)
-            {
-                _secondStasisComponent.StatisEffectDeactivate();
+                // Shift: el segundo pasa a primero
+                _firstFrozenObject = _secondFrozenObject;
+                _firstStasisComponent = _secondStasisComponent;
                 _secondFrozenObject = null;
                 _secondStasisComponent = null;
             }
 
-            _stasisTimerCoroutine = null;
+            // Si hay lugar en el segundo slot, poner el nuevo ahí
+            if (!_firstFrozenObject)
+            {
+                _firstFrozenObject = newObject;
+                _firstStasisComponent = newStasisComponent;
+                _firstStasisComponent.StatisEffectActivate();
+            }
+            else if (!_secondFrozenObject)
+            {
+                _secondFrozenObject = newObject;
+                _secondStasisComponent = newStasisComponent;
+                _secondStasisComponent.StatisEffectActivate();
+            }
         }
 
         private IEnumerator DisableBeamAfterDuration(float duration)
@@ -193,14 +134,8 @@ namespace Interaction
 
         private void UnfreezeAllObjects()
         {
-            if (_firstStasisComponent != null)
-            {
-                _firstStasisComponent.StatisEffectDeactivate();
-            }
-            if (_secondStasisComponent != null)
-            {
-                _secondStasisComponent.StatisEffectDeactivate();
-            }
+            _firstStasisComponent?.StatisEffectDeactivate();
+            _secondStasisComponent?.StatisEffectDeactivate();
 
             _firstFrozenObject = null;
             _secondFrozenObject = null;

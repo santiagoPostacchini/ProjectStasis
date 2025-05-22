@@ -24,7 +24,7 @@ namespace Player
         [SerializeField] private float crouchCenterY = 0.5f;
         [SerializeField] private float eyeOffset = 0.6f;
         [SerializeField] private Transform cameraTransform;
-        [SerializeField, Range(0.05f, 0.2f)] private float crouchSmoothTime = 0.08f;
+        [SerializeField, Range(0.01f, 0.2f)] private float crouchSmoothTime = 0.08f;
         
         private float _crouchTargetHeight = 2f;
         private float _crouchTargetCenterY;

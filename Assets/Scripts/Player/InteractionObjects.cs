@@ -19,9 +19,6 @@ public class InteractionObjects : MonoBehaviour
             DetectInteractableObjects();
         }
         DetectPhysicsObjects();
-       
-
-
     }
     
     private void DetectInteractableObjects()

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Puzzle_Elements;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -17,7 +18,7 @@ public class PressurePlateGroup : MonoBehaviour
         bool allActive = true;
         foreach (var plate in plates)
         {
-            if (!plate.isActivated)
+            if (!plate.IsActivated)
             {
                 allActive = false;
                 break;

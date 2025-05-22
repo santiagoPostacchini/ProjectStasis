@@ -1,17 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class TrajectoryCube : MonoBehaviour
 {
-    public LineRenderer _lineRenderer;
-    public int _pointsCount = 50;
-    public float _timeStep = 0.1f;
-    public LayerMask _collisionMask;
+    public LineRenderer lineRenderer;
+    public int pointsCount = 50;
+    public float timeStep = 0.1f;
+    public LayerMask collisionMask;
     public void DrawTrajectory(Vector3 startPos, Vector3 startVelocity, float drag)
     {
         
-        Vector3[] points = new Vector3[_pointsCount];
+        Vector3[] points = new Vector3[pointsCount];
         Vector3 currentPosition = startPos;
         Vector3 velocity = startVelocity;
 
@@ -19,20 +17,16 @@ public class TrajectoryCube : MonoBehaviour
         points[0] = currentPosition;
         int i = 1;
 
-        for (; i < _pointsCount; i++)
+        for (; i < pointsCount; i++)
         {
-            // Aplicar drag: reducci�n exponencial por unidad de tiempo
-            velocity *= 1f / (1f + drag * _timeStep);
-
-            // Aplicar gravedad
-            Vector3 nextVelocity = velocity + gravity * _timeStep;
-
-            // Posici�n estimada con gravedad y drag
-            Vector3 nextPosition = currentPosition + velocity * _timeStep + 0.5f * gravity * (_timeStep * _timeStep);
+            velocity *= 1f / (1f + drag * timeStep);
+            
+            Vector3 nextVelocity = velocity + gravity * timeStep;
+            
+            Vector3 nextPosition = currentPosition + velocity * timeStep + gravity * (0.5f * (timeStep * timeStep));
             Vector3 segment = nextPosition - currentPosition;
-
-            // Comprobar colisi�n
-            if (Physics.Raycast(currentPosition, segment.normalized, out RaycastHit hit, segment.magnitude, _collisionMask))
+            
+            if (Physics.Raycast(currentPosition, segment.normalized, out RaycastHit hit, segment.magnitude, collisionMask))
             {
                 points[i] = hit.point;
                 i++;
@@ -44,7 +38,7 @@ public class TrajectoryCube : MonoBehaviour
             velocity = nextVelocity;
         }
 
-        _lineRenderer.positionCount = i;
-        _lineRenderer.SetPositions(points);
+        lineRenderer.positionCount = i;
+        lineRenderer.SetPositions(points);
     }
 }

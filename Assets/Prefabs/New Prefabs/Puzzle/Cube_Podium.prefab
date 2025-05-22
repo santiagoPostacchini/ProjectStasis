@@ -126,6 +126,9 @@ GameObject:
   - component: {fileID: 308126047923129655}
   - component: {fileID: 4007970185156037054}
   - component: {fileID: 808464816821112028}
+  - component: {fileID: 814687755024198573}
+  - component: {fileID: 6481558618772228865}
+  - component: {fileID: 8010808763392777451}
   m_Layer: 0
   m_Name: Cube_Podium
   m_TagString: CubePodium
@@ -141,7 +144,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8181989653873865493}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.000001989305, y: -0.70710576, z: 0.7071079, w: 0.0000021532178}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0.7071068, w: 0}
   m_LocalPosition: {x: 12.3, y: 1.81, z: 41}
   m_LocalScale: {x: 1.5000001, y: 1.5000001, z: 1.5000001}
   m_ConstrainProportionsScale: 1
@@ -201,6 +204,63 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &814687755024198573
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8181989653873865493}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c36531ad2bdd6e4cac3bb89e60b43dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  box: {fileID: 0}
+  t: {fileID: 1560308282531133769}
+  particle: {fileID: 8263267731317758636}
+--- !u!65 &6481558618772228865
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8181989653873865493}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.7376727, y: 0.30000004, z: 1.6410309}
+  m_Center: {x: 0.042944666, y: 0.15000762, z: -0.09910615}
+--- !u!65 &8010808763392777451
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8181989653873865493}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.92922986, y: 1.6482657, z: 1.1281554}
+  m_Center: {x: -0.1323103, y: 0.82413286, z: -0.082556285}
 --- !u!1001 &7011049779442761240
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -241,6 +301,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1432503776327017652, guid: ccf28ea29cf499744ac31bab90073aba,
         type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1432503776327017652, guid: ccf28ea29cf499744ac31bab90073aba,
+        type: 3}
       propertyPath: InitialModule.startColor.maxColor.a
       value: 0.09019608
       objectReference: {fileID: 0}
@@ -258,6 +323,11 @@ PrefabInstance:
         type: 3}
       propertyPath: InitialModule.startColor.maxColor.r
       value: 0.19305795
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663811077496848440, guid: ccf28ea29cf499744ac31bab90073aba,
+        type: 3}
+      propertyPath: playOnAwake
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6393863139070106113, guid: ccf28ea29cf499744ac31bab90073aba,
         type: 3}
@@ -363,6 +433,12 @@ PrefabInstance:
 --- !u!4 &1450937545847762127 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8461846582903198423, guid: ccf28ea29cf499744ac31bab90073aba,
+    type: 3}
+  m_PrefabInstance: {fileID: 7011049779442761240}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &8263267731317758636 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 1432503776327017652, guid: ccf28ea29cf499744ac31bab90073aba,
     type: 3}
   m_PrefabInstance: {fileID: 7011049779442761240}
   m_PrefabAsset: {fileID: 0}
