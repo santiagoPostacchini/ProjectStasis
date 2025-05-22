@@ -4,17 +4,18 @@ namespace NuevoInteractor
 {
     public class NewPhysicsBox : MonoBehaviour, IStasis
     {
-        [Header("Components")]
-        [SerializeField] private Collider mainCollider;   // Colisiona con el ambiente SIEMPRE
+        [Header("Components")] [SerializeField]
+        private Collider mainCollider; // Colisiona con el ambiente SIEMPRE
+
         [SerializeField] private Collider playerCollider; // Solo colisiona con el jugador
         [SerializeField] private Rigidbody rb;
 
         private Transform _objGrabPointTransform;
         private Player.Player _player;
         private Vector3 _velocity;
-        
+
         private bool _isFreezed;
-        
+
         public Material matStasis;
         private readonly string _outlineThicknessName = "_BorderThickness";
         private MaterialPropertyBlock _mpb;
@@ -23,37 +24,43 @@ namespace NuevoInteractor
         private Vector3 _savedVelocity;
         private Vector3 _savedAngularVelocity;
         private float _savedDrag;
-        
+
+        [SerializeField] private LayerMask originalLayer;
+
         public bool IsCollidingWithPlayer { get; private set; }
 
         private void Start()
         {
             _renderer = GetComponent<Renderer>();
             _mpb = new MaterialPropertyBlock();
-            SetOutlineThickness(1f);
+            SetOutlineThickness(0f);
         }
 
         public void Grab()
         {
+            originalLayer = gameObject.layer;
+            gameObject.layer = _objGrabPointTransform.gameObject.layer;
             transform.parent = _objGrabPointTransform;
             transform.localPosition = Vector3.zero;
             transform.localRotation = Quaternion.identity;
             rb.isKinematic = true;
             rb.useGravity = false;
-            SetPlayerColliderState(false);
+            SetPlayerColliderState(true);
         }
 
         public void Drop()
         {
             transform.parent = null;
+            gameObject.layer = originalLayer;
             if (!_isFreezed)
             {
                 rb.isKinematic = false;
                 rb.useGravity = true;
             }
-            SetPlayerColliderState(true);
+
+            SetPlayerColliderState(false);
         }
-        
+
         public void Throw(float force)
         {
             Drop();
@@ -68,25 +75,25 @@ namespace NuevoInteractor
         {
             playerCollider.isTrigger = asTrigger;
         }
-        
+
         public void SetReferences(Player.Player assignedPlayer, Transform grabHolder)
         {
             _player = assignedPlayer;
             _objGrabPointTransform = grabHolder;
         }
-        
+
         private void OnTriggerEnter(Collider other)
         {
-            if (_objGrabPointTransform && _player && other == _player.GetComponent<Collider>())
+            if (other.gameObject == _player.gameObject)
                 IsCollidingWithPlayer = true;
         }
 
         private void OnTriggerExit(Collider other)
         {
-            if (_objGrabPointTransform && _player && other == _player.GetComponent<Collider>())
+            if (other.gameObject == _player.gameObject)
                 IsCollidingWithPlayer = false;
         }
-        
+
         public void StatisEffectActivate()
         {
             FreezeObject();
@@ -135,9 +142,12 @@ namespace NuevoInteractor
             if (!_isFreezed) return;
             RestoreRigidbodyState();
             _isFreezed = false;
-            if(rb)
+            if (rb)
+            {
                 rb.useGravity = true;
-            SetOutlineThickness(1f);
+                rb.isKinematic = false;
+            }
+            SetOutlineThickness(0f);
         }
 
         private void SetOutlineThickness(float thickness)
