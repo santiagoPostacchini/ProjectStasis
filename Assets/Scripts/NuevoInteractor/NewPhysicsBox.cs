@@ -8,13 +8,13 @@ namespace NuevoInteractor
         private Collider mainCollider; // Colisiona con el ambiente SIEMPRE
 
         [SerializeField] private Collider playerCollider; // Solo colisiona con el jugador
-        [SerializeField] private Rigidbody rb;
+        public Rigidbody rb;
 
         private Transform _objGrabPointTransform;
         private Player.Player _player;
         private Vector3 _velocity;
 
-        private bool _isFreezed;
+        public bool _isFreezed;
 
         public Material matStasis;
         private readonly string _outlineThicknessName = "_BorderThickness";
@@ -29,10 +29,13 @@ namespace NuevoInteractor
 
         public bool IsCollidingWithPlayer { get; private set; }
 
+        [SerializeField] private TrajectoryCube trajectoryCube;
+
         private void Start()
         {
             _renderer = GetComponent<Renderer>();
             _mpb = new MaterialPropertyBlock();
+            trajectoryCube = GetComponent<TrajectoryCube>();
             SetOutlineThickness(0f);
         }
 
@@ -45,6 +48,7 @@ namespace NuevoInteractor
             transform.localRotation = Quaternion.identity;
             rb.isKinematic = true;
             rb.useGravity = false;
+            trajectoryCube._lineRenderer.positionCount = 0;
             SetPlayerColliderState(true);
         }
 
@@ -56,6 +60,10 @@ namespace NuevoInteractor
             {
                 rb.isKinematic = false;
                 rb.useGravity = true;
+                if (_savedVelocity.magnitude > 0.5f)
+                {
+                    trajectoryCube.DrawTrajectory(transform.position, _savedVelocity, rb.drag);
+                }
             }
 
             SetPlayerColliderState(false);
@@ -84,12 +92,14 @@ namespace NuevoInteractor
 
         private void OnTriggerEnter(Collider other)
         {
+            if (_player == null) return;
             if (other.gameObject == _player.gameObject)
                 IsCollidingWithPlayer = true;
         }
 
         private void OnTriggerExit(Collider other)
         {
+            if (_player == null) return;
             if (other.gameObject == _player.gameObject)
                 IsCollidingWithPlayer = false;
         }
@@ -114,6 +124,10 @@ namespace NuevoInteractor
                 rb.angularVelocity = Vector3.zero;
                 rb.useGravity = false;
                 _isFreezed = true;
+                if (_savedVelocity.magnitude > 0.5f)
+                {
+                    trajectoryCube.DrawTrajectory(transform.position, _savedVelocity, rb.drag);
+                }
                 SetOutlineThickness(1.05f);
             }
         }
@@ -148,6 +162,10 @@ namespace NuevoInteractor
                 rb.isKinematic = false;
             }
             SetOutlineThickness(0f);
+            if (trajectoryCube._lineRenderer != null)
+            {
+                trajectoryCube._lineRenderer.positionCount = 0;
+            }
         }
 
         private void SetOutlineThickness(float thickness)

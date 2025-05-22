@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Player;
+using NuevoInteractor;
 
 public class InteractionObjects : MonoBehaviour
 {

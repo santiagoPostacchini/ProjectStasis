@@ -1,16 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using NuevoInteractor;
 
 public class ArtificialJumpForce : MonoBehaviour
 {
     [SerializeField] private float jumpForce = 10f;
     [SerializeField] private float forwardForce = 5f;
-    [SerializeField] private PhysicsBox box;
-    private void Awake()
-    {
-        box = GetComponent<PhysicsBox>();
-    }
+    [SerializeField] private NewPhysicsBox box;
+   
     // Start is called before the first frame update
     void Start()
     {
@@ -25,7 +23,7 @@ public class ArtificialJumpForce : MonoBehaviour
     IEnumerator wait()
     {
         yield return new WaitForSeconds(0.5f);
-        ApplyForce(box.objRB);
+        ApplyForce(box.rb);
     }
     private void ApplyForce(Rigidbody rb)
     {
@@ -35,7 +33,7 @@ public class ArtificialJumpForce : MonoBehaviour
     }
     IEnumerator FreezeObject()
     {
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.04f);
         box.StatisEffectActivate();
     }
 }
