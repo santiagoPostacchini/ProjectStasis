@@ -88,13 +88,11 @@ namespace Interaction
                 _secondStasisComponent = null;
                 return;
             }
-
-            // Si los dos slots están ocupados: liberar el primero
+            
             if (_firstFrozenObject && _secondFrozenObject)
             {
                 _firstStasisComponent.StatisEffectDeactivate();
-
-                // Shift: el segundo pasa a primero
+                
                 _firstFrozenObject = _secondFrozenObject;
                 _firstStasisComponent = _secondStasisComponent;
                 _secondFrozenObject = null;

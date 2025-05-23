@@ -1,49 +1,42 @@
 ﻿using System.Collections;
+using NuevoInteractor;
 using UnityEngine;
 using UnityEngine.UI;
-using NuevoInteractor;
 
 namespace Player
 {
     public class StasisObjectEffects : MonoBehaviour
     {
-        [Header("Reticule UI")]
-        [Tooltip("Lista de imágenes de la mira; todas se animan")]
+        [Header("Reticule UI")] [Tooltip("Lista de imágenes de la mira; todas se animan")]
         public Image[] reticleImages;
 
-        [Header("Animation Settings")]
-        [Tooltip("Curva de easing para la animación (entrada/salida)")]
+        [Header("Animation Settings")] [Tooltip("Curva de easing para la animación (entrada/salida)")]
         public AnimationCurve animCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+
         [Tooltip("Velocidad de la progresión (1 = 1 segundo para ir de 0→1)")]
         public float animSpeed = 2f;
 
-        [Header("Scale Settings")]
-        [Tooltip("Escala en reposo")]
+        [Header("Scale Settings")] [Tooltip("Escala en reposo")]
         public float normalScale = 1f;
-        [Tooltip("Escala al highlight")]
-        public float highlightScale = 1.2f;
 
-        [Header("Color Settings")]
-        [Tooltip("Color en reposo")]
+        [Tooltip("Escala al highlight")] public float highlightScale = 1.2f;
+
+        [Header("Color Settings")] [Tooltip("Color en reposo")]
         public Color normalColor = Color.white;
-        [Tooltip("Color al highlight")]
-        public Color highlightColor = Color.cyan;
 
-        [Header("Rotation Settings")]
-        [Tooltip("Velocidad de giro máxima (grados/segundo)")]
+        [Tooltip("Color al highlight")] public Color highlightColor = Color.cyan;
+
+        [Header("Rotation Settings")] [Tooltip("Velocidad de giro máxima (grados/segundo)")]
         public float rotationSpeed = 90f;
 
-        [Header("Tick Sound")]
-        [Tooltip("Nombre exacto del sonido en AudioManager (ambientSounds)")]
+        [Header("Tick Sound")] [Tooltip("Nombre exacto del sonido en AudioManager (ambientSounds)")]
         public string tickingSoundName = "Ticking.Pulse";
 
         private Coroutine _animCoroutine;
         private bool _isAiming;
-        private PhysicsObject _physicObject;
 
         void Start()
         {
-            // Inicializa todas las imágenes en estado reposo
             foreach (var img in reticleImages)
             {
                 if (!img) continue;
@@ -52,15 +45,16 @@ namespace Player
                 img.rectTransform.localEulerAngles = Vector3.zero;
             }
         }
+        
+        private IStasis _lastLookedStasisObject;
 
-        /// <summary>
-        /// Llama a este método desde tu interactor principal, pasando el objeto stasiable (o null) y si se está agarrando algo.
-        /// </summary>
-        public void HandleVisualStasisFeedback(PhysicsObject lookedPhysicsObject, bool isGrabbing)
+        public void HandleVisualStasisFeedback(IStasis lookedStasisObject, bool isGrabbing)
         {
-            bool hitStasis = (lookedPhysicsObject != null && lookedPhysicsObject is IStasis);
+            bool hitStasis = (lookedStasisObject != null);
+            var lookedPhysicsObject = lookedStasisObject as NewPhysicsBox;
+            var lastPhysicsObject = _lastLookedStasisObject as NewPhysicsBox;
 
-            // Solo reacciona si cambió el estado de highlight
+            // Cambio en el highlight de la mira
             if (hitStasis != _isAiming)
             {
                 _isAiming = hitStasis;
@@ -68,41 +62,38 @@ namespace Player
                 _animCoroutine = StartCoroutine(AnimateReticle(_isAiming));
             }
 
-            if (hitStasis)
+            // Solo ejecuta al apuntar a un nuevo objeto
+            if (lookedStasisObject != _lastLookedStasisObject)
             {
-                AudioManager.Instance?.PlayAmbient(tickingSoundName);
-
-                if (!lookedPhysicsObject._isFreezed && !isGrabbing)
+                // Si dejé de mirar un objeto staseable, restablezco su estado anterior
+                if (_lastLookedStasisObject != null && lastPhysicsObject)
                 {
-                    _physicObject = lookedPhysicsObject;
-                    Color softGreen = new Color(0.7f, 1f, 0.7f, 1f);
-                    _physicObject.SetColorOutline(softGreen, 1f);
-                    _physicObject.SetOutlineThickness(1.05f);
+                    if (!lastPhysicsObject.isFreezed)
+                    {
+                        lastPhysicsObject.SetOutlineThickness(0f);
+                    }
+                    AudioManager.Instance?.StopAmbient(tickingSoundName);
+                }
+
+                // Ahora, si miro un nuevo objeto válido, aplico highlight y sonido
+                if (lookedPhysicsObject && !lookedPhysicsObject.isFreezed && !isGrabbing)
+                {
+                    lookedPhysicsObject.SetOutlineThickness(1.01f);
+                    AudioManager.Instance?.PlayAmbient(tickingSoundName);
                     AudioManager.Instance?.PlaySfx("SelectStasiable");
                 }
             }
-            else
-            {
-                AudioManager.Instance?.StopAmbient(tickingSoundName);
 
-                if (_physicObject)
-                {
-                    if (!_physicObject._isFreezed)
-                    {
-                        _physicObject.SetColorOutline(Color.green, 1);
-                        _physicObject.SetOutlineThickness(1f);
-                    }
-                    _physicObject = null;
-                }
-            }
-
+            // Si estoy agarrando, detengo el sonido inmediatamente
             if (isGrabbing)
             {
                 AudioManager.Instance?.StopAmbient(tickingSoundName);
             }
+
+            // Actualiza la referencia del último objeto mirado
+            _lastLookedStasisObject = lookedStasisObject;
         }
 
-        // Corrutina para animar la mira solo al cambio de estado
         private IEnumerator AnimateReticle(bool highlight)
         {
             float start = highlight ? 0f : 1f;
@@ -127,8 +118,10 @@ namespace Player
                     float angle = img.rectTransform.localEulerAngles.z + rotationSpeed * t * Time.deltaTime;
                     img.rectTransform.localEulerAngles = new Vector3(0, 0, angle);
                 }
+
                 yield return null;
             }
+
             // Asegura valores finales exactos
             foreach (var img in reticleImages)
             {

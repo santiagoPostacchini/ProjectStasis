@@ -215,7 +215,6 @@ GameObject:
   - component: {fileID: 7304058133669273201}
   - component: {fileID: 1705544926496965761}
   - component: {fileID: 7390858252915200763}
-  - component: {fileID: 246580235368776387}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -372,18 +371,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &246580235368776387
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7471954370213840871}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8884a302dbad9154881e0bc48b26e3ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &7605596597607411720
 GameObject:
   m_ObjectHideFlags: 0
@@ -562,7 +549,6 @@ GameObject:
   - component: {fileID: 3684571510027206823}
   - component: {fileID: 6663444182057631544}
   - component: {fileID: 8009462911006117329}
-  - component: {fileID: 2350604656792327503}
   m_Layer: 7
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -658,7 +644,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 982b31029ed655c429de6e8515243064, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sens: 150
+  sens: 200
   orientation: {fileID: 6496956851434335168}
 --- !u!114 &1590727132965684361
 MonoBehaviour:
@@ -736,18 +722,17 @@ MonoBehaviour:
   throwCharge: 0
   pickUpRange: 3
   holdTime: 0
-  throwHoldThreshold: 0.3
-  throwForce: 150
+  throwHoldThreshold: 0.2
+  throwForce: 300
   objectGrabPointTransform: {fileID: 4755807727198483506}
   objectGrabPointBackTransform: {fileID: 6972389755522747709}
-  minHoldDistance: 0.5
+  minHoldDistance: 0.7
   maxHoldDistance: 1.5
   holderOffset: 0.05
   player: {fileID: 9016404985424508209}
   environmentMask:
     serializedVersion: 2
     m_Bits: 64
-  positionSmoothTime: 0.1
   rotationSmoothSpeed: 10
   holdMoveCurve:
     serializedVersion: 2
@@ -762,22 +747,31 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.83154297
-      value: 0.23611817
-      inSlope: 1.0966225
-      outSlope: 1.0966225
+      time: 0.7079717
+      value: 0.025686637
+      inSlope: 0.054141223
+      outSlope: 0.054141223
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334
-      outWeight: 0.7328322
+      outWeight: 0.27999482
+    - serializedVersion: 3
+      time: 0.9514939
+      value: 0.32769328
+      inSlope: 3.2131052
+      outSlope: 3.2131052
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.14627199
+      outWeight: 1
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 2.82752
-      outSlope: 2.82752
+      inSlope: 26.56001
+      outSlope: 26.56001
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.21373433
+      inWeight: 0.15801081
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -845,54 +839,6 @@ MonoBehaviour:
   highlightScale: 2
   normalColor: {r: 1, g: 1, b: 1, a: 0}
   highlightColor: {r: 0.4235294, g: 1, b: 0, a: 0.8509804}
-  rotationSpeed: 90
-  tickingSoundName: Ticking.Pulse
---- !u!114 &2350604656792327503
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8298380290158451531}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e8b6ea915abfda4ab7a990d5959b7e9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  reticleImages:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  animCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  animSpeed: 2
-  normalScale: 1
-  highlightScale: 1.2
-  normalColor: {r: 1, g: 1, b: 1, a: 1}
-  highlightColor: {r: 0, g: 1, b: 1, a: 1}
   rotationSpeed: 90
   tickingSoundName: Ticking.Pulse
 --- !u!1 &9057293013084862463

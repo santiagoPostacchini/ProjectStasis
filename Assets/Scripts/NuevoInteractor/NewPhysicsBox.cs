@@ -5,9 +5,9 @@ namespace NuevoInteractor
     public class NewPhysicsBox : MonoBehaviour, IStasis
     {
         [Header("Components")] [SerializeField]
-        private Collider mainCollider; // Colisiona con el ambiente SIEMPRE
+        private Collider mainCollider;
 
-        [SerializeField] private Collider playerCollider; // Solo colisiona con el jugador
+        [SerializeField] private Collider playerCollider;
         public Rigidbody rb;
 
         private Transform _objGrabPointTransform;
@@ -188,14 +188,12 @@ namespace NuevoInteractor
         }
 
 
-        private void SetOutlineThickness(float thickness)
+        public void SetOutlineThickness(float thickness)
         {
             if (!_renderer || _mpb == null) return;
             _renderer.GetPropertyBlock(_mpb);
             _mpb.SetFloat(_outlineThicknessName, thickness);
-            // _mpb.SetColor("_Color", Color.green);
             _renderer.SetPropertyBlock(_mpb);
-            //Glow(false, 1);
         }
     }
 }

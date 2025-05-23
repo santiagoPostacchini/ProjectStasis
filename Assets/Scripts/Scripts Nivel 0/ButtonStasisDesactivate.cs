@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using NuevoInteractor;
 
@@ -12,7 +10,6 @@ public class ButtonStasisDesactivate : MonoBehaviour, IInteractable
         if (physicsBox.isFreezed)
         {
             physicsBox.StatisEffectDeactivate();
-            Debug.Log("Unfreezed");
         }
     }
 

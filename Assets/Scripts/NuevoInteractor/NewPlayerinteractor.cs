@@ -1,4 +1,5 @@
 using Interaction;
+using Player;
 using UnityEngine;
 
 namespace NuevoInteractor
@@ -35,43 +36,57 @@ namespace NuevoInteractor
 
         [Header("Custom Movement")] [SerializeField]
         private AnimationCurve holdMoveCurve = AnimationCurve.Linear(0, 0, 1, 1);
-
         [SerializeField] private float headDropStartDist = 0.5f;
         [SerializeField] private float maxHeadDrop = 0.5f;
-
-
-        private Vector3 _frontLocalPos;
-        private Vector3 _backLocalPos;
+        
+        [Header("FX Settings")]
+        [SerializeField] private StasisObjectEffects stasisEffects;
+        
         private Vector3 _localSmoothVel;
         private Quaternion _rotationSmoothQuat;
         private Vector3 _positionSmoothVelocity;
 
         void Start()
         {
-            _frontLocalPos = objectGrabPointTransform.localPosition;
-            _backLocalPos = objectGrabPointBackTransform.localPosition;
             _rotationSmoothQuat = objectGrabPointTransform.rotation;
         }
 
         void Update()
         {
+            IStasis lookedStasisObject = null;
             GameObject hitObject = null;
 
             if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, pickUpRange))
+            {
+                lookedStasisObject = hit.collider.GetComponent<IStasis>();
                 hitObject = hit.collider.gameObject;
-
-            // 1. PRESIONAR E (iniciar agarrar o hold)
+                
+            }
+    
+            stasisEffects.HandleVisualStasisFeedback(lookedStasisObject, HasObjectInHand());
+            
             if (Input.GetKeyDown(KeyCode.E))
             {
                 if (!_objectGrabbable)
                 {
-                    TryGrabObject(hitObject);
+                    if (hitObject)
+                    {
+                        if (hitObject.GetComponent<IInteractable>() != null)
+                        {
+                            hitObject.GetComponent<IInteractable>().Interact();
+                        }
+                        else
+                        {
+                            TryGrabObject(hitObject);
+                        }
+                    }
                 }
                 else
                 {
                     _isHoldingThrow = true;
                     holdTime = 0f;
                     throwCharge = 0f;
+                    
                 }
             }
 

@@ -12,15 +12,13 @@ namespace Puzzle_Elements
         [SerializeField] private PressurePlateGroup plateGroup;
         [SerializeField] private Animator animator;
         [SerializeField] private ParticleSystem particles;
-        public bool isFrozen;  // para desactivar toda la placa si hace falta
+        public bool isFrozen;
 
         public bool IsActivated { get; private set; }
-
-        // Listas internas
+        
         private readonly List<NewPhysicsBox> _physicalBoxes = new List<NewPhysicsBox>();
         private readonly List<NewPhysicsBox> _stasisBoxes   = new List<NewPhysicsBox>();
-
-        // 1) Collider normal: solo objetos SIN stasis
+        
         private void OnCollisionEnter(Collision collision)
         {
             if (isFrozen) return;
@@ -49,10 +47,7 @@ namespace Puzzle_Elements
         {
             if (isFrozen) return;
             var box = other.GetComponent<NewPhysicsBox>();
-            if (!box
-                || !box.isFreezed
-                || box.transform.parent
-                || _stasisBoxes.Contains(box)) return;
+            if (!box || !box.isFreezed || box.transform.parent || _stasisBoxes.Contains(box)) return;
             _stasisBoxes.Add(box);
             UpdateState();
         }
@@ -61,12 +56,7 @@ namespace Puzzle_Elements
         {
             if (isFrozen) return;
             var box = other.GetComponent<NewPhysicsBox>();
-            // Solo quitamos si:
-            // – Ya no está en stasis (lo han deshelado)
-            // – O sale físicamente del trigger
-            if (!box
-                || !_stasisBoxes.Contains(box)
-                || (box.isFreezed && other)) return;
+            if (!box || !_stasisBoxes.Contains(box) || (box.isFreezed && other)) return;
             _stasisBoxes.Remove(box);
             UpdateState();
         }
