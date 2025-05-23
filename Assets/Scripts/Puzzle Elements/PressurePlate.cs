@@ -22,10 +22,12 @@ namespace Puzzle_Elements
         private void OnCollisionEnter(Collision collision)
         {
             if (isFrozen) return;
-
+            
             var box = collision.collider.GetComponent<NewPhysicsBox>();
             if (box && !box.isFreezed && !_physicalBoxes.Contains(box))
             {
+                _stasisBoxes.Clear();
+                _physicalBoxes.Clear();
                 _physicalBoxes.Add(box);
                 UpdateState();
             }
@@ -38,7 +40,8 @@ namespace Puzzle_Elements
             var box = collision.collider.GetComponent<NewPhysicsBox>();
             if (box && !box.isFreezed && _physicalBoxes.Contains(box))
             {
-                _physicalBoxes.Remove(box);
+                _physicalBoxes.Clear();
+                _stasisBoxes.Clear();
                 UpdateState();
             }
         }
@@ -57,7 +60,8 @@ namespace Puzzle_Elements
             if (isFrozen) return;
             var box = other.GetComponent<NewPhysicsBox>();
             if (!box || !_stasisBoxes.Contains(box) || (!box.isFreezed && other)) return;
-            _stasisBoxes.Remove(box);
+            _stasisBoxes.Clear();
+            _physicalBoxes.Clear();
             UpdateState();
         }
         
