@@ -56,7 +56,7 @@ namespace Puzzle_Elements
         {
             if (isFrozen) return;
             var box = other.GetComponent<NewPhysicsBox>();
-            if (!box || !_stasisBoxes.Contains(box) || (box.isFreezed && other)) return;
+            if (!box || !_stasisBoxes.Contains(box) || (!box.isFreezed && other)) return;
             _stasisBoxes.Remove(box);
             UpdateState();
         }

@@ -58,11 +58,15 @@ namespace NuevoInteractor
 
             if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, pickUpRange))
             {
-                lookedStasisObject = hit.collider.GetComponent<IStasis>();
                 hitObject = hit.collider.gameObject;
                 
             }
-    
+            if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit1))
+            {
+                lookedStasisObject = hit1.collider.GetComponent<IStasis>();
+
+            }
+
             stasisEffects.HandleVisualStasisFeedback(lookedStasisObject, HasObjectInHand());
             
             if (Input.GetKeyDown(KeyCode.E))
