@@ -15,6 +15,7 @@ public class ButtonStasisDesactivate : MonoBehaviour, IInteractable
 
     public void Interact()
     {
+        Debug.Log("A");
         DesactivateStasis();
     }
 }

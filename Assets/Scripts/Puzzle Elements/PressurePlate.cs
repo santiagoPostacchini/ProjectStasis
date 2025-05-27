@@ -44,7 +44,7 @@ namespace Puzzle_Elements
             }
         }
         
-        private void OnTriggerEnter(Collider other)
+        private void OnTriggerStay(Collider other)
         {
             if (isFrozen) return;
             var box = other.GetComponent<NewPhysicsBox>();

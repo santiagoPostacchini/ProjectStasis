@@ -7,14 +7,14 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_S_Glass
-  m_Shader: {fileID: -6465566751694194690, guid: 3e59984e0daa9ea4f97f68aed4452a55,
+  m_Name: Shader Graphs_S_Smoke
+  m_Shader: {fileID: -6465566751694194690, guid: d35070291f0d05e4b8e281fb11b00daf,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
-  m_LightmapFlags: 2
+  m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -24,8 +24,8 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _Refraction_Map:
-        m_Texture: {fileID: 2800000, guid: 4252f5a599480ed4d90e2dcede069202, type: 3}
+    - _Texture2D:
+        m_Texture: {fileID: 2800000, guid: 86ae3e77cdf803c43a7a880956cf88de, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -42,16 +42,13 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _IOR: 0.028
+    - _Emissive: 0.01
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Strength: 0.01
     m_Colors:
-    - _Offset: {r: 0, g: 0, b: 0, a: 0}
-    - _Tiling: {r: 15, g: 15, b: 0, a: 0}
-    - _Tint_Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 0.8603975, g: 0.35308766, b: 0.35308766, a: 0.3137255}
   m_BuildTextureStacks: []
---- !u!114 &7806532688978413109
+--- !u!114 &7222505514657410051
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

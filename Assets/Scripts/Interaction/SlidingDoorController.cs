@@ -48,6 +48,8 @@ public class SlidingDoorController : MonoBehaviour
     // Para cancelar cierres temporizados antiguos
     private Coroutine timedCloseCoroutine;
 
+
+    [SerializeField] private ParticleSystem[] particlesDoor = new ParticleSystem[3];
     private void Start()
     {
         leftClosedPos = leftDoor.localPosition;
@@ -121,7 +123,7 @@ public class SlidingDoorController : MonoBehaviour
         float elapsed = 0f;
         float from = gear.localEulerAngles.z;
         float to = opening ? from + gearRotationAngle : from - gearRotationAngle;
-
+        
         while (elapsed < gearRotateDuration)
         {
             elapsed += Time.deltaTime;
@@ -143,7 +145,10 @@ public class SlidingDoorController : MonoBehaviour
 
         Vector3 leftEnd = opening ? leftClosedPos + Vector3.right * slideDistance : leftClosedPos;
         Vector3 rightEnd = opening ? rightClosedPos + Vector3.left * slideDistance : rightClosedPos;
-
+        for (int i = 0; i < particlesDoor.Length; i++)
+        {
+            particlesDoor[i].Play();
+        }
         float elapsed = 0f;
         while (elapsed < slideDuration)
         {

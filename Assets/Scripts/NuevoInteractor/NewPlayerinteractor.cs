@@ -78,6 +78,7 @@ namespace NuevoInteractor
                         if (hitObject.GetComponent<IInteractable>() != null)
                         {
                             hitObject.GetComponent<IInteractable>().Interact();
+                            Debug.Log("B");
                         }
                         else
                         {
