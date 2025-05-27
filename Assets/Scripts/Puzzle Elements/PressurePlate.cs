@@ -26,8 +26,6 @@ namespace Puzzle_Elements
             var box = collision.collider.GetComponent<NewPhysicsBox>();
             if (box && !box.isFreezed && !_physicalBoxes.Contains(box))
             {
-                _stasisBoxes.Clear();
-                _physicalBoxes.Clear();
                 _physicalBoxes.Add(box);
                 UpdateState();
             }
@@ -46,7 +44,7 @@ namespace Puzzle_Elements
             }
         }
         
-        private void OnTriggerStay(Collider other)
+        private void OnTriggerEnter(Collider other)
         {
             if (isFrozen) return;
             var box = other.GetComponent<NewPhysicsBox>();
@@ -59,7 +57,7 @@ namespace Puzzle_Elements
         {
             if (isFrozen) return;
             var box = other.GetComponent<NewPhysicsBox>();
-            if (!box || !_stasisBoxes.Contains(box) || (!box.isFreezed && other)) return;
+            if (!box || !_stasisBoxes.Contains(box) || !box.isFreezed) return;
             _stasisBoxes.Clear();
             _physicalBoxes.Clear();
             UpdateState();

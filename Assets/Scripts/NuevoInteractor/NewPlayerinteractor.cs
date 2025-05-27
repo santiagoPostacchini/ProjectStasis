@@ -103,7 +103,7 @@ namespace NuevoInteractor
                 
                 if (holdTime >= throwHoldThreshold)
                 {
-                    if (_objectGrabbable && !_objectGrabbable.IsCollidingWithPlayer)
+                    if (_objectGrabbable && !_objectGrabbable.IsOverlappingAnything)
                     {
                         _objectGrabbable.Throw(throwForce);
                         _objectGrabbable = null;
@@ -139,7 +139,8 @@ namespace NuevoInteractor
             if (hitObject && hitObject.TryGetComponent(out NewPhysicsBox physicsObject))
             {
                 objectGrabPointTransform.position = hitObject.transform.position;
-                physicsObject.SetReferences(player, objectGrabPointTransform);
+                physicsObject.SetReferences(objectGrabPointTransform);
+                physicsObject.SetReferences(objectGrabPointTransform);
                 physicsObject.Grab();
 
                 _objectGrabbable = physicsObject;
@@ -148,7 +149,7 @@ namespace NuevoInteractor
 
         private void TryDropObject()
         {
-            if (_objectGrabbable && !_objectGrabbable.IsCollidingWithPlayer)
+            if (_objectGrabbable && !_objectGrabbable.IsOverlappingAnything)
             {
                 ThrowUISlider.Instance?.SetFill(0);
                 _objectGrabbable.Drop();

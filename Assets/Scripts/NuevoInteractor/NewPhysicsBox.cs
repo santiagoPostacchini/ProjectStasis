@@ -11,7 +11,6 @@ namespace NuevoInteractor
         public Rigidbody rb;
 
         private Transform _objGrabPointTransform;
-        private Player.Player _player;
         private Vector3 _velocity;
 
         public bool isFreezed;
@@ -27,7 +26,7 @@ namespace NuevoInteractor
 
         [SerializeField] private LayerMask originalLayer;
 
-        public bool IsCollidingWithPlayer { get; private set; }
+        public bool IsOverlappingAnything { get; private set; }
 
         [SerializeField] private TrajectoryCube trajectoryCube;
 
@@ -106,24 +105,19 @@ namespace NuevoInteractor
             playerCollider.isTrigger = asTrigger;
         }
 
-        public void SetReferences(Player.Player assignedPlayer, Transform grabHolder)
+        public void SetReferences(Transform grabHolder)
         {
-            _player = assignedPlayer;
             _objGrabPointTransform = grabHolder;
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            if (!_player) return;
-            if (other.gameObject == _player.gameObject)
-                IsCollidingWithPlayer = true;
+            IsOverlappingAnything = true;
         }
 
         private void OnTriggerExit(Collider other)
         {
-            if (!_player) return;
-            if (other.gameObject == _player.gameObject)
-                IsCollidingWithPlayer = false;
+            IsOverlappingAnything = false;
         }
 
         public void StatisEffectActivate()

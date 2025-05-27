@@ -413,6 +413,7 @@ GameObject:
   - component: {fileID: 6855661490142653803}
   - component: {fileID: 5498575423403636240}
   - component: {fileID: 9002229271755166032}
+  - component: {fileID: 3953956313647848729}
   m_Layer: 8
   m_Name: HandsCamera
   m_TagString: Untagged
@@ -532,6 +533,23 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
+--- !u!114 &3953956313647848729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7965130512470243430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 032e4371c53f9aa4bb9d806503677826, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  amplitude: 0.001
+  frecuency: 15
+  camera: {fileID: 6855661490142653803}
+  cameraHolder: {fileID: 6855661490142653803}
+  characterController: {fileID: 8772484843695230119}
 --- !u!1 &8298380290158451531
 GameObject:
   m_ObjectHideFlags: 0
@@ -547,7 +565,6 @@ GameObject:
   - component: {fileID: 1590727132965684361}
   - component: {fileID: 611708135318588728}
   - component: {fileID: 3684571510027206823}
-  - component: {fileID: 6663444182057631544}
   - component: {fileID: 8009462911006117329}
   m_Layer: 7
   m_Name: Main Camera
@@ -779,23 +796,6 @@ MonoBehaviour:
   headDropStartDist: 0.75
   maxHeadDrop: 1
   stasisEffects: {fileID: 8009462911006117329}
---- !u!114 &6663444182057631544
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8298380290158451531}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 032e4371c53f9aa4bb9d806503677826, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  amplitude: 0.001
-  frecuency: 15
-  camera: {fileID: 4974858125161302739}
-  cameraHolder: {fileID: 7351367501652722227}
-  characterController: {fileID: 8772484843695230119}
 --- !u!114 &8009462911006117329
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -808,9 +808,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e8b6ea915abfda4ab7a990d5959b7e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reticleImages:
-  - {fileID: 0}
-  - {fileID: 0}
+  reticleImages: []
   animCurve:
     serializedVersion: 2
     m_Curve:
