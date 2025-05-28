@@ -1,3 +1,5 @@
+using System.Collections;
+using Audio;
 using UnityEngine;
 
 namespace NuevoInteractor
@@ -146,7 +148,16 @@ namespace NuevoInteractor
                 }
 
                 SetOutlineThickness(1.05f);
+
+                StartCoroutine(StasisSounds());
             }
+        }
+
+        IEnumerator StasisSounds()
+        {
+            AudioManager.Instance.PlaySfxOnObject("ObjInStasis", this.GetComponent<AudioSource>());
+            yield return new WaitForSeconds(0.1f);
+            AudioManager.Instance.PlaySfxOnObject("StasisConfirm", this.GetComponent<AudioSource>());
         }
 
         private void SaveRigidbodyState()
@@ -179,6 +190,8 @@ namespace NuevoInteractor
 
             if (trajectoryCube.lineRenderer)
                 trajectoryCube.lineRenderer.positionCount = 0;
+            
+            AudioManager.Instance.StopSfxOnObject(this.GetComponent<AudioSource>());
         }
 
 

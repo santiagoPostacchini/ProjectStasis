@@ -1,5 +1,6 @@
 // SlidingDoorController.cs
 using System.Collections;
+using Audio;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
@@ -13,13 +14,13 @@ public class SlidingDoorController : MonoBehaviour
     [Header("Deslizamiento")]
     [Tooltip("Distancia en unidades que recorre cada hoja")]
     public float slideDistance = 2f;
-    [Tooltip("Duración en segundos del deslizamiento")]
+    [Tooltip("Duraciï¿½n en segundos del deslizamiento")]
     public float slideDuration = 1f;
 
     [Header("Engranajes")]
-    [Tooltip("Ángulo total que giran los engranajes")]
+    [Tooltip("ï¿½ngulo total que giran los engranajes")]
     public float gearRotationAngle = 180f;
-    [Tooltip("Duración en segundos del giro de los engranajes")]
+    [Tooltip("Duraciï¿½n en segundos del giro de los engranajes")]
     public float gearRotateDuration = 0.5f;
     public string gearSoundName = "GearTurn";
 
@@ -38,7 +39,7 @@ public class SlidingDoorController : MonoBehaviour
     public float autoCloseDelay = 1f;
 
     [Header("Cierre temporizado")]
-    [Tooltip("Si true, la puerta se cerrará automáticamente tras abrirse")]
+    [Tooltip("Si true, la puerta se cerrarï¿½ automï¿½ticamente tras abrirse")]
     public bool hasTimedClose = false;
     [Tooltip("Tiempo en segundos que la puerta permanece abierta antes de cerrarse")]
     public float timedCloseDelay = 5f;

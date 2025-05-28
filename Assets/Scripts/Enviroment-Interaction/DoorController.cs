@@ -1,16 +1,17 @@
 using System.Collections;
+using Audio;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
 public class DoorController : MonoBehaviour
 {
-    [Header("Configuración de Rotación")]
+    [Header("Configuraciï¿½n de Rotaciï¿½n")]
     public Transform doorTransform;              // El Transform de la puerta (puede ser un child)
-    public Vector3 closedEulerAngles;            // Rotación en estado cerrado (en inspector)
-    public Vector3 openEulerAngles;              // Rotación en estado abierto (en inspector)
+    public Vector3 closedEulerAngles;            // Rotaciï¿½n en estado cerrado (en inspector)
+    public Vector3 openEulerAngles;              // Rotaciï¿½n en estado abierto (en inspector)
 
-    [Header("Animación")]
-    [Tooltip("Duración en segundos de la animación de apertura/cierre")]
+    [Header("Animaciï¿½n")]
+    [Tooltip("Duraciï¿½n en segundos de la animaciï¿½n de apertura/cierre")]
     public float animationDuration = 1f;
     private bool isAnimating = false;
 
@@ -20,7 +21,7 @@ public class DoorController : MonoBehaviour
     private bool lastState = false;
 
     [Header("Autocierre")]
-    [Tooltip("Si true, la puerta se cerrará automáticamente tras que el jugador pase")]
+    [Tooltip("Si true, la puerta se cerrarï¿½ automï¿½ticamente tras que el jugador pase")]
     public bool autoClose = true;
     [Tooltip("Tiempo en segundos tras detectar al jugador para cerrar")]
     public float closeDelay = 1f;
@@ -31,7 +32,7 @@ public class DoorController : MonoBehaviour
 
     private void Start()
     {
-        // Inicializamos la rotación al estado declarado
+        // Inicializamos la rotaciï¿½n al estado declarado
         doorTransform.localEulerAngles = closedEulerAngles;
         lastState = isOpen;
     }
@@ -57,12 +58,12 @@ public class DoorController : MonoBehaviour
         else
             AudioManager.Instance.PlayAmbient(closeSoundName);
 
-        // Interpolación suave de ángulos
+        // Interpolaciï¿½n suave de ï¿½ngulos
         Vector3 startRot = doorTransform.localEulerAngles;
         Vector3 endRot = opening ? openEulerAngles : closedEulerAngles;
         float elapsed = 0f;
 
-        // Aseguramos que use la ruta angular más corta
+        // Aseguramos que use la ruta angular mï¿½s corta
         startRot = NormalizeEuler(startRot);
         endRot = NormalizeEuler(endRot);
 
@@ -92,7 +93,7 @@ public class DoorController : MonoBehaviour
     {
         if (!autoClose) return;
 
-        // Ajusta el tag según tu jugador
+        // Ajusta el tag segï¿½n tu jugador
         if (other.CompareTag("Player") && isOpen && !isAnimating)
         {
             // Inicia autocierre tras el delay

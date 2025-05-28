@@ -1,42 +1,52 @@
+using System.Collections;
+using Audio;
 using UnityEngine;
 
-[RequireComponent(typeof(LineRenderer))]
-public class StasisBeam : MonoBehaviour
+namespace Interaction
 {
-    private LineRenderer _lineRenderer;
-
-    private void Awake()
+    [RequireComponent(typeof(LineRenderer))]
+    public class StasisBeam : MonoBehaviour
     {
-        _lineRenderer = GetComponent<LineRenderer>();
-        _lineRenderer.enabled = false;
-    }
+        [SerializeField] private float moveDuration = .3f;
+        [SerializeField] private Light lightStasis;
 
-    /// <summary>
-    /// Configura y muestra el rayo desde el punto de inicio hasta el punto final.
-    /// </summary>
-    public void SetBeam(Vector3 start, Vector3 end)
-    {
-        _lineRenderer.enabled = true;
-
-        if (_lineRenderer.useWorldSpace)
+        public void SetBeam(Vector3 start, Vector3 end, bool hit)
         {
-            _lineRenderer.SetPosition(0, start);
-            _lineRenderer.SetPosition(1, end);
+            StopAllCoroutines();
+            gameObject.SetActive(true);
+            transform.position = start;
+            StartCoroutine(MoveBeam(start, end, hit));
         }
-        else
-        {
-            Vector3 localStart = transform.InverseTransformPoint(start);
-            Vector3 localEnd = transform.InverseTransformPoint(end);
-            _lineRenderer.SetPosition(0, localStart);
-            _lineRenderer.SetPosition(1, localEnd);
-        }
-    }
 
-    /// <summary>
-    /// Desactiva la visualización del rayo.
-    /// </summary>
-    public void DisableBeam()
-    {
-        _lineRenderer.enabled = false;
+        private IEnumerator MoveBeam(Vector3 start, Vector3 end, bool hit)
+        {
+            float elapsedTime = 0f;
+
+            while (elapsedTime < moveDuration)
+            {
+                transform.position = Vector3.Lerp(start, end, elapsedTime / moveDuration);
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+
+            transform.position = end;
+            lightStasis.enabled = false;
+            if (!hit)
+            {
+                AudioManager.Instance.PlaySfxOnObject("StasisFail", this.GetComponent<AudioSource>());
+            }
+            else
+            {
+                AudioManager.Instance.PlaySfxOnObject("StasisSuccess", this.GetComponent<AudioSource>());
+            }
+            
+            yield return new WaitForSeconds(.3f);
+            DisableBeam();
+        }
+        
+        private void DisableBeam()
+        {
+            gameObject.SetActive(false);
+        }
     }
 }

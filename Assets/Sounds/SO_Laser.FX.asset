@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: SO_Laser.FX
   m_EditorClassIdentifier: 
   soundName: LaserFX
-  clip: {fileID: 8300000, guid: 207e9d083a360ee4283263fb8b983df3, type: 3}
+  clip: {fileID: 8300000, guid: 8e058527b74c76d40847ada46ea72492, type: 3}
   mixerGroup: {fileID: 976767025159669007, guid: f380811a388512f45bca0ea436ce452b,
     type: 2}
   playOnAwake: 0
   loop: 0
-  volume: 1
+  volume: 0.4

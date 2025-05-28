@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7594319d8ede23c40ae874f3ffd3150c, type: 3}
-  m_Name: SO_BackGround
+  m_Name: SO_HitStasisConfirm
   m_EditorClassIdentifier: 
-  soundName: Enviroment
-  clip: {fileID: 8300000, guid: b32a716c09b3c1e4a9cf2232a6f8b863, type: 3}
-  mixerGroup: {fileID: 5117069146659376473, guid: f380811a388512f45bca0ea436ce452b,
+  soundName: StasisConfirm
+  clip: {fileID: 8300000, guid: 2c3341fb67abd4cbdbb51ae6723bbc22, type: 3}
+  mixerGroup: {fileID: 976767025159669007, guid: f380811a388512f45bca0ea436ce452b,
     type: 2}
-  playOnAwake: 1
-  loop: 1
-  volume: 0.2
+  playOnAwake: 0
+  loop: 0
+  volume: 0.6
