@@ -48,6 +48,7 @@ public class SlidingDoorController : MonoBehaviour
     // Para cancelar cierres temporizados antiguos
     private Coroutine timedCloseCoroutine;
 
+    [SerializeField] private bool canOpenWithPlayerCollision = false;
 
     [SerializeField] private ParticleSystem[] particlesDoor = new ParticleSystem[3];
     private void Start()
@@ -163,17 +164,16 @@ public class SlidingDoorController : MonoBehaviour
         rightDoor.localPosition = rightEnd;
     }
 
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (!other.CompareTag("Player"))
-    //        return;
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!other.CompareTag("Player"))
+            return;
 
-    //    if (!isOpen)
-    //        isOpen = true;
-    //    else if (autoClose)
-    //        StartCoroutine(AutoCloseRoutine());
-    //}
-
+        if (!isOpen)
+            isOpen = true;
+        else if (autoClose)
+            StartCoroutine(AutoCloseRoutine());
+    }
     private IEnumerator AutoCloseRoutine()
     {
         yield return new WaitForSeconds(autoCloseDelay);

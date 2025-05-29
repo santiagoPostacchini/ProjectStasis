@@ -5,7 +5,7 @@ namespace Puzzle_Elements
 {
     public class CubePodium : MonoBehaviour, IInteractable
     {
-        [SerializeField] private NewPhysicsBox box;
+        public NewPhysicsBox box;
         [SerializeField] private Transform t;
         [SerializeField] private ParticleSystem particle;
 
@@ -24,7 +24,7 @@ namespace Puzzle_Elements
                 Interact();
             }
         }
-        private void SuspendObject()
+        public void SuspendObject()
         {
             if (!box) return;
             Rigidbody rb = box.GetComponent<Rigidbody>();
@@ -33,6 +33,7 @@ namespace Puzzle_Elements
                 rb.useGravity = false;
                 box.transform.position = t.transform.position;
             }
+            particle?.Play();
 
         }
 

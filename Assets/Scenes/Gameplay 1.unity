@@ -24084,7 +24084,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &831265302
 Transform:
   m_ObjectHideFlags: 0
@@ -54682,7 +54682,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1875459420
 Transform:
   m_ObjectHideFlags: 0
@@ -71764,6 +71764,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
+  objRB: {fileID: 0}
   _isFreezed: 0
   matStasis: {fileID: 2100000, guid: ede74eb79b9d0e94694f3cb677c03bb2, type: 2}
   _renderer: {fileID: 8879733979801669620}
@@ -93346,7 +93347,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e8b6ea915abfda4ab7a990d5959b7e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectionDistance: 100
   reticleImages: []
   animCurve:
     serializedVersion: 2
@@ -93379,7 +93379,6 @@ MonoBehaviour:
   highlightColor: {r: 0, g: 1, b: 1, a: 1}
   rotationSpeed: 90
   tickingSoundName: Ticking.Pulse
-  playerInteractor: {fileID: 0}
 --- !u!114 &9156347144147895031
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -93392,12 +93391,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42b6ba911740a324ba5cfe9e5c37c1c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stasisRange: 8
-  _stasisDuration: 5
-  _stasisOrigin: {fileID: 990437113}
-  _stasisBeamPrefab: {fileID: 8580083465333662618, guid: 32e5bfc2456a426478d91365c25e0a73,
-    type: 3}
-  _beamDuration: 0.2
+  stasisOrigin: {fileID: 0}
+  stasisBeamPrefab: {fileID: 0}
+  beamDuration: 0.2
 --- !u!114 &9156347144147895033
 MonoBehaviour:
   m_ObjectHideFlags: 0
