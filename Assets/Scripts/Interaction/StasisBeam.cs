@@ -1,14 +1,22 @@
 using System.Collections;
-using Audio;
+using Events;
 using UnityEngine;
 
 namespace Interaction
 {
     [RequireComponent(typeof(LineRenderer))]
+    [RequireComponent(typeof(AudioSource))]
     public class StasisBeam : MonoBehaviour
     {
         [SerializeField] private float moveDuration = .3f;
         [SerializeField] private Light lightStasis;
+
+        // Nombres de evento para éxito y fallo
+        [Header("Eventos de Sonido")]
+        [Tooltip("Evento que se dispara si no golpea un objeto staseable")]
+        public string failEventName = "StasisFail";
+        [Tooltip("Evento que se dispara si golpea un objeto staseable")]
+        public string successEventName = "StasisSuccess";
 
         public void SetBeam(Vector3 start, Vector3 end, bool hit)
         {
@@ -31,19 +39,14 @@ namespace Interaction
 
             transform.position = end;
             lightStasis.enabled = false;
-            if (!hit)
-            {
-                AudioManager.Instance.PlaySfxOnObject("StasisFail", this.GetComponent<AudioSource>());
-            }
-            else
-            {
-                AudioManager.Instance.PlaySfxOnObject("StasisSuccess", this.GetComponent<AudioSource>());
-            }
-            
+
+            // Disparo de eventos en lugar de AudioManager
+            EventManager.TriggerEvent(hit ? successEventName : failEventName, gameObject);
+
             yield return new WaitForSeconds(.3f);
             DisableBeam();
         }
-        
+
         private void DisableBeam()
         {
             gameObject.SetActive(false);

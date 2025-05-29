@@ -1,109 +1,102 @@
 using System.Collections;
-using Audio;
+using Events;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider))]
-public class DoorController : MonoBehaviour
+// Asegúrate de que exista tu EventManager en el proyecto (sin namespace o importándolo si lo tienes en uno).
+namespace Enviroment_Interaction
 {
-    [Header("Configuraci�n de Rotaci�n")]
-    public Transform doorTransform;              // El Transform de la puerta (puede ser un child)
-    public Vector3 closedEulerAngles;            // Rotaci�n en estado cerrado (en inspector)
-    public Vector3 openEulerAngles;              // Rotaci�n en estado abierto (en inspector)
-
-    [Header("Animaci�n")]
-    [Tooltip("Duraci�n en segundos de la animaci�n de apertura/cierre")]
-    public float animationDuration = 1f;
-    private bool isAnimating = false;
-
-    [Header("Control de Estado")]
-    [Tooltip("Marca para abrir/cerrar la puerta")]
-    public bool isOpen = false;
-    private bool lastState = false;
-
-    [Header("Autocierre")]
-    [Tooltip("Si true, la puerta se cerrar� autom�ticamente tras que el jugador pase")]
-    public bool autoClose = true;
-    [Tooltip("Tiempo en segundos tras detectar al jugador para cerrar")]
-    public float closeDelay = 1f;
-
-    [Header("Sonidos")]
-    public string openSoundName = "DoorOpen";
-    public string closeSoundName = "DoorClose";
-
-    private void Start()
+    [RequireComponent(typeof(Collider))]
+    public class DoorController : MonoBehaviour
     {
-        // Inicializamos la rotaci�n al estado declarado
-        doorTransform.localEulerAngles = closedEulerAngles;
-        lastState = isOpen;
-    }
+        [Header("Configuración de Rotación")]
+        public Transform doorTransform;
+        public Vector3 closedEulerAngles;
+        public Vector3 openEulerAngles;
 
-    private void Update()
-    {
-        // Detectamos cambio de estado de isOpen en el inspector o por otro script
-        if (isOpen != lastState && !isAnimating)
+        [Header("Animación")]
+        [Tooltip("Duración en segundos de la animación de apertura/cierre")]
+        public float animationDuration = 1f;
+        private bool _isAnimating;
+
+        [Header("Control de Estado")]
+        [Tooltip("Marca para abrir/cerrar la puerta")]
+        public bool isOpen;
+        private bool _lastState;
+
+        [Header("Autocierre")]
+        [Tooltip("Si true, la puerta se cerrará automáticamente tras que el jugador pase")]
+        public bool autoClose = true;
+        [Tooltip("Tiempo en segundos tras detectar al jugador para cerrar")]
+        public float closeDelay = 1f;
+
+        [Header("Eventos de Sonido")]
+        [Tooltip("Nombre del evento para el sonido de apertura")]
+        public string openEventName = "DoorOpen";
+        [Tooltip("Nombre del evento para el sonido de cierre")]
+        public string closeEventName = "DoorClose";
+
+        private void Start()
         {
-            StopAllCoroutines();
-            StartCoroutine(AnimateDoor(isOpen));
-            lastState = isOpen;
-        }
-    }
-
-    private IEnumerator AnimateDoor(bool opening)
-    {
-        isAnimating = true;
-
-        // Sonido
-        if (opening)
-            AudioManager.Instance.PlayAmbient(openSoundName);
-        else
-            AudioManager.Instance.PlayAmbient(closeSoundName);
-
-        // Interpolaci�n suave de �ngulos
-        Vector3 startRot = doorTransform.localEulerAngles;
-        Vector3 endRot = opening ? openEulerAngles : closedEulerAngles;
-        float elapsed = 0f;
-
-        // Aseguramos que use la ruta angular m�s corta
-        startRot = NormalizeEuler(startRot);
-        endRot = NormalizeEuler(endRot);
-
-        while (elapsed < animationDuration)
-        {
-            elapsed += Time.deltaTime;
-            float t = Mathf.SmoothStep(0f, 1f, elapsed / animationDuration);
-            doorTransform.localEulerAngles = Vector3.LerpUnclamped(startRot, endRot, t);
-            yield return null;
+            // Inicializamos la rotación al estado declarado
+            doorTransform.localEulerAngles = closedEulerAngles;
+            _lastState = isOpen;
         }
 
-        doorTransform.localEulerAngles = endRot;
-        isAnimating = false;
-    }
-
-    // Normaliza cada componente a [-180,180] para evitar vueltas extra
-    private Vector3 NormalizeEuler(Vector3 e)
-    {
-        e.x = Mathf.DeltaAngle(0, e.x);
-        e.y = Mathf.DeltaAngle(0, e.y);
-        e.z = Mathf.DeltaAngle(0, e.z);
-        return e;
-    }
-
-    // Si la puerta tiene un Collider marcado como Trigger y el jugador entra...
-    private void OnTriggerEnter(Collider other)
-    {
-        if (!autoClose) return;
-
-        // Ajusta el tag seg�n tu jugador
-        if (other.CompareTag("Player") && isOpen && !isAnimating)
+        private void Update()
         {
-            // Inicia autocierre tras el delay
-            StartCoroutine(AutoCloseRoutine());
+            // Detectamos cambio de estado de isOpen
+            if (isOpen != _lastState && !_isAnimating)
+            {
+                StopAllCoroutines();
+                StartCoroutine(AnimateDoor(isOpen));
+                _lastState = isOpen;
+            }
         }
-    }
 
-    private IEnumerator AutoCloseRoutine()
-    {
-        yield return new WaitForSeconds(closeDelay);
-        isOpen = false;
+        private IEnumerator AnimateDoor(bool opening)
+        {
+            _isAnimating = true;
+
+            // Disparamos el evento correspondiente
+            string evt = opening ? openEventName : closeEventName;
+            EventManager.TriggerEvent(evt, gameObject);
+
+            // Interpolación suave de ángulos
+            Vector3 startRot = NormalizeEuler(doorTransform.localEulerAngles);
+            Vector3 endRot   = NormalizeEuler(opening ? openEulerAngles : closedEulerAngles);
+            float elapsed = 0f;
+
+            while (elapsed < animationDuration)
+            {
+                elapsed += Time.deltaTime;
+                float t = Mathf.SmoothStep(0f, 1f, elapsed / animationDuration);
+                doorTransform.localEulerAngles = Vector3.LerpUnclamped(startRot, endRot, t);
+                yield return null;
+            }
+
+            doorTransform.localEulerAngles = endRot;
+            _isAnimating = false;
+        }
+
+        private Vector3 NormalizeEuler(Vector3 e)
+        {
+            e.x = Mathf.DeltaAngle(0, e.x);
+            e.y = Mathf.DeltaAngle(0, e.y);
+            e.z = Mathf.DeltaAngle(0, e.z);
+            return e;
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (!autoClose) return;
+            if (other.CompareTag("Player") && isOpen && !_isAnimating)
+                StartCoroutine(AutoCloseRoutine());
+        }
+
+        private IEnumerator AutoCloseRoutine()
+        {
+            yield return new WaitForSeconds(closeDelay);
+            isOpen = false;
+        }
     }
 }

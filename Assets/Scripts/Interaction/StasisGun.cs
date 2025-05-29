@@ -1,5 +1,4 @@
-﻿using Audio;
-using NuevoInteractor;
+﻿using NuevoInteractor;
 using UnityEngine;
 
 namespace Interaction
@@ -70,8 +69,6 @@ namespace Interaction
                 GameObject beamInstance = Instantiate(stasisBeamPrefab, stasisOrigin.position, Quaternion.identity);
                 _activeBeam = beamInstance.GetComponent<StasisBeam>();
                 _activeBeam.SetBeam(stasisOrigin.position, hit.point, stasisHit);
-
-                AudioManager.Instance?.PlaySfx("LaserFX");
             }
         }
 

@@ -1,5 +1,4 @@
-using System.Collections;
-using Audio;
+using Events;
 using UnityEngine;
 
 namespace NuevoInteractor
@@ -124,14 +123,15 @@ namespace NuevoInteractor
 
         public void StatisEffectActivate()
         {
+            EventManager.TriggerEvent("StasisStart", gameObject);
             FreezeObject();
         }
-        
+
         public void StatisEffectDeactivate()
         {
+            EventManager.TriggerEvent("StasisEnd", gameObject);
             UnfreezeObject();
         }
-
         private void FreezeObject()
         {
             if (!isFreezed)
@@ -148,16 +148,7 @@ namespace NuevoInteractor
                 }
 
                 SetOutlineThickness(1.05f);
-
-                StartCoroutine(StasisSounds());
             }
-        }
-
-        IEnumerator StasisSounds()
-        {
-            AudioManager.Instance.PlaySfxOnObject("ObjInStasis", this.GetComponent<AudioSource>());
-            yield return new WaitForSeconds(0.1f);
-            AudioManager.Instance.PlaySfxOnObject("StasisConfirm", this.GetComponent<AudioSource>());
         }
 
         private void SaveRigidbodyState()
@@ -190,8 +181,6 @@ namespace NuevoInteractor
 
             if (trajectoryCube.lineRenderer)
                 trajectoryCube.lineRenderer.positionCount = 0;
-            
-            AudioManager.Instance.StopSfxOnObject(this.GetComponent<AudioSource>());
         }
 
 
