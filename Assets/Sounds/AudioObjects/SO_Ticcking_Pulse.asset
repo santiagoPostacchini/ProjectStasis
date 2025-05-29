@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7594319d8ede23c40ae874f3ffd3150c, type: 3}
-  m_Name: SO_BackGround
+  m_Name: SO_Ticcking_Pulse
   m_EditorClassIdentifier: 
-  soundName: Enviroment
-  clip: {fileID: 8300000, guid: dc1689f0baaf3984dbce2780fe2767ba, type: 3}
-  mixerGroup: {fileID: 5117069146659376473, guid: f380811a388512f45bca0ea436ce452b,
+  soundName: TickingPulse
+  clip: {fileID: 8300000, guid: 33686cf74ec550541b1429af90951fa5, type: 3}
+  mixerGroup: {fileID: -4801773147402711802, guid: f380811a388512f45bca0ea436ce452b,
     type: 2}
-  playOnAwake: 1
+  playOnAwake: 0
   loop: 1
   volume: 0.7

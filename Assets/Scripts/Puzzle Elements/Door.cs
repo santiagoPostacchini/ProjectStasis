@@ -1,20 +1,24 @@
+using Interaction;
 using UnityEngine;
 
-public class Door : MonoBehaviour
+namespace Puzzle_Elements
 {
-    [SerializeField] private Animator animator;
-    [SerializeField] private SlidingDoorController doorController;
-    private void Start()
+    public class Door : MonoBehaviour
     {
-        doorController = GetComponentInParent<SlidingDoorController>();
-    }
-    public void Open()
-    {
-        doorController.isOpen = true;
-    }
+        [SerializeField] private Animator animator;
+        [SerializeField] private SlidingDoorController doorController;
+        private void Start()
+        {
+            doorController = GetComponentInParent<SlidingDoorController>();
+        }
+        public void Open()
+        {
+            doorController.isOpen = true;
+        }
 
-    public void Close()
-    {
-        doorController.isOpen = false;
+        public void Close()
+        {
+            doorController.isOpen = false;
+        }
     }
 }

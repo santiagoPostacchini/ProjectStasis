@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7594319d8ede23c40ae874f3ffd3150c, type: 3}
-  m_Name: SO_SelectedStasis.obj
+  m_Name: SO_ObjInStasis
   m_EditorClassIdentifier: 
-  soundName: SelectStasiable
-  clip: {fileID: 8300000, guid: d5ad48caba138384abf4c5660d0644c2, type: 3}
+  soundName: ObjInStasis
+  clip: {fileID: 8300000, guid: e96a84f66ed7d4eaabbfb352f63add7e, type: 3}
   mixerGroup: {fileID: -6319808297377166825, guid: f380811a388512f45bca0ea436ce452b,
     type: 2}
   playOnAwake: 0
-  loop: 0
-  volume: 1
+  loop: 1
+  volume: 0.2

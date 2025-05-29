@@ -1,25 +1,27 @@
-// Sound.cs
 using UnityEngine;
 using UnityEngine.Audio;
 
-[CreateAssetMenu(menuName = "Audio/Sound")]
-public class Sound : ScriptableObject
+namespace Audio
 {
-    [Tooltip("Nombre único para referenciar este sonido")]
-    public string soundName;
+    [CreateAssetMenu(menuName = "Audio/Sound")]
+    public class Sound : ScriptableObject
+    {
+        [Tooltip("Nombre ï¿½nico para referenciar este sonido")]
+        public string soundName;
 
-    [Tooltip("Clip de audio a reproducir")]
-    public AudioClip clip;
+        [Tooltip("Clip de audio a reproducir")]
+        public AudioClip clip;
 
-    [Tooltip("Grupo del AudioMixer al que pertenecerá")]
-    public AudioMixerGroup mixerGroup;
+        [Tooltip("Grupo del AudioMixer al que pertenecerï¿½")]
+        public AudioMixerGroup mixerGroup;
 
-    [Tooltip("¿Se reproduce automáticamente al iniciar la escena?")]
-    public bool playOnAwake = false;
+        [Tooltip("ï¿½Se reproduce automï¿½ticamente al iniciar la escena?")]
+        public bool playOnAwake;
 
-    [Tooltip("¿Se repite en bucle?")]
-    public bool loop = false;
+        [Tooltip("ï¿½Se repite en bucle?")]
+        public bool loop;
 
-    [Range(0f, 1f), Tooltip("Volumen inicial")]
-    public float volume = 1f;
+        [Range(0f, 1f), Tooltip("Volumen inicial")]
+        public float volume = 1f;
+    }
 }

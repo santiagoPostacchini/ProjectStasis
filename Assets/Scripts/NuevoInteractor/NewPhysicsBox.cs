@@ -1,3 +1,4 @@
+using Events;
 using UnityEngine;
 
 namespace NuevoInteractor
@@ -122,14 +123,15 @@ namespace NuevoInteractor
 
         public void StatisEffectActivate()
         {
+            EventManager.TriggerEvent("StasisStart", gameObject);
             FreezeObject();
         }
-        
+
         public void StatisEffectDeactivate()
         {
+            EventManager.TriggerEvent("StasisEnd", gameObject);
             UnfreezeObject();
         }
-
         private void FreezeObject()
         {
             if (!isFreezed)

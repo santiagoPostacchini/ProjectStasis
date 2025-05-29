@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7594319d8ede23c40ae874f3ffd3150c, type: 3}
-  m_Name: SO_Ticcking_Pulse
+  m_Name: SO_WrongHitStasis
   m_EditorClassIdentifier: 
-  soundName: Ticking.Pulse
-  clip: {fileID: 8300000, guid: 33686cf74ec550541b1429af90951fa5, type: 3}
-  mixerGroup: {fileID: -4801773147402711802, guid: f380811a388512f45bca0ea436ce452b,
+  soundName: StasisFail
+  clip: {fileID: 8300000, guid: 4e8a937bb6d294f469b438e6d322feb9, type: 3}
+  mixerGroup: {fileID: 976767025159669007, guid: f380811a388512f45bca0ea436ce452b,
     type: 2}
   playOnAwake: 0
-  loop: 1
-  volume: 1
+  loop: 0
+  volume: 0.6

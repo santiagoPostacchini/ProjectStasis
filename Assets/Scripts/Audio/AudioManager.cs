@@ -1,82 +1,50 @@
-// AudioManager.cs
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Audio;
 
-
-public class AudioManager : MonoBehaviour
+namespace Audio
 {
-    public static AudioManager Instance { get; private set; }
-
-    [Header("Sonidos de Ambiente")]
-    public Sound[] ambientSounds;
-    [Header("Sonidos SFX")]
-    public Sound[] sfxSounds;
-
-    private Dictionary<string, AudioSource> _sources = new Dictionary<string, AudioSource>();
-
-    private void Awake()
+    public class AudioManager : MonoBehaviour
     {
-        if (Instance == null)
+        public static AudioManager Instance { get; private set; }
+
+        [Header("Sonidos de Ambiente")]
+        public Sound[] ambientSounds;
+        [Header("Sonidos SFX")]
+        public Sound[] sfxSounds;
+        
+        private readonly Dictionary<string, Sound> _sfxDict = new();
+
+        private void Awake()
         {
-            Instance = this;
-            DontDestroyOnLoad(transform.root.gameObject);
-            RegisterSounds(ambientSounds);
-            RegisterSounds(sfxSounds);
+            if (Instance == null)
+            {
+                Instance = this;
+                DontDestroyOnLoad(gameObject);
+                RegisterSfx(sfxSounds);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
-        else
+
+        private void RegisterSfx(Sound[] sounds)
         {
-            Destroy(gameObject);
+            foreach (var s in sounds)
+            {
+                if (!_sfxDict.ContainsKey(s.soundName))
+                    _sfxDict[s.soundName] = s;
+                else
+                    Debug.LogWarning($"[AudioManager] Duplicate SFX name: {s.soundName}");
+            }
         }
-    }
-
-    private void RegisterSounds(Sound[] sounds)
-    {
-        foreach (var s in sounds)
+        
+        public Sound GetSfx(string soundName)
         {
-            var src = gameObject.AddComponent<AudioSource>();
-            src.clip = s.clip;
-            src.outputAudioMixerGroup = s.mixerGroup;
-            src.loop = s.loop;
-            src.volume = s.volume;
-            src.playOnAwake = false;
-            _sources[s.soundName] = src;
-
-            if (s.playOnAwake)
-                src.Play();
+            _sfxDict.TryGetValue(soundName, out var s);
+            if (s == null)
+                Debug.LogWarning($"[AudioManager] No SFX '{soundName}'");
+            return s;
         }
-    }
-
-    // Ambiente
-    public void PlayAmbient(string name)
-    {
-        if (_sources.TryGetValue(name, out var src)) src.Play();
-        else Debug.LogWarning($"[AudioManager] No ambient sound '{name}'");
-    }
-
-    public void StopAmbient(string name)
-    {
-        if (_sources.TryGetValue(name, out var src)) src.Stop();
-        else Debug.LogWarning($"[AudioManager] No ambient sound '{name}'");
-    }
-
-    public void FadeOutAmbient(string name, float duration)
-    {
-        if (_sources.TryGetValue(name, out var src))
-            StartCoroutine(Fader.FadeOut(src, duration));
-        else Debug.LogWarning($"[AudioManager] No ambient sound '{name}'");
-    }
-
-    // SFX
-    public void PlaySfx(string name)
-    {
-        if (_sources.TryGetValue(name, out var src)) src.PlayOneShot(src.clip, src.volume);
-        else Debug.LogWarning($"[AudioManager] No SFX '{name}'");
-    }
-
-    public void StopSfx(string name)
-    {
-        if (_sources.TryGetValue(name, out var src)) src.Stop();
-        else Debug.LogWarning($"[AudioManager] No SFX '{name}'");
     }
 }

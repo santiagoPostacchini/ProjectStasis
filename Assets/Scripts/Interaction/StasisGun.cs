@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using NuevoInteractor;
+﻿using NuevoInteractor;
 using UnityEngine;
 
 namespace Interaction
@@ -9,7 +8,6 @@ namespace Interaction
         [Header("Visual Settings")]
         [SerializeField] private Transform stasisOrigin;
         [SerializeField] private GameObject stasisBeamPrefab;
-        [SerializeField] private float beamDuration = 0.2f;
 
         private GameObject _firstFrozenObject;
         private IStasis _firstStasisComponent;
@@ -21,12 +19,14 @@ namespace Interaction
         private Coroutine _beamCoroutine;
 
         private NewPlayerInteractor _playerInteractor;
+        private Camera _mainCam;
 
         private bool IsGunActive => this.enabled && this.gameObject.activeInHierarchy;
 
         void Start()
         {
             _playerInteractor = GetComponent<NewPlayerInteractor>();
+            _mainCam = Camera.main;
         }
 
         void Update()
@@ -39,21 +39,28 @@ namespace Interaction
                 if (_playerInteractor && _playerInteractor.HasObjectInHand())
                     return;
 
-                TryApplyStasis(Camera.main?.transform);
+                TryApplyStasis(_mainCam.transform);
             }
         }
 
         private void TryApplyStasis(Transform playerCameraTransform)
         {
-            if (Physics.Raycast(playerCameraTransform.position, playerCameraTransform.forward, out RaycastHit hit))
+            Vector3 origin = playerCameraTransform.position;
+            Vector3 direction = playerCameraTransform.forward;
+            
+            if (Physics.Raycast(origin, direction, out RaycastHit hit))
             {
+                bool stasisHit = false;
+                
                 GameObject hitObject = hit.collider.gameObject;
 
                 if (hitObject.TryGetComponent<IStasis>(out var stasisComponent))
                 {
                     ApplyStasisEffect(hitObject, stasisComponent);
+                    stasisHit = true;
+                    
                 }
-                
+                Debug.DrawRay(origin, hit.point, Color.cyan, 1f);
                 if (_activeBeam)
                 {
                     Destroy(_activeBeam.gameObject);
@@ -61,16 +68,10 @@ namespace Interaction
 
                 GameObject beamInstance = Instantiate(stasisBeamPrefab, stasisOrigin.position, Quaternion.identity);
                 _activeBeam = beamInstance.GetComponent<StasisBeam>();
-                _activeBeam.SetBeam(stasisOrigin.position, hit.point);
-
-                AudioManager.Instance?.PlaySfx("LaserFX");
-
-                if (_beamCoroutine != null)
-                    StopCoroutine(_beamCoroutine);
-
-                _beamCoroutine = StartCoroutine(DisableBeamAfterDuration(beamDuration));
+                _activeBeam.SetBeam(stasisOrigin.position, hit.point, stasisHit);
             }
         }
+
 
         void ApplyStasisEffect(GameObject newObject, IStasis newStasisComponent)
         {
@@ -111,17 +112,6 @@ namespace Interaction
                 _secondFrozenObject = newObject;
                 _secondStasisComponent = newStasisComponent;
                 _secondStasisComponent.StatisEffectActivate();
-            }
-        }
-
-        private IEnumerator DisableBeamAfterDuration(float duration)
-        {
-            yield return new WaitForSeconds(duration);
-
-            if (_activeBeam)
-            {
-                Destroy(_activeBeam.gameObject);
-                _activeBeam = null;
             }
         }
 
