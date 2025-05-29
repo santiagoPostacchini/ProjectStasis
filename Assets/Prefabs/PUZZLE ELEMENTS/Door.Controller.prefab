@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3017822747774422482}
   - component: {fileID: 7887665336775897588}
   - component: {fileID: 7446869050577313946}
-  - component: {fileID: 1796791375734721714}
+  - component: {fileID: 8292314190259829950}
   m_Layer: 0
   m_Name: Door.Controller
   m_TagString: Untagged
@@ -82,14 +82,15 @@ MonoBehaviour:
   slideDuration: 1
   gearRotationAngle: 180
   gearRotateDuration: 0.5
-  gearEventName: GearTurn
-  openEventName: Door.OPEN
-  closeEventName: Door.CLOSE
+  gearSoundName: GearTurn
+  openSoundName: Door.OPEN
+  closeSoundName: Door.CLOSE
   isOpen: 0
   autoClose: 1
   autoCloseDelay: 1
-  hasTimedClose: 0
+  hasTimedClose: 1
   timedCloseDelay: 5
+  canOpenWithPlayerCollision: 0
   particlesDoor:
   - {fileID: 6639013980406026712}
   - {fileID: 591311687880517342}
@@ -190,7 +191,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &1796791375734721714
+--- !u!114 &8292314190259829950
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -205,22 +206,19 @@ MonoBehaviour:
   soundEventGroups:
   - eventName: Door.OPEN
     soundDelays:
-    - soundName: GearTurn
-      delay: 0
-    - soundName: GearTurn
-      delay: 0.5
-    - soundName: GearTurn
-      delay: 1
-    - soundName: GearTurn
-      delay: 1.5
     - soundName: Door.OPEN
-      delay: 2
+      delay: 0
     isStopEvent: 0
   - eventName: Door.CLOSE
     soundDelays:
     - soundName: Door.CLOSE
       delay: 0
     isStopEvent: 1
+  - eventName: GearTurn
+    soundDelays:
+    - soundName: GearTurn
+      delay: 0
+    isStopEvent: 0
 --- !u!1 &552191768651282957
 GameObject:
   m_ObjectHideFlags: 0

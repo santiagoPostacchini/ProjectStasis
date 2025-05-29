@@ -10,13 +10,6 @@ public class BrokenSlidingDoorController : MonoBehaviour
     public Transform rightDoor;
     public Transform[] gears;
 
-    [Header("Engranajes")]
-    [Tooltip("Ángulo total que giran los engranajes")]
-    public float gearRotationAngle = 180f;
-    [Tooltip("Duración en segundos del giro de los engranajes")]
-    public float gearRotateDuration = 0.5f;
-    public string gearSoundName = "GearTurn";
-
     [Header("Movimiento roto")]
     [Tooltip("Distancia que recorre la hoja rota")]
     public float slideDistance = 0.5f;
@@ -32,6 +25,13 @@ public class BrokenSlidingDoorController : MonoBehaviour
     public float gearJitterAngle = 10f;
     [Tooltip("Velocidad de giro errático")]
     public float gearJitterSpeed = 2f;
+
+    [Header("Engranajes")]
+    [Tooltip("Ángulo total que giran los engranajes")]
+    public float gearRotationAngle = 180f;
+    [Tooltip("Duración en segundos del giro de los engranajes")]
+    public float gearRotateDuration = 0.5f;
+    public string gearSoundName = "GearTurn";
 
     [Header("Puerta SFX")]
     public string openSoundName = "Door.OPEN";
@@ -81,16 +81,18 @@ public class BrokenSlidingDoorController : MonoBehaviour
             // Girar engranajes en orden, uno por uno
             foreach (var gear in gears)
             {
+                EventManager.TriggerEvent("GearTurn", gameObject);
                 yield return RotateGear(gear, true);
             }
 
             // Una vez que todos giraron, reproducir sonido de abrir y mover la puerta
-            EventManager.TriggerEvent(openSoundName, gameObject);
+            EventManager.TriggerEvent("Door.OPEN", gameObject);
             yield return SlideDoorsBroken();
         }
         else
         {
             // Primero reproducir sonido de cerrar y luego mover la puerta
+            EventManager.TriggerEvent("Door.CLOSE", gameObject);
             EventManager.TriggerEvent(closeSoundName, gameObject);
             yield return SlideDoorsBroken();
         }
