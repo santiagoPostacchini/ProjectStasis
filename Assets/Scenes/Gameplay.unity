@@ -12412,6 +12412,66 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1796791375734721714, guid: 9f3a6f4740b20ac4ab3cd80841f0ea93,
+        type: 3}
+      propertyPath: soundEventGroups.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1796791375734721714, guid: 9f3a6f4740b20ac4ab3cd80841f0ea93,
+        type: 3}
+      propertyPath: soundEventGroups.Array.data[2].eventName
+      value: GearTurn
+      objectReference: {fileID: 0}
+    - target: {fileID: 1796791375734721714, guid: 9f3a6f4740b20ac4ab3cd80841f0ea93,
+        type: 3}
+      propertyPath: soundEventGroups.Array.data[2].isStopEvent
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1796791375734721714, guid: 9f3a6f4740b20ac4ab3cd80841f0ea93,
+        type: 3}
+      propertyPath: soundEventGroups.Array.data[0].soundDelays.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1796791375734721714, guid: 9f3a6f4740b20ac4ab3cd80841f0ea93,
+        type: 3}
+      propertyPath: soundEventGroups.Array.data[2].soundDelays.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1796791375734721714, guid: 9f3a6f4740b20ac4ab3cd80841f0ea93,
+        type: 3}
+      propertyPath: soundEventGroups.Array.data[0].soundDelays.Array.data[1].delay
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1796791375734721714, guid: 9f3a6f4740b20ac4ab3cd80841f0ea93,
+        type: 3}
+      propertyPath: soundEventGroups.Array.data[0].soundDelays.Array.data[2].delay
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1796791375734721714, guid: 9f3a6f4740b20ac4ab3cd80841f0ea93,
+        type: 3}
+      propertyPath: soundEventGroups.Array.data[0].soundDelays.Array.data[3].delay
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1796791375734721714, guid: 9f3a6f4740b20ac4ab3cd80841f0ea93,
+        type: 3}
+      propertyPath: soundEventGroups.Array.data[0].soundDelays.Array.data[4].delay
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1796791375734721714, guid: 9f3a6f4740b20ac4ab3cd80841f0ea93,
+        type: 3}
+      propertyPath: soundEventGroups.Array.data[0].soundDelays.Array.data[0].soundName
+      value: Door.OPEN
+      objectReference: {fileID: 0}
+    - target: {fileID: 1796791375734721714, guid: 9f3a6f4740b20ac4ab3cd80841f0ea93,
+        type: 3}
+      propertyPath: soundEventGroups.Array.data[0].soundDelays.Array.data[5].soundName
+      value: Door.OPEN
+      objectReference: {fileID: 0}
+    - target: {fileID: 1796791375734721714, guid: 9f3a6f4740b20ac4ab3cd80841f0ea93,
+        type: 3}
+      propertyPath: soundEventGroups.Array.data[2].soundDelays.Array.data[0].soundName
+      value: GearTurn
+      objectReference: {fileID: 0}
     - target: {fileID: 8500825191743187681, guid: 9f3a6f4740b20ac4ab3cd80841f0ea93,
         type: 3}
       propertyPath: plates.Array.data[0]
@@ -18922,6 +18982,12 @@ Transform:
   - {fileID: 1219392764}
   m_Father: {fileID: 1027112719}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!1 &1459850015 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 517040214083005499, guid: 9f3a6f4740b20ac4ab3cd80841f0ea93,
+    type: 3}
+  m_PrefabInstance: {fileID: 1967270179}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1472384008
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25586,10 +25652,15 @@ PrefabInstance:
       propertyPath: plates.Array.data[0]
       value: 
       objectReference: {fileID: 1681840538}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1796791375734721714, guid: 9f3a6f4740b20ac4ab3cd80841f0ea93, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 517040214083005499, guid: 9f3a6f4740b20ac4ab3cd80841f0ea93,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1967270189}
   m_SourcePrefab: {fileID: 100100000, guid: 9f3a6f4740b20ac4ab3cd80841f0ea93, type: 3}
 --- !u!114 &1967270180 stripped
 MonoBehaviour:
@@ -25609,6 +25680,34 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1967270179}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1967270189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1459850015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae8e6204a2f686d49803648ea9caa843, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundEventGroups:
+  - eventName: Door.OPEN
+    soundDelays:
+    - soundName: Door.OPEN
+      delay: 0
+    isStopEvent: 0
+  - eventName: Door.CLOSE
+    soundDelays:
+    - soundName: Door.CLOSE
+      delay: 0
+    isStopEvent: 1
+  - eventName: GearTurn
+    soundDelays:
+    - soundName: GearTurn
+      delay: 0
+    isStopEvent: 0
 --- !u!1 &1974069232
 GameObject:
   m_ObjectHideFlags: 0
