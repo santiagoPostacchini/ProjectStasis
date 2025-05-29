@@ -57,7 +57,10 @@ namespace Audio
         private void HandleEvent(string eventName, GameObject sender)
         {
             if (!_groups.TryGetValue(eventName, out var group)) return;
-
+            
+            if (sender != gameObject) 
+                return;
+            
             if (group.isStopEvent)
             {
                 if (_audioSource.isPlaying)
