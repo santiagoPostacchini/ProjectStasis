@@ -761,13 +761,15 @@ MonoBehaviour:
   leftDoor: {fileID: 845788485}
   rightDoor: {fileID: 1869200254}
   gears: []
+  gearRotationAngle: 180
+  gearRotateDuration: 0.5
+  gearSoundName: GearTurn
   slideDistance: 2
   slideDuration: 1.2
   jitterAmount: 0.015
   jitterSpeed: 30
   gearJitterAngle: 10
   gearJitterSpeed: 2
-  gearSoundName: GearTurn
   openSoundName: Door.OPEN
   closeSoundName: Door.CLOSE
   isOpen: 0
@@ -3041,8 +3043,8 @@ MonoBehaviour:
   switchTime: 3.2
   rotationAxis: {x: 1, y: 0, z: 1}
   rotationSpeed: 80
-  fallSpeedMultiplier: 4
-  pos: {fileID: 1477538919}
+  fallSpeedMultiplier: 3
+  pos: {fileID: 1998847935}
   paredes:
   - {fileID: 608057183}
   - {fileID: 799250372}
@@ -5537,7 +5539,7 @@ Transform:
   m_GameObject: {fileID: 459998650}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 11.106735, y: -9.621525, z: 21}
+  m_LocalPosition: {x: 11.106735, y: -9.621525, z: 19}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5675,17 +5677,17 @@ PrefabInstance:
     - target: {fileID: 6617804030325529290, guid: b66b9b9b9e52c56449e9b51ff57be6a0,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 78
+      value: 182
       objectReference: {fileID: 0}
     - target: {fileID: 6617804030325529290, guid: b66b9b9b9e52c56449e9b51ff57be6a0,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -10.6
+      value: -14.6
       objectReference: {fileID: 0}
     - target: {fileID: 6617804030325529290, guid: b66b9b9b9e52c56449e9b51ff57be6a0,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -13
+      value: -60
       objectReference: {fileID: 0}
     - target: {fileID: 6617804030325529290, guid: b66b9b9b9e52c56449e9b51ff57be6a0,
         type: 3}
@@ -5903,6 +5905,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: becc23065ffba194981cc2b883ad384c, type: 3}
+--- !u!198 &487739868 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 485513391776268360, guid: 9f3a6f4740b20ac4ab3cd80841f0ea93,
+    type: 3}
+  m_PrefabInstance: {fileID: 873240536}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &488852068 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6977388815529377621, guid: e0cafe9b9f06bde4585392790ca34ae8,
@@ -6183,8 +6191,8 @@ MonoBehaviour:
   switchTime: 1.8
   rotationAxis: {x: 0, y: 1, z: 1}
   rotationSpeed: 30
-  fallSpeedMultiplier: 4
-  pos: {fileID: 1477538919}
+  fallSpeedMultiplier: 3
+  pos: {fileID: 1998847935}
   paredes:
   - {fileID: 608057183}
   - {fileID: 799250372}
@@ -6691,6 +6699,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 843d895b1ec26444182dca22d616c2aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!198 &542816043 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 6639013980406026712, guid: 9f3a6f4740b20ac4ab3cd80841f0ea93,
+    type: 3}
+  m_PrefabInstance: {fileID: 873240536}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &546636887
 GameObject:
   m_ObjectHideFlags: 0
@@ -9892,8 +9906,8 @@ MonoBehaviour:
   switchTime: 3
   rotationAxis: {x: 1, y: 1, z: 1}
   rotationSpeed: 60
-  fallSpeedMultiplier: 4
-  pos: {fileID: 1477538919}
+  fallSpeedMultiplier: 3
+  pos: {fileID: 1998847935}
   paredes:
   - {fileID: 608057183}
   - {fileID: 799250372}
@@ -11468,20 +11482,22 @@ MonoBehaviour:
   leftDoor: {fileID: 873240539}
   rightDoor: {fileID: 873240538}
   gears: []
+  gearRotationAngle: 180
+  gearRotateDuration: 0.5
+  gearSoundName: GearTurn
   slideDistance: 2
   slideDuration: 1.2
   jitterAmount: 0.015
   jitterSpeed: 30
   gearJitterAngle: 10
   gearJitterSpeed: 2
-  gearSoundName: GearTurn
   openSoundName: Door.OPEN
   closeSoundName: Door.CLOSE
   isOpen: 0
   particlesDoor:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 542816043}
+  - {fileID: 1822048060}
+  - {fileID: 487739868}
 --- !u!4 &877827773
 Transform:
   m_ObjectHideFlags: 0
@@ -16913,8 +16929,8 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -19372,7 +19388,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1500473961
 Transform:
   m_ObjectHideFlags: 0
@@ -19512,8 +19528,8 @@ MonoBehaviour:
   switchTime: 1.6
   rotationAxis: {x: 1, y: 1, z: 0}
   rotationSpeed: 35
-  fallSpeedMultiplier: 4
-  pos: {fileID: 1477538919}
+  fallSpeedMultiplier: 3
+  pos: {fileID: 1998847935}
   paredes:
   - {fileID: 608057183}
   - {fileID: 799250372}
@@ -20652,8 +20668,8 @@ MonoBehaviour:
   switchTime: 1.5
   rotationAxis: {x: 1, y: 1, z: 1}
   rotationSpeed: 20
-  fallSpeedMultiplier: 4
-  pos: {fileID: 1477538919}
+  fallSpeedMultiplier: 3
+  pos: {fileID: 1998847935}
   paredes:
   - {fileID: 608057183}
   - {fileID: 799250372}
@@ -21404,7 +21420,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.003921569}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -23150,8 +23166,8 @@ MonoBehaviour:
   switchTime: 3
   rotationAxis: {x: 1, y: 0, z: 1}
   rotationSpeed: 30
-  fallSpeedMultiplier: 4
-  pos: {fileID: 1477538919}
+  fallSpeedMultiplier: 3
+  pos: {fileID: 1998847935}
   paredes:
   - {fileID: 608057183}
   - {fileID: 799250372}
@@ -23863,6 +23879,12 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1811762251}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!198 &1822048060 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 591311687880517342, guid: 9f3a6f4740b20ac4ab3cd80841f0ea93,
+    type: 3}
+  m_PrefabInstance: {fileID: 873240536}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1824901137
 GameObject:
   m_ObjectHideFlags: 0
@@ -25554,6 +25576,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7887665336775897588, guid: 9f3a6f4740b20ac4ab3cd80841f0ea93,
+        type: 3}
+      propertyPath: hasTimedClose
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8500825191743187681, guid: 9f3a6f4740b20ac4ab3cd80841f0ea93,
         type: 3}
       propertyPath: plates.Array.data[0]
@@ -26477,6 +26504,12 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1995078110}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1998847935 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6617804030325529290, guid: b66b9b9b9e52c56449e9b51ff57be6a0,
+    type: 3}
+  m_PrefabInstance: {fileID: 470005026}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2002764824
 GameObject:
   m_ObjectHideFlags: 0
@@ -41366,13 +41399,17 @@ MonoBehaviour:
   ambientSounds:
   - {fileID: 11400000, guid: 8f25ec2050aecce44a00ed6f603e3776, type: 2}
   sfxSounds:
-  - {fileID: 11400000, guid: 299f70db1bbb2cd40b5389131403a48e, type: 2}
-  - {fileID: 11400000, guid: 325428abc8411324b8f5c58a8318e580, type: 2}
+  - {fileID: 11400000, guid: 8f25ec2050aecce44a00ed6f603e3776, type: 2}
   - {fileID: 11400000, guid: bd1382a026c1c344786bf10523e89533, type: 2}
+  - {fileID: 11400000, guid: 325428abc8411324b8f5c58a8318e580, type: 2}
+  - {fileID: 11400000, guid: 299f70db1bbb2cd40b5389131403a48e, type: 2}
+  - {fileID: 11400000, guid: fa122ff64df79ca42bb341250f43551e, type: 2}
+  - {fileID: 11400000, guid: 7824283349f3d6e4691ccb13889238bd, type: 2}
   - {fileID: 11400000, guid: 45d076519bee3b345ad5d57b25bdddc5, type: 2}
-  - {fileID: 11400000, guid: 092c966773e02a24089a0134ef182a5b, type: 2}
+  - {fileID: 11400000, guid: 2ee287a7818cd364c8774161b52c24ea, type: 2}
   - {fileID: 11400000, guid: 092c966773e02a24089a0134ef182a5b, type: 2}
   - {fileID: 11400000, guid: ff7e1e6628b831f46b8898fd3485b9d0, type: 2}
+  - {fileID: 11400000, guid: e69733bf321837f46ae8878feec4468d, type: 2}
 --- !u!114 &7656520598193725103
 MonoBehaviour:
   m_ObjectHideFlags: 0

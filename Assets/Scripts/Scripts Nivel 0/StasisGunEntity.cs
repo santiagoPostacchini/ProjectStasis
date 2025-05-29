@@ -54,18 +54,25 @@ namespace Interaction
                 if (currentTarget != null)
                 {
                     ErraticObject erraticObject = currentTarget.GetComponent<ErraticObject>();
-
-                    // Intentar aplicar stasis repetidamente hasta congelar
-                    while (erraticObject != null && !erraticObject.isFreezed)
+                    if (erraticObject != null)
                     {
+                        while (!erraticObject.isFreezed)
+                        {
+                            TryApplyStasis(currentTarget.transform);
+                            yield return new WaitForSeconds(0.1f);
+                        }
+                    }
+                    FallingRoof fallingRoof = currentTarget.GetComponentInParent<FallingRoof>();
+                    if (fallingRoof != null)
+                    {
+
+                        Debug.Log("FallingRoof");
                         TryApplyStasis(currentTarget.transform);
-                        yield return new WaitForSeconds(0.1f); // Reintenta cada 0.5 segundos
                     }
                 }
 
-                // Una vez congelado o si el target es null, lo eliminamos
                 targets.RemoveAt(0);
-                yield return new WaitForSeconds(0.1f); // Pequeña pausa antes del siguiente
+                yield return new WaitForSeconds(0.1f);
             }
         }
 
@@ -75,11 +82,13 @@ namespace Interaction
 
             if (Physics.Raycast(transform.position, direction, out RaycastHit hit, Mathf.Infinity))
             {
+                bool stasisHit = false;
                 GameObject hitObject = hit.collider.gameObject;
 
                 if (hitObject.TryGetComponent<IStasis>(out var stasisComponent))
                 {
                     ApplyStasisEffect(hitObject, stasisComponent);
+                    stasisHit = true;
                 }
 
                 if (_activeBeam)
@@ -89,9 +98,9 @@ namespace Interaction
 
                 GameObject beamInstance = Instantiate(stasisBeamPrefab, stasisOrigin.position, Quaternion.identity);
                 _activeBeam = beamInstance.GetComponent<StasisBeam>();
-                _activeBeam.SetBeam(stasisOrigin.position, hit.point);
+                _activeBeam.SetBeam(stasisOrigin.position, hit.point, stasisHit);
 
-                AudioManager.Instance?.PlaySfx("LaserFX");
+                // AudioManager.Instance?.PlaySfx("LaserFX");
 
                 if (_beamCoroutine != null)
                     StopCoroutine(_beamCoroutine);

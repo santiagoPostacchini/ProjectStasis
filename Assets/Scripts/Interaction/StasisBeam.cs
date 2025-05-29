@@ -33,8 +33,11 @@ namespace Interaction
             // Calcula la dirección y distancia
             Vector3 direction = (end - start).normalized;
             float distance    = Vector3.Distance(start, end);
-
-            lightStasis.enabled = true;
+            if(lightStasis != null)
+            {
+                lightStasis.enabled = true;
+            }
+           
             gameObject.SetActive(true);
 
             _beamRoutine = StartCoroutine(MoveForward(direction, distance, hit));
@@ -63,7 +66,10 @@ namespace Interaction
             }
 
             // Apago la luz
-            lightStasis.enabled = false;
+            if (lightStasis != null)
+            {
+                lightStasis.enabled = false;
+            }
 
             // Disparo el evento correspondiente según el bool 'hit'
             EventManager.TriggerEvent(hit ? successEventName : failEventName, gameObject);

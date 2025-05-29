@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using Events;
 
 [RequireComponent(typeof(Collider))]
 public class BrokenSlidingDoorController : MonoBehaviour
@@ -8,6 +9,13 @@ public class BrokenSlidingDoorController : MonoBehaviour
     public Transform leftDoor;
     public Transform rightDoor;
     public Transform[] gears;
+
+    [Header("Engranajes")]
+    [Tooltip("Ángulo total que giran los engranajes")]
+    public float gearRotationAngle = 180f;
+    [Tooltip("Duración en segundos del giro de los engranajes")]
+    public float gearRotateDuration = 0.5f;
+    public string gearSoundName = "GearTurn";
 
     [Header("Movimiento roto")]
     [Tooltip("Distancia que recorre la hoja rota")]
@@ -24,7 +32,6 @@ public class BrokenSlidingDoorController : MonoBehaviour
     public float gearJitterAngle = 10f;
     [Tooltip("Velocidad de giro errático")]
     public float gearJitterSpeed = 2f;
-    public string gearSoundName = "GearTurn";
 
     [Header("Puerta SFX")]
     public string openSoundName = "Door.OPEN";
@@ -61,8 +68,9 @@ public class BrokenSlidingDoorController : MonoBehaviour
         }
 
         // Siempre giran erráticamente
-        RotateGearsBroken();
+        //RotateGearsBroken();
     }
+
 
     private IEnumerator RunDoorSequence(bool opening)
     {
@@ -70,30 +78,34 @@ public class BrokenSlidingDoorController : MonoBehaviour
 
         if (opening)
         {
-            // No hay sonido real, solo giro falso
+            // Girar engranajes en orden, uno por uno
             foreach (var gear in gears)
             {
-                AudioManager.Instance.PlaySfx(gearSoundName);
-                yield return new WaitForSeconds(0.1f);
+                yield return RotateGear(gear, true);
             }
-            AudioManager.Instance.PlaySfx(openSoundName);
+
+            // Una vez que todos giraron, reproducir sonido de abrir y mover la puerta
+            EventManager.TriggerEvent(openSoundName, gameObject);
             yield return SlideDoorsBroken();
         }
         else
         {
-            AudioManager.Instance.PlaySfx(closeSoundName);
+            // Primero reproducir sonido de cerrar y luego mover la puerta
+            EventManager.TriggerEvent(closeSoundName, gameObject);
             yield return SlideDoorsBroken();
         }
     }
+
     public void OpenDoor()
     {
         if (!isOpen) isOpen = true;
     }
+
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player"))
             return;
-        if (!isOpen) isOpen = true;
+        if (!isOpen) OpenDoor();
     }
 
     private IEnumerator SlideDoorsBroken()
@@ -114,6 +126,28 @@ public class BrokenSlidingDoorController : MonoBehaviour
         }
 
         rightDoor.localPosition = end;
+    }
+
+    private IEnumerator RotateGear(Transform gear, bool opening)
+    {
+        EventManager.TriggerEvent(gearSoundName, gameObject);
+
+        float elapsed = 0f;
+        float from = gear.localEulerAngles.z;
+        float to = opening ? from + gearRotationAngle : from - gearRotationAngle;
+
+        while (elapsed < gearRotateDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.SmoothStep(0f, 1f, elapsed / gearRotateDuration);
+            float angle = Mathf.LerpUnclamped(from, to, t);
+            var e = gear.localEulerAngles;
+            gear.localEulerAngles = new Vector3(e.x, e.y, angle);
+            yield return null;
+        }
+
+        var final = gear.localEulerAngles;
+        gear.localEulerAngles = new Vector3(final.x, final.y, to);
     }
 
     private void RotateGearsBroken()

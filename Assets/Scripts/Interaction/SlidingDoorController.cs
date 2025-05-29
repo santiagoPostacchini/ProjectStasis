@@ -1,6 +1,7 @@
 // SlidingDoorController.cs
 using System.Collections;
 using UnityEngine;
+using Events;
 
 [RequireComponent(typeof(Collider))]
 public class SlidingDoorController : MonoBehaviour
@@ -74,7 +75,7 @@ public class SlidingDoorController : MonoBehaviour
             lastState = isOpen;
         }
     }
-
+   
     private IEnumerator RunDoorSequence(bool opening)
     {
         if (opening)
@@ -82,12 +83,14 @@ public class SlidingDoorController : MonoBehaviour
             // 1) Giro de engranajes antes de abrir
             foreach (var gear in gears)
             {
-                AudioManager.Instance.PlaySfx(gearSoundName);
+                // AudioManager.Instance.PlaySfx(gearSoundName);
+                EventManager.TriggerEvent("GearTurn", gameObject);
                 yield return RotateGear(gear, true);
             }
 
             // 2) Sonido de apertura
-            AudioManager.Instance.PlaySfx(openSoundName);
+            // AudioManager.Instance.PlaySfx(openSoundName);
+            EventManager.TriggerEvent("Door.OPEN", gameObject);
 
             // 3) Deslizamiento abriendo
             yield return SlideDoors(true);
@@ -99,7 +102,8 @@ public class SlidingDoorController : MonoBehaviour
         else
         {
             // 1) Sonido de cierre
-            AudioManager.Instance.PlaySfx(closeSoundName);
+            //AudioManager.Instance.PlaySfx(closeSoundName);
+            EventManager.TriggerEvent("Door.CLOSE", gameObject);
 
             // 2) Deslizamiento cerrando
             yield return SlideDoors(false);
@@ -107,7 +111,8 @@ public class SlidingDoorController : MonoBehaviour
             // 3) Giro de engranajes al final del cierre
             foreach (var gear in gears)
             {
-                AudioManager.Instance.PlaySfx(gearSoundName);
+                //AudioManager.Instance.PlaySfx(gearSoundName);
+                EventManager.TriggerEvent("GearTurn", gameObject);
                 yield return RotateGear(gear, false);
             }
         }
