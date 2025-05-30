@@ -43,8 +43,9 @@ namespace Player
         private Coroutine _currentCrouchRoutine;
 
         public enum MovementState { Sprinting, Crouching, Air }
-        public bool IsAtMinSpeed { get; private set; }
         public MovementState state;
+        public bool IsAtMinSpeed { get; private set; }
+        public bool IsIdle { get; private set; }
         
         private bool _wasGrounded;
         private bool _isCrouching;
@@ -93,6 +94,12 @@ namespace Player
             
             var flatCurrentVel = new Vector3(_currentVelocity.x, 0, _currentVelocity.z);
             IsAtMinSpeed = flatCurrentVel.magnitude >= targetSpeed * 0.3f;
+            IsIdle = flatCurrentVel.magnitude <= 0.05f;
+
+            if (IsIdle)
+            {
+                EventManager.TriggerEvent("OnIdle", gameObject);
+            }
             
             float effectiveAcceleration = acceleration;
             float effectiveDeceleration = deceleration;
@@ -180,6 +187,7 @@ namespace Player
         private void ResetJump()
         {
             _readyToJump = true;
+            EventManager.TriggerEvent("OnIdle", gameObject);
         }
         
         private void CheckGroundedEvents()

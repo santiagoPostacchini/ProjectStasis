@@ -1,5 +1,6 @@
 ﻿using NuevoInteractor;
 using UnityEngine;
+using Events;
 
 namespace Interaction
 {
@@ -50,6 +51,8 @@ namespace Interaction
             if (!canShootStasis) return;
             Vector3 origin = playerCameraTransform.position;
             Vector3 direction = playerCameraTransform.forward;
+            
+            EventManager.TriggerEvent("OnShot", transform.root.gameObject);
             
             if (Physics.Raycast(origin, direction, out RaycastHit hit))
             {

@@ -13,6 +13,8 @@ namespace Player
         private readonly int _grabHash = Animator.StringToHash("Grab");
         private readonly int _dropHash = Animator.StringToHash("Drop");
         private readonly int _throwHash = Animator.StringToHash("Throw");
+        private readonly int _shotHash = Animator.StringToHash("Shot");
+        private readonly int _idleHash = Animator.StringToHash("Idle");
 
         private void OnEnable()
         {
@@ -46,8 +48,14 @@ namespace Player
                 case "OnJump":
                     armAnimator.SetTrigger(_jumpHash);
                     break;
+                case "OnShot":
+                    armAnimator.SetTrigger(_shotHash);
+                    break;
                 case "OnLand":
                     armAnimator.SetTrigger(_landHash);
+                    break;
+                case "OnIdle":
+                    armAnimator.SetTrigger(_idleHash);
                     break;
                 case "OnCrouchEnter":
                     armAnimator.SetBool(_crouchHash, true);
