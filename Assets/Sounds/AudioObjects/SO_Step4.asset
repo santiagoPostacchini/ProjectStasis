@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7594319d8ede23c40ae874f3ffd3150c, type: 3}
+  m_Name: SO_Step4
+  m_EditorClassIdentifier: 
+  soundName: Step4
+  clip: {fileID: 8300000, guid: e7132f9c36139aa4499ff5c5e80e8eaa, type: 3}
+  mixerGroup: {fileID: -6319808297377166825, guid: f380811a388512f45bca0ea436ce452b,
+    type: 2}
+  playOnAwake: 0
+  loop: 0
+  volume: 0.2

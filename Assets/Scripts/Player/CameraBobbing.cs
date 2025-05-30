@@ -1,4 +1,5 @@
 using UnityEngine;
+using Events;
 
 namespace Player
 {
@@ -14,7 +15,11 @@ namespace Player
         private readonly float _toggleSpeed = 1f;
 
         [SerializeField] private CharacterController characterController;
+        [SerializeField] private Player player; // ← Referencia al jugador
         private Vector3 _startPos;
+
+        private bool _footstepTriggeredThisCycle;
+        private float _previousBobbingValue;
 
         private void Awake()
         {
@@ -32,8 +37,16 @@ namespace Player
         private Vector3 FootstepMotion()
         {
             Vector3 pos = Vector3.zero;
-            pos.y = Mathf.Sin(Time.time * frecuency) * amplitude;
+            
+            float bobbingValue = Mathf.Sin(Time.time * frecuency);
+            
+            pos.y = bobbingValue * amplitude;
             pos.x = Mathf.Sin(Time.time * frecuency / 2) * amplitude / 2;
+
+            CheckFootstepEvent(bobbingValue); // Método modificado
+
+            _previousBobbingValue = bobbingValue;
+
             return pos;
         }
 
@@ -41,7 +54,11 @@ namespace Player
         {
             float speed = new Vector3(characterController.velocity.x, 0, characterController.velocity.z).magnitude;
 
-            if (speed < _toggleSpeed) return;
+            if (speed < _toggleSpeed)
+            {
+                _footstepTriggeredThisCycle = false;
+                return;
+            }
 
             PlayMotion(FootstepMotion());
         }
@@ -55,6 +72,21 @@ namespace Player
         private void PlayMotion(Vector3 motion)
         {
             camera.localPosition += motion;
+        }
+
+        private void CheckFootstepEvent(float currentBobbingValue)
+        {
+            if (_previousBobbingValue < 0 && currentBobbingValue >= 0)
+            {
+                if (!_footstepTriggeredThisCycle && player && player.state != Player.MovementState.Air)
+                {
+                    EventManager.TriggerEvent("OnFootstep", player.gameObject);
+                    _footstepTriggeredThisCycle = true;
+                }
+            }
+
+            if (currentBobbingValue < 0)
+                _footstepTriggeredThisCycle = false;
         }
     }
 }

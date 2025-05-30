@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Events;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Audio
 {
@@ -92,10 +93,13 @@ namespace Audio
             {
                 if (sd.delay > 0f)
                     yield return new WaitForSeconds(sd.delay);
-
-                var s = AudioManager.Instance.GetSfx(sd.soundName);
+        
+                var soundNames = sd.soundName.Split(',');
+                var chosenSoundName = soundNames[Random.Range(0, soundNames.Length)].Trim();
+        
+                var s = AudioManager.Instance.GetSfx(chosenSoundName);
                 if (!s) continue;
-
+        
                 if (s.loop)
                 {
                     _audioSource.clip = s.clip;
@@ -109,5 +113,6 @@ namespace Audio
                 }
             }
         }
+
     }
 }

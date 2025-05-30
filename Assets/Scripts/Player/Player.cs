@@ -43,6 +43,7 @@ namespace Player
         private Coroutine _currentCrouchRoutine;
 
         public enum MovementState { Sprinting, Crouching, Air }
+        public bool IsAtMinSpeed { get; private set; }
         public MovementState state;
         
         private bool _wasGrounded;
@@ -90,6 +91,9 @@ namespace Player
             float targetSpeed = (state == MovementState.Crouching) ? crouchSpeed : sprintSpeed;
             Vector3 desiredVelocity = _moveDirection * targetSpeed;
             
+            var flatCurrentVel = new Vector3(_currentVelocity.x, 0, _currentVelocity.z);
+            IsAtMinSpeed = flatCurrentVel.magnitude >= targetSpeed * 0.3f;
+            
             float effectiveAcceleration = acceleration;
             float effectiveDeceleration = deceleration;
             if (!_controller.isGrounded)
@@ -98,7 +102,7 @@ namespace Player
                 effectiveDeceleration *= airControlMultiplier;
             }
             
-            var flatCurrentVel = new Vector3(_currentVelocity.x, 0, _currentVelocity.z);
+            flatCurrentVel = new Vector3(_currentVelocity.x, 0, _currentVelocity.z);
             var flatDesiredVel = new Vector3(desiredVelocity.x, 0, desiredVelocity.z);
 
             flatCurrentVel = _moveDirection.magnitude > 0.1f ? Vector3.MoveTowards(flatCurrentVel, flatDesiredVel, effectiveAcceleration * Time.deltaTime) : Vector3.MoveTowards(flatCurrentVel, Vector3.zero, effectiveDeceleration * Time.deltaTime);
