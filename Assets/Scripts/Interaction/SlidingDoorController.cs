@@ -70,7 +70,7 @@ namespace Interaction
             if (isOpen != _lastState)
             {
                 StopAllCoroutines();
-                // Cancelar cualquier cierre programado anterior
+                
                 if (_timedCloseCoroutine != null)
                     StopCoroutine(_timedCloseCoroutine);
 

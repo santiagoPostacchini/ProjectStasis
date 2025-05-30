@@ -95,8 +95,7 @@ namespace NuevoInteractor
                     
                 }
             }
-
-            // 2. MANTENER E (incrementa carga)
+            
             if (_isHoldingThrow && _objectGrabbable)
             {
                 holdTime += Time.deltaTime;
@@ -129,8 +128,7 @@ namespace NuevoInteractor
                 holdTime = 0f;
                 throwCharge = 0f;
             }
-
-            // Actualiza posición de holder si corresponde
+            
             if (_objectGrabbable)
             {
                 UpdateHolderPosition();
@@ -158,54 +156,44 @@ namespace NuevoInteractor
                 ThrowUISlider.Instance?.SetFill(0);
                 _objectGrabbable.Drop();
                 _objectGrabbable = null;
-
-                // <-- Añadido esto:
+                
                 EventManager.TriggerEvent("OnObjectDrop", gameObject);
             }
         }
 
         private void UpdateHolderPosition()
         {
-            // 1) Raycast para ajustar targetDistance
             float targetDistance = maxHoldDistance;
             if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, maxHoldDistance,
                     environmentMask))
             {
                 targetDistance = Mathf.Clamp(hit.distance - holderOffset, minHoldDistance, maxHoldDistance);
             }
-
-            // 2) Calcula t puro [0..1] y lo remap con tu curve
+            
             float t = Mathf.InverseLerp(maxHoldDistance, minHoldDistance, targetDistance);
             float curveT = holdMoveCurve.Evaluate(t);
-
-            // 3) Define front/back en world space
+            
             Vector3 frontPos = transform.position + transform.forward * maxHoldDistance;
             Vector3 backPos = objectGrabPointBackTransform.position;
-
-            // 4) Interpola usando curveT
+            
             Vector3 desiredPos = Vector3.Lerp(frontPos, backPos, curveT);
-
-            // 5) Si estás muy cerca, aplica “head drop”
+            
             if (targetDistance < headDropStartDist)
             {
-                // headT sube de 0 a 1 cuando targetDistance va de headDropStartDist a 0
                 float headT = Mathf.InverseLerp(headDropStartDist, minHoldDistance, targetDistance);
                 float dropAmt = Mathf.Lerp(0f, maxHeadDrop, headT);
                 desiredPos.y -= dropAmt;
             }
-
-            // 6) Rotación “mira al jugador” con up = Vector3.up
+            
             Vector3 dirToPlayer = (transform.position - desiredPos).normalized;
             Quaternion targetRot = Quaternion.LookRotation(dirToPlayer, Vector3.up);
             _rotationSmoothQuat =
                 Quaternion.Slerp(_rotationSmoothQuat, targetRot, Time.deltaTime * rotationSmoothSpeed);
-
-            // 7) Aplica al holder y al cubo
+            
             objectGrabPointTransform.SetPositionAndRotation(desiredPos, _rotationSmoothQuat);
             _objectGrabbable.transform.SetPositionAndRotation(desiredPos, _rotationSmoothQuat);
         }
 
         public bool HasObjectInHand() => _objectGrabbable && _objectGrabbable.gameObject.activeInHierarchy;
-
     }
 }

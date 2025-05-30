@@ -6,7 +6,6 @@ namespace Events
 {
     public static class EventManager
     {
-        // Inicializo aquí mismo la tabla de eventos
         private static Dictionary<string, Action<string, GameObject>> _events = new Dictionary<string, Action<string, GameObject>>();
     
         public static void Subscribe(string eventName, Action<string, GameObject> handler)
