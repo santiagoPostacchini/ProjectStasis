@@ -23,6 +23,8 @@ namespace Interaction
 
         private bool IsGunActive => this.enabled && this.gameObject.activeInHierarchy;
 
+        [SerializeField] private bool canShootStasis = false;
+
         void Start()
         {
             _playerInteractor = GetComponent<NewPlayerInteractor>();
@@ -45,6 +47,7 @@ namespace Interaction
 
         private void TryApplyStasis(Transform playerCameraTransform)
         {
+            if (!canShootStasis) return;
             Vector3 origin = playerCameraTransform.position;
             Vector3 direction = playerCameraTransform.forward;
             

@@ -59,7 +59,7 @@ namespace Interaction
                         while (!erraticObject.isFreezed)
                         {
                             TryApplyStasis(currentTarget.transform);
-                            yield return new WaitForSeconds(0.1f);
+                            yield return new WaitForSeconds(0.2f);
                         }
                     }
                     FallingRoof fallingRoof = currentTarget.GetComponentInParent<FallingRoof>();
@@ -96,7 +96,8 @@ namespace Interaction
                     Destroy(_activeBeam.gameObject);
                 }
 
-                GameObject beamInstance = Instantiate(stasisBeamPrefab, stasisOrigin.position, Quaternion.identity);
+                GameObject beamInstance = Instantiate(stasisBeamPrefab,stasisOrigin.position,Quaternion.LookRotation(direction)  // Rotación que apunta hacia la dirección del rayo
+);
                 _activeBeam = beamInstance.GetComponent<StasisBeam>();
                 _activeBeam.SetBeam(stasisOrigin.position, hit.point, stasisHit);
 

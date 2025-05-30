@@ -18,10 +18,16 @@ public class ErraticObject : MonoBehaviour
 
     [Header("Frenetic Fall Settings")]
     public float fallSpeedMultiplier = 2.5f;
-    public Transform pos; // destino al caer
+    public Transform pos; // destino al caer (jugador)
 
     [Header("Paredes")]
     public List<GameObject> paredes;
+
+    [Header("Visual Settings")]
+    public float fallOffsetRadius = 3f;
+
+    [Header("Line Renderer (asignar en inspector o se crea automáticamente)")]
+    public LineRenderer lineRenderer;
 
     public bool isFreezed;
     private bool isFalling = false;
@@ -33,6 +39,9 @@ public class ErraticObject : MonoBehaviour
 
     private Vector3 lastDirection;
 
+    // Punto fijo final hacia donde caer
+    private Vector3? fallTarget = null;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -43,6 +52,20 @@ public class ErraticObject : MonoBehaviour
             enabled = false;
             return;
         }
+
+        if (lineRenderer == null)
+        {
+            // Creamos un LineRenderer automáticamente si no hay ninguno
+            lineRenderer = gameObject.AddComponent<LineRenderer>();
+            lineRenderer.startWidth = 0.05f;
+            lineRenderer.endWidth = 0.05f;
+            lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
+            lineRenderer.positionCount = 2;
+            lineRenderer.startColor = Color.red;
+            lineRenderer.endColor = Color.red;
+        }
+
+        lineRenderer.enabled = false; // Lo desactivamos al principio
 
         ChooseNewTarget();
     }
@@ -71,6 +94,21 @@ public class ErraticObject : MonoBehaviour
         ApplyContinuousRotation();
     }
 
+    private void Update()
+    {
+        // Actualizamos la línea si estamos en modo caída y tenemos target fijo
+        if (isFalling && fallTarget.HasValue)
+        {
+            lineRenderer.enabled = true;
+            lineRenderer.SetPosition(0, transform.position);    // inicio: posición actual del objeto
+            lineRenderer.SetPosition(1, fallTarget.Value);      // fin: posición fija calculada
+        }
+        else
+        {
+            lineRenderer.enabled = false;
+        }
+    }
+
     private void MoveTowardsCurrentTarget()
     {
         Vector3 targetPosition = GetTargetWithRandomness();
@@ -83,18 +121,20 @@ public class ErraticObject : MonoBehaviour
 
     private void MoveDownErratically()
     {
-        Vector3 descent = Vector3.down;
-        Vector3 directionToPos = Vector3.zero;
+        if (pos == null) return;
 
-        if (pos != null)
+        // Calculamos el punto final de caída solo una vez
+        if (fallTarget == null)
         {
-            directionToPos = (pos.position - rb.position).normalized * 4f;
+            Vector2 circleOffset = Random.insideUnitCircle.normalized * fallOffsetRadius;
+            Vector3 lateralOffset = new Vector3(circleOffset.x, 0f, circleOffset.y);
+            fallTarget = pos.position + lateralOffset;
         }
 
-        Vector3 dynamicFallDirection = (directionToPos + descent).normalized;
-        lastDirection = dynamicFallDirection;
+        Vector3 directionToTarget = (fallTarget.Value - rb.position).normalized;
+        lastDirection = directionToTarget;
 
-        Vector3 movement = dynamicFallDirection * speed * fallSpeedMultiplier * Time.fixedDeltaTime;
+        Vector3 movement = directionToTarget * speed * fallSpeedMultiplier * Time.fixedDeltaTime;
         rb.MovePosition(rb.position + movement);
     }
 
@@ -130,6 +170,9 @@ public class ErraticObject : MonoBehaviour
     {
         isFalling = true;
         timer = 0f;
+
+        // Reseteamos la posición fija para que se calcule una vez en MoveDownErratically
+        fallTarget = null;
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -140,13 +183,10 @@ public class ErraticObject : MonoBehaviour
 
             if (isFalling)
             {
-                // Cambia la dirección de caída temporalmente
-                // (Se recalculará igual cada frame, pero mejora el rebote inmediato)
                 lastDirection = reversed;
             }
             else
             {
-                // Retrocede y busca el waypoint más cercano a esa nueva dirección
                 Vector3 newTarget = rb.position + reversed * speed;
                 int closestIndex = GetClosestWaypointIndex(newTarget);
                 currentTargetIndex = closestIndex;
