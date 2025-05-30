@@ -1,6 +1,7 @@
 using Interaction;
 using Player;
 using UnityEngine;
+using Events;
 
 namespace NuevoInteractor
 {
@@ -112,6 +113,8 @@ namespace NuevoInteractor
                         holdTime = 0f;
                         throwCharge = 0f;
                         ThrowUISlider.Instance?.SetFill(0);
+                        
+                        EventManager.TriggerEvent("OnObjectThrow", gameObject);
                     }
                 }
             }
@@ -141,10 +144,10 @@ namespace NuevoInteractor
             {
                 objectGrabPointTransform.position = hitObject.transform.position;
                 physicsObject.SetReferences(objectGrabPointTransform);
-                physicsObject.SetReferences(objectGrabPointTransform);
                 physicsObject.Grab();
-
                 _objectGrabbable = physicsObject;
+                
+                EventManager.TriggerEvent("OnObjectGrab", gameObject);
             }
         }
 
@@ -155,6 +158,9 @@ namespace NuevoInteractor
                 ThrowUISlider.Instance?.SetFill(0);
                 _objectGrabbable.Drop();
                 _objectGrabbable = null;
+
+                // <-- Añadido esto:
+                EventManager.TriggerEvent("OnObjectDrop", gameObject);
             }
         }
 

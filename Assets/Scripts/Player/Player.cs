@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using Events;
 namespace Player
 {
     public class Player : MonoBehaviour
@@ -44,6 +44,9 @@ namespace Player
 
         public enum MovementState { Sprinting, Crouching, Air }
         public MovementState state;
+        
+        private bool _wasGrounded;
+        private bool _isCrouching;
 
         private void Start()
         {
@@ -51,6 +54,7 @@ namespace Player
             UpdateCameraHeight();
         }
 
+        
         private void Update()
         {
             HandleInput();
@@ -59,8 +63,10 @@ namespace Player
             ApplyGravity();
             HandleMovement();
             HandleCrouchTransition();
-        }
 
+            CheckGroundedEvents();
+            CheckCrouchEvents();
+        }
         private void HandleInput()
         {
             _horizontalInput = Input.GetAxisRaw("Horizontal");
@@ -114,8 +120,11 @@ namespace Player
                 _verticalVelocity = jumpForce;
                 _readyToJump = false;
                 Invoke(nameof(ResetJump), jumpCooldown);
+
+                EventManager.TriggerEvent("OnJump", gameObject);
             }
         }
+
 
         private void ApplyGravity()
         {
@@ -154,7 +163,6 @@ namespace Player
             );
         }
 
-
         private void StateHandler()
         {
             if (Input.GetKey(KeyCode.LeftControl))
@@ -168,6 +176,26 @@ namespace Player
         private void ResetJump()
         {
             _readyToJump = true;
+        }
+        
+        private void CheckGroundedEvents()
+        {
+            if (_controller.isGrounded && !_wasGrounded)
+                EventManager.TriggerEvent("OnLand", gameObject);
+
+            _wasGrounded = _controller.isGrounded;
+        }
+        
+        private void CheckCrouchEvents()
+        {
+            bool currentlyCrouching = state == MovementState.Crouching;
+
+            if (currentlyCrouching && !_isCrouching)
+                EventManager.TriggerEvent("OnCrouchEnter", gameObject);
+            else if (!currentlyCrouching && _isCrouching)
+                EventManager.TriggerEvent("OnCrouchExit", gameObject);
+
+            _isCrouching = currentlyCrouching;
         }
     }
 }
