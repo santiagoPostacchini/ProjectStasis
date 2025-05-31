@@ -20,7 +20,7 @@ public class MovingPlatform : MonoBehaviour
         rb.isKinematic = false;
         rb.interpolation = RigidbodyInterpolation.Interpolate;
 
-        target = pointB.position;
+        if(pointB != null) target = pointB.position;
         canMove = true;
     }
     private void Update()
@@ -29,7 +29,9 @@ public class MovingPlatform : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        if (!canMove) return;
+        if (!canMove ) return;
+        if (pointA == null) return;
+        if (pointB == null) return;
 
         Vector3 direction = (target - rb.position).normalized;
         float distance = Vector3.Distance(rb.position, target);

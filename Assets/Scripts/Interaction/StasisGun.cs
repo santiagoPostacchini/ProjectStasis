@@ -22,7 +22,7 @@ namespace Interaction
         private NewPlayerInteractor _playerInteractor;
         private Camera _mainCam;
 
-        private bool _canShootStasis;
+        [SerializeField] private bool _canShootStasis;
     
         void Start()
         {

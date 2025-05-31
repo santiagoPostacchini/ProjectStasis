@@ -53,19 +53,19 @@ public class ErraticObject : MonoBehaviour
             return;
         }
 
-        if (lineRenderer == null)
-        {
-            // Creamos un LineRenderer automáticamente si no hay ninguno
-            lineRenderer = gameObject.AddComponent<LineRenderer>();
-            lineRenderer.startWidth = 0.05f;
-            lineRenderer.endWidth = 0.05f;
-            lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
-            lineRenderer.positionCount = 2;
-            lineRenderer.startColor = Color.red;
-            lineRenderer.endColor = Color.red;
-        }
+        //if (lineRenderer == null)
+        //{
+        //    // Creamos un LineRenderer automáticamente si no hay ninguno
+        //    lineRenderer = gameObject.AddComponent<LineRenderer>();
+        //    lineRenderer.startWidth = 0.05f;
+        //    lineRenderer.endWidth = 0.05f;
+        //    lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
+        //    lineRenderer.positionCount = 2;
+        //    lineRenderer.startColor = Color.red;
+        //    lineRenderer.endColor = Color.red;
+        //}
 
-        lineRenderer.enabled = false; // Lo desactivamos al principio
+         if(lineRenderer != null) lineRenderer.enabled = false; // Lo desactivamos al principio
 
         ChooseNewTarget();
     }
