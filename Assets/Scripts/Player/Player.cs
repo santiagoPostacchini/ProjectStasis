@@ -94,7 +94,7 @@ namespace Player
             
             var flatCurrentVel = new Vector3(_currentVelocity.x, 0, _currentVelocity.z);
             IsAtMinSpeed = flatCurrentVel.magnitude >= targetSpeed * 0.3f;
-            IsIdle = flatCurrentVel.magnitude <= 0.05f;
+            IsIdle = flatCurrentVel.magnitude <= 0.1f;
 
             if (IsIdle)
             {

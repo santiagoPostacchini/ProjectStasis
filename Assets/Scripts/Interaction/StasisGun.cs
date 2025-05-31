@@ -22,10 +22,8 @@ namespace Interaction
         private NewPlayerInteractor _playerInteractor;
         private Camera _mainCam;
 
-        private bool IsGunActive => this.enabled && this.gameObject.activeInHierarchy;
-
-        [SerializeField] private bool canShootStasis = false;
-
+        private bool _canShootStasis;
+    
         void Start()
         {
             _playerInteractor = GetComponent<NewPlayerInteractor>();
@@ -34,25 +32,31 @@ namespace Interaction
 
         void Update()
         {
-            if (!IsGunActive)
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                _canShootStasis = !_canShootStasis;
+            }
+            
+            if (!_canShootStasis)
                 return;
 
             if (Input.GetMouseButtonDown(0))
             {
                 if (_playerInteractor && _playerInteractor.HasObjectInHand())
                     return;
-
+                
+                EventManager.TriggerEvent("OnShot", gameObject);
                 TryApplyStasis(_mainCam.transform);
             }
         }
 
         private void TryApplyStasis(Transform playerCameraTransform)
         {
-            if (!canShootStasis) return;
+            if (!_canShootStasis) return;
             Vector3 origin = playerCameraTransform.position;
             Vector3 direction = playerCameraTransform.forward;
             
-            EventManager.TriggerEvent("OnShot", transform.root.gameObject);
+            
             
             if (Physics.Raycast(origin, direction, out RaycastHit hit))
             {
