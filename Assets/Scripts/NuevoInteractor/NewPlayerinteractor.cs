@@ -5,7 +5,7 @@ using Events;
 
 namespace NuevoInteractor
 {
-    public class NewPlayerInteractor : MonoBehaviour
+    public class NewPlayerInteractor : MonoBehaviour,IPlateActivator
     {
         [Header("Interaction Settings")]
         [SerializeField] private float throwCharge;

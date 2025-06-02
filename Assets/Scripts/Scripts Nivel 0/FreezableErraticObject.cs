@@ -56,15 +56,15 @@ public class FreezableErraticObject : MonoBehaviour,IStasis
 
     private void UnfreezeObject()
     {
-        //if (erraticObject.isFreezed)
-        //{
+        if (erraticObject.isFreezed)
+        {
 
-        //    erraticObject.isFreezed = false;
+            erraticObject.isFreezed = false;
 
 
 
-        //    SetOutlineThickness(1f);
-        //}
+            SetOutlineThickness(1f);
+        }
     }
     public void SetOutlineThickness(float thickness)
     {

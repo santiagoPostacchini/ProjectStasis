@@ -18,7 +18,7 @@ public class ErraticObject : MonoBehaviour
 
     [Header("Frenetic Fall Settings")]
     public float fallSpeedMultiplier = 2.5f;
-    public Transform pos; // destino al caer (jugador)
+    public Transform pos;
 
     [Header("Paredes")]
     public List<GameObject> paredes;
@@ -38,9 +38,9 @@ public class ErraticObject : MonoBehaviour
     public Rigidbody rb;
 
     private Vector3 lastDirection;
-
-    // Punto fijo final hacia donde caer
     private Vector3? fallTarget = null;
+
+    private Vector3 currentRandomOffset;
 
     private void Start()
     {
@@ -53,19 +53,7 @@ public class ErraticObject : MonoBehaviour
             return;
         }
 
-        //if (lineRenderer == null)
-        //{
-        //    // Creamos un LineRenderer automáticamente si no hay ninguno
-        //    lineRenderer = gameObject.AddComponent<LineRenderer>();
-        //    lineRenderer.startWidth = 0.05f;
-        //    lineRenderer.endWidth = 0.05f;
-        //    lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
-        //    lineRenderer.positionCount = 2;
-        //    lineRenderer.startColor = Color.red;
-        //    lineRenderer.endColor = Color.red;
-        //}
-
-         if(lineRenderer != null) lineRenderer.enabled = false; // Lo desactivamos al principio
+        if (lineRenderer != null) lineRenderer.enabled = false;
 
         ChooseNewTarget();
     }
@@ -96,16 +84,16 @@ public class ErraticObject : MonoBehaviour
 
     private void Update()
     {
-        // Actualizamos la línea si estamos en modo caída y tenemos target fijo
         if (isFalling && fallTarget.HasValue)
         {
             lineRenderer.enabled = true;
-            lineRenderer.SetPosition(0, transform.position);    // inicio: posición actual del objeto
-            lineRenderer.SetPosition(1, fallTarget.Value);      // fin: posición fija calculada
+            lineRenderer.SetPosition(0, transform.position);
+            lineRenderer.SetPosition(1, fallTarget.Value);
         }
         else
         {
-            lineRenderer.enabled = false;
+            if (lineRenderer != null)
+                lineRenderer.enabled = false;
         }
     }
 
@@ -123,7 +111,6 @@ public class ErraticObject : MonoBehaviour
     {
         if (pos == null) return;
 
-        // Calculamos el punto final de caída solo una vez
         if (fallTarget == null)
         {
             Vector2 circleOffset = Random.insideUnitCircle.normalized * fallOffsetRadius;
@@ -146,13 +133,7 @@ public class ErraticObject : MonoBehaviour
 
     private Vector3 GetTargetWithRandomness()
     {
-        Vector3 targetPos = waypoints[currentTargetIndex].position;
-        Vector3 randomOffset = new Vector3(
-            Random.Range(-randomness, randomness),
-            Random.Range(-randomness, randomness),
-            Random.Range(-randomness, randomness)
-        );
-        return targetPos + randomOffset;
+        return waypoints[currentTargetIndex].position + currentRandomOffset;
     }
 
     private void ChooseNewTarget()
@@ -164,14 +145,18 @@ public class ErraticObject : MonoBehaviour
         } while (newIndex == currentTargetIndex);
 
         currentTargetIndex = newIndex;
+
+        currentRandomOffset = new Vector3(
+            Random.Range(-randomness, randomness),
+            Random.Range(-randomness, randomness),
+            Random.Range(-randomness, randomness)
+        );
     }
 
     public void EnterFallMode()
     {
         isFalling = true;
         timer = 0f;
-
-        // Reseteamos la posición fija para que se calcule una vez en MoveDownErratically
         fallTarget = null;
     }
 
@@ -190,6 +175,12 @@ public class ErraticObject : MonoBehaviour
                 Vector3 newTarget = rb.position + reversed * speed;
                 int closestIndex = GetClosestWaypointIndex(newTarget);
                 currentTargetIndex = closestIndex;
+
+                currentRandomOffset = new Vector3(
+                    Random.Range(-randomness, randomness),
+                    Random.Range(-randomness, randomness),
+                    Random.Range(-randomness, randomness)
+                );
             }
 
             timer = 0f;

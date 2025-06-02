@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace NuevoInteractor
 {
-    public class NewPhysicsBox : MonoBehaviour, IStasis
+    public class NewPhysicsBox : MonoBehaviour, IStasis,IPlateActivator
     {
         [Header("Components")] [SerializeField]
         private Collider mainCollider;
