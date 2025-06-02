@@ -192,7 +192,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 0.05
+  m_Time: 0.1
   m_PreviewTimeScale: 1
   m_Parameters:
     serializedVersion: 3
@@ -325,11 +325,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_moveObject: {fileID: 8605527138207810488}
   m_shaderPropertyName: _MoveToMaterialUV
-  m_shaderPropertyID: 978
+  m_shaderPropertyID: 1082
   m_materialData:
   - m_trailRenderer: {fileID: 2289120248479258985}
     m_uvTiling: {x: 0.5, y: 0.2}
-    m_move: 0.7734957
+    m_move: 0.30651402
 --- !u!198 &5709557984613904662
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -5241,8 +5241,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95aae0ca8d04cf24b96902b2659fa503, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveDuration: 0.1
+  beamSpeed: 30
+  lightOffDelay: 0.3
   lightStasis: {fileID: 42432725101990728}
+  failEventName: StasisFail
+  successEventName: StasisSuccess
 --- !u!82 &5945853407347953319
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5254,7 +5257,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 0.3
   m_Pitch: 1
   Loop: 0

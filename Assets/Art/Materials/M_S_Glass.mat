@@ -48,7 +48,7 @@ Material:
     - _Strength: 0.01
     m_Colors:
     - _Offset: {r: 0, g: 0, b: 0, a: 0}
-    - _Tiling: {r: 15, g: 15, b: 0, a: 0}
+    - _Tiling: {r: 5, g: 5, b: 0, a: 0}
     - _Tint_Color: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &7806532688978413109
