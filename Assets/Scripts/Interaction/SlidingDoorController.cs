@@ -174,9 +174,10 @@ namespace Interaction
 
         private void OnTriggerEnter(Collider other)
         {
+            
             if (!other.CompareTag("Player"))
                 return;
-
+            if (!canOpenWithPlayerCollision) return;
             if (!isOpen)
                 isOpen = true;
             else if (autoClose)

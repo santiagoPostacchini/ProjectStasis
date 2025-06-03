@@ -19,7 +19,6 @@ public class JumpPlatform : MonoBehaviour
             StartCoroutine(ApplyJumpForce(rb, t));
         }
     }
-
     private IEnumerator ApplyJumpForce(Rigidbody rb, Transform t)
     {
         canApplyForce = false;

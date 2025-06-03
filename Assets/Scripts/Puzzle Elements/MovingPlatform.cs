@@ -10,28 +10,39 @@ public class MovingPlatform : MonoBehaviour
 
     private Rigidbody rb;
     private Vector3 target;
+    private Vector3 previousPosition;
 
     public bool canMove;
     public GameObject objectTransport;
     public Transform pos;
+
+    [SerializeField]private Transform passenger; // Referencia al jugador encima
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.isKinematic = false;
         rb.interpolation = RigidbodyInterpolation.Interpolate;
 
-        if(pointB != null) target = pointB.position;
+        if (pointB != null) target = pointB.position;
         canMove = true;
+
+        previousPosition = transform.position;
     }
+
     private void Update()
     {
         TransportObject();
     }
+
     private void FixedUpdate()
     {
-        if (!canMove ) return;
-        if (pointA == null) return;
-        if (pointB == null) return;
+        if (!canMove || pointA == null || pointB == null)
+        {
+            rb.velocity = Vector3.zero;
+            return;
+        }
+            
 
         Vector3 direction = (target - rb.position).normalized;
         float distance = Vector3.Distance(rb.position, target);
@@ -45,6 +56,9 @@ public class MovingPlatform : MonoBehaviour
             rb.velocity = Vector3.zero;
             StartCoroutine(SwapTargetAfterPause());
         }
+
+        MovePassenger(); // Mover jugador encima si lo hay
+        previousPosition = transform.position;
     }
 
     private IEnumerator SwapTargetAfterPause()
@@ -55,27 +69,31 @@ public class MovingPlatform : MonoBehaviour
         canMove = true;
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void MovePassenger()
     {
-        Player.Player player = collision.gameObject.GetComponent<Player.Player>();
-        if (player != null)
+        if (passenger != null)
         {
-            // Solo seteamos si no tiene padre o no est� ya en esta plataforma
-            if (player.transform.parent != transform)
-            {
-                player.transform.SetParent(transform);
-            }
+            Vector3 delta = transform.position - previousPosition;
+            passenger.Translate(delta, Space.World);
         }
     }
 
-    private void OnCollisionExit(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        Player.Player player = collision.gameObject.GetComponent<Player.Player>();
-        if (player != null && player.transform.parent == transform)
+        if (other.CompareTag("Player"))
         {
-            player.transform.SetParent(null);
+            passenger = other.transform;
         }
     }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player") && passenger == other.transform)
+        {
+            passenger = null;
+        }
+    }
+
     public void TransportObject()
     {
         if (objectTransport != null && pos != null)
