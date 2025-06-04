@@ -517,17 +517,21 @@ public class PlayerController2 : MonoBehaviour
     //Manual Methods
     void ChangeStatus(Status s)//Used to change status
     {
-        if (status == s) { return; }
+        if (status == s) return;
         status = s;
         if (s == Status.Crouching)
         {
             _crouchTargetHeight = crouchHeight;
             _crouchTargetCenterY = crouchCenterY;
+            isCrouching = true;
+            _player.Crounch(true);
         }
         else
         {
             _crouchTargetHeight = standHeight;
             _crouchTargetCenterY = standCenterY;
+            isCrouching = false;
+            _player.Crounch(false);
         }
         return;
     }

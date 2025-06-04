@@ -173,23 +173,21 @@ namespace Player
 
 
 
-        public void Crounch()
+        public void Crounch(bool b)
         {
            
 
-            if (Input.GetKeyDown(KeyCode.LeftControl))
+            if (b)
             {
                 Debug.Log("Entro a crounch");
-                playerController.isCrouching = true;
                 Vector3 scale = sizeArmsY.localScale;  
-                scale.y = 2f;                          
+                scale.y = 1.45f;                          
                 sizeArmsY.localScale = scale;         
                 CheckCrouchEvents(true);
             }
-            else if (Input.GetKeyUp(KeyCode.LeftControl))
+            else
             {
                 Debug.Log("salgo de  crounch");
-                playerController.isCrouching = false;
                 Vector3 scale = sizeArmsY.localScale;
                 scale.y = sizeArmsYInitial; 
                 sizeArmsY.localScale = scale;
