@@ -1,218 +1,6 @@
-﻿//using UnityEngine;
-//using Events;
-//namespace Player
-//{
-//    public class Player : MonoBehaviour
-//    {
-//        [Header("Movement")]
-//        [SerializeField] private float sprintSpeed = 7f;
-//        [SerializeField] private float crouchSpeed = 3f;
-//        [SerializeField] private float acceleration = 20f;
-//        [SerializeField] private float deceleration = 30f;
-//        [SerializeField] private float airControlMultiplier = 0.4f;
-
-//        [Header("Jumping")]
-//        [SerializeField] private float jumpForce = 8f;
-//        [SerializeField] private float jumpCooldown = 0.25f;
-//        [SerializeField] private float gravity = -18f;
-//        private bool _readyToJump = true;
-
-//        [Header("Crouch")]
-//        [SerializeField] private float standHeight = 2f;
-//        [SerializeField] private float crouchHeight = 1f;
-//        [SerializeField] private float standCenterY;
-//        [SerializeField] private float crouchCenterY = 0.5f;
-//        [SerializeField] private float eyeOffset = 0.6f;
-//        [SerializeField] private Transform cameraTransform;
-//        [SerializeField, Range(0.01f, 0.2f)] private float crouchSmoothTime = 0.08f;
-
-//        private float _crouchTargetHeight = 2f;
-//        private float _crouchTargetCenterY;
-//        private float _heightSmoothVelocity;
-//        private float _centerYSmoothVelocity;
-
-//        [SerializeField] private Transform orientation;
-
-//        private float _horizontalInput;
-//        private float _verticalInput;
-//        private Vector3 _moveDirection;
-//        private Vector3 _currentVelocity;
-//        private float _verticalVelocity;
-
-//        private CharacterController _controller;
-//        private Coroutine _currentCrouchRoutine;
-
-//        public enum MovementState { Sprinting, Crouching, Air }
-//        public MovementState state;
-//        public bool IsAtMinSpeed { get; private set; }
-//        public bool IsIdle { get; private set; }
-
-//        private bool _wasGrounded;
-//        private bool _isCrouching;
-
-//        private void Start()
-//        {
-//            _controller = GetComponent<CharacterController>();
-//            UpdateCameraHeight();
-//        }
-
-
-//        private void Update()
-//        {
-//            HandleInput();
-//            StateHandler();
-//            HandleJump();
-//            ApplyGravity();
-//            HandleMovement();
-//            HandleCrouchTransition();
-
-//            CheckGroundedEvents();
-//            CheckCrouchEvents();
-//        }
-//        private void HandleInput()
-//        {
-//            _horizontalInput = Input.GetAxisRaw("Horizontal");
-//            _verticalInput = Input.GetAxisRaw("Vertical");
-
-//            if (Input.GetKeyDown(KeyCode.LeftControl))
-//            {
-//                _crouchTargetHeight = crouchHeight;
-//                _crouchTargetCenterY = crouchCenterY;
-//            }
-//            else if (Input.GetKeyUp(KeyCode.LeftControl))
-//            {
-//                _crouchTargetHeight = standHeight;
-//                _crouchTargetCenterY = standCenterY;
-//            }
-//        }
-
-//        private void HandleMovement()
-//        {
-//            _moveDirection = (orientation.forward * _verticalInput + orientation.right * _horizontalInput).normalized;
-//            float targetSpeed = (state == MovementState.Crouching) ? crouchSpeed : sprintSpeed;
-//            Vector3 desiredVelocity = _moveDirection * targetSpeed;
-
-//            var flatCurrentVel = new Vector3(_currentVelocity.x, 0, _currentVelocity.z);
-//            IsAtMinSpeed = flatCurrentVel.magnitude >= targetSpeed * 0.3f;
-//            IsIdle = flatCurrentVel.magnitude <= 0.1f;
-
-//            if (IsIdle)
-//            {
-//                EventManager.TriggerEvent("OnIdle", gameObject);
-//            }
-
-//            float effectiveAcceleration = acceleration;
-//            float effectiveDeceleration = deceleration;
-//            if (!_controller.isGrounded)
-//            {
-//                effectiveAcceleration *= airControlMultiplier;
-//                effectiveDeceleration *= airControlMultiplier;
-//            }
-
-//            flatCurrentVel = new Vector3(_currentVelocity.x, 0, _currentVelocity.z);
-//            var flatDesiredVel = new Vector3(desiredVelocity.x, 0, desiredVelocity.z);
-
-//            flatCurrentVel = _moveDirection.magnitude > 0.1f ? Vector3.MoveTowards(flatCurrentVel, flatDesiredVel, effectiveAcceleration * Time.deltaTime) : Vector3.MoveTowards(flatCurrentVel, Vector3.zero, effectiveDeceleration * Time.deltaTime);
-
-//            _currentVelocity = new Vector3(flatCurrentVel.x, _currentVelocity.y, flatCurrentVel.z);
-
-//            Vector3 finalVelocity = new Vector3(flatCurrentVel.x, _verticalVelocity, flatCurrentVel.z);
-//            _controller.Move(finalVelocity * Time.deltaTime);
-//        }
-
-
-//        private void HandleJump()
-//        {
-//            if (_controller.isGrounded && _verticalVelocity < 0)
-//                _verticalVelocity = -2f;
-
-//            if (Input.GetKeyDown(KeyCode.Space) && _controller.isGrounded && state != MovementState.Crouching && _readyToJump)
-//            {
-//                _verticalVelocity = jumpForce;
-//                _readyToJump = false;
-//                Invoke(nameof(ResetJump), jumpCooldown);
-
-//                EventManager.TriggerEvent("OnJump", gameObject);
-//            }
-//        }
-
-
-//        private void ApplyGravity()
-//        {
-//            _verticalVelocity += gravity * Time.deltaTime;
-//        }
-
-//        private void HandleCrouchTransition()
-//        {
-//            _controller.height = Mathf.SmoothDamp(
-//                _controller.height,
-//                _crouchTargetHeight,
-//                ref _heightSmoothVelocity,
-//                crouchSmoothTime
-//            );
-
-//            _controller.center = new Vector3(
-//                0f,
-//                Mathf.SmoothDamp(
-//                    _controller.center.y,
-//                    _crouchTargetCenterY,
-//                    ref _centerYSmoothVelocity,
-//                    crouchSmoothTime
-//                ),
-//                0f
-//            );
-
-//            UpdateCameraHeight();
-//        }
-
-//        private void UpdateCameraHeight()
-//        {
-//            cameraTransform.localPosition = new Vector3(
-//                cameraTransform.localPosition.x,
-//                _controller.center.y + eyeOffset,
-//                cameraTransform.localPosition.z
-//            );
-//        }
-
-//        private void StateHandler()
-//        {
-//            if (Input.GetKey(KeyCode.LeftControl))
-//                state = MovementState.Crouching;
-//            else if (_controller.isGrounded)
-//                state = MovementState.Sprinting;
-//            else
-//                state = MovementState.Air;
-//        }
-
-//        private void ResetJump()
-//        {
-//            _readyToJump = true;
-//            EventManager.TriggerEvent("OnIdle", gameObject);
-//        }
-
-//        private void CheckGroundedEvents()
-//        {
-//            if (_controller.isGrounded && !_wasGrounded)
-//                EventManager.TriggerEvent("OnLand", gameObject);
-
-//            _wasGrounded = _controller.isGrounded;
-//        }
-
-//        private void CheckCrouchEvents()
-//        {
-//            bool currentlyCrouching = state == MovementState.Crouching;
-
-//            if (currentlyCrouching && !_isCrouching)
-//                EventManager.TriggerEvent("OnCrouchEnter", gameObject);
-//            else if (!currentlyCrouching && _isCrouching)
-//                EventManager.TriggerEvent("OnCrouchExit", gameObject);
-
-//            _isCrouching = currentlyCrouching;
-//        }
-//    }
-//}
-
-
+﻿
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Events;
 
@@ -220,236 +8,273 @@ namespace Player
 {
     public class Player : MonoBehaviour
     {
-        [Header("Movement")]
-        [SerializeField] private float sprintSpeed = 7f;
-        [SerializeField] private float crouchSpeed = 3f;
-        [SerializeField] private float acceleration = 20f;
-        [SerializeField] private float deceleration = 30f;
-        [SerializeField] private float airControlMultiplier = 0.4f;
+       
+        [Header("VectorSpace Method")]
+        private Vector3 tempVector;
+        [Header("Sliding")]
+        public bool slideReady;
 
-        [Header("Jumping")]
-        [SerializeField] private float jumpForce = 8f;
-        [SerializeField] private float jumpCooldown = 0.25f;
-        [SerializeField] private float gravity = -18f;
-        private bool _readyToJump = true;
+        [Header("Camera")]
+        public Transform standingCameraHeight;
+        public Transform crouchingCameraHeight;
 
-        [Header("Crouch")]
-        [SerializeField] private float standHeight = 2f;
-        [SerializeField] private float crouchHeight = 1f;
-        [SerializeField] private float standCenterY;
-        [SerializeField] private float crouchCenterY = 0.5f;
-        [SerializeField] private float eyeOffset = 0.6f;
-        [SerializeField, Range(0.01f, 0.2f)] private float crouchSmoothTime = 0.08f;
 
-        private float _crouchTargetHeight = 2f;
-        private float _crouchTargetCenterY;
-        private float _heightSmoothVelocity;
-        private float _centerYSmoothVelocity;
 
-        [SerializeField] private Transform orientation;
+        [Header("Dashing")]
+        private float dashLerpCounter;
+        public bool isDashing;
+
+        [Header("References")]
+        private Rigidbody rb;
+        //
+        public PlayerController2 playerController;
+
+        public PlayerInput playerInput;
+
         [SerializeField] private Transform cameraTransform;
+        [SerializeField] private Transform sizeArmsY;
+        private float sizeArmsYInitial;
 
-
-        private float _horizontalInput;
-        private float _verticalInput;
-        private Vector3 _moveDirection;
-        private Vector3 _currentVelocity;
-        private float _verticalVelocity;
-
-        private CharacterController _controller;
-        private Coroutine _currentCrouchRoutine;
-
-        public enum MovementState { Sprinting, Crouching, Air }
-        public MovementState state;
-        public bool IsAtMinSpeed { get; private set; }
-        public bool IsIdle { get; private set; }
-
-        // ① Propiedad pública para exponer la velocidad horizontal
-        public float CurrentSpeed
-        {
-            get
-            {
-                // Solo la componente XZ de _currentVelocity
-                Vector3 flatVel = new Vector3(_currentVelocity.x, 0f, _currentVelocity.z);
-                return flatVel.magnitude;
-            }
-        }
+        //public enum MovementState { Sprinting, Crouching, Air }
+        //public MovementState state;
+    
+       
 
         private bool _wasGrounded;
         private bool _isCrouching;
 
         private void Start()
         {
-            _controller = GetComponent<CharacterController>();
+            rb = GetComponent<Rigidbody>();
             UpdateCameraHeight();
+            sizeArmsYInitial = sizeArmsY.localScale.y;
+
         }
 
         private void Update()
         {
-            HandleInput();
-            StateHandler();
-            HandleJump();
-            ApplyGravity();
-            HandleMovement();
-            HandleCrouchTransition();
+           // StateHandler();
 
             CheckGroundedEvents();
-            CheckCrouchEvents();
+        }
+        private Vector2 VectorSpace(Vector2 directionVector)
+        {
+            tempVector = new Vector3(directionVector.x, 0.0f, directionVector.y);
+            tempVector = transform.TransformDirection(tempVector);
+            tempVector.Normalize();
+            return new Vector2(tempVector.x, tempVector.z);
+        }
+        public void ApplyGravity(float amount)
+        {
+            rb.AddForce(Physics.gravity * (rb.mass * rb.mass) * amount);
+        }
+        public void ApplyFriction(float friction)
+        {
+            rb.AddForce(new Vector3(rb.velocity.x * -friction, 0, rb.velocity.z * -friction));
+        }
+        public void ApplyVerticalFriction(float friction)
+        {
+            rb.AddForce(new Vector3(0, rb.velocity.y * -friction, 0));
+        }
+        public void GroundedJump(float force)
+        {
+            rb.AddForce(new Vector3(0, force * 10, 0));
+        }
+        public void AirborneJump(float force, float dirForce, Vector3 dir)
+        {
+            rb.velocity = new Vector3(rb.velocity.x / 4, 0.0f, rb.velocity.z / 4);
+            rb.AddForce(new Vector3(0, force * 10, 0) + dir * dirForce * 10);
+        }
+        public void WallJump(float upForce, float range, float wallPush, Vector3 dir, Vector3 wallDir)
+        {
+            rb.AddForce(dir * range * 10 + new Vector3(0, upForce * 10, 0) + wallDir * wallPush * 10);
+        }
+        public void SlideJump(float force, Vector3 dir)
+        {
+            rb.AddForce(new Vector3(0, force * 10, 0) + dir * 10);
+        }
+        public void Walk(Vector2 moveDir, float walkSpeed, float walkSpeedIncrease, ref float rampUpCounter, float rampUpTime)
+        {
+            if (rampUpCounter < rampUpTime)
+            {
+                rampUpCounter += 0.05f;
+                if (rampUpCounter > rampUpTime) { rampUpCounter = rampUpTime; } //prevent overshoot
+            }
+
+            moveDir = VectorSpace(moveDir);
+
+            rb.AddForce(new Vector3(moveDir.x * (walkSpeed + (walkSpeedIncrease * (rampUpCounter / rampUpTime))), 0, moveDir.y * (walkSpeed + (walkSpeedIncrease * (rampUpCounter / rampUpTime)))));
+        }
+        public void Slide(float strenght, bool grounded)
+        {
+
+            if (slideReady)
+            {
+                if (grounded) { rb.AddForce(new Vector3(rb.velocity.x, 0, rb.velocity.z).normalized * strenght * 100); }
+                else { rb.AddForce(new Vector3(rb.velocity.x, -0.8f, rb.velocity.z).normalized * strenght * 100); }
+            }
+            slideReady = false;
+        }
+        public void Wallrun(bool rightSide, float dir, float speed, Vector3 normal)
+        {
+            rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+            if (rightSide)
+            {
+                rb.AddForce(Vector3.Cross(Vector3.up, normal) * dir * speed);
+            }
+            else
+            {
+                rb.AddForce(Vector3.Cross(normal, Vector3.up) * dir * speed);
+            }
+        }
+        public void AirControl(Vector2 moveDir, float airSpeed)
+        {
+            moveDir = VectorSpace(moveDir);
+            rb.AddForce(new Vector3(moveDir.x * airSpeed, 0, moveDir.y * airSpeed));
+        }
+        public void Climb(Vector2 moveDir, float climbSpeed)
+        {
+            rb.AddForce(Vector3.up * climbSpeed * moveDir.y);
+        }
+        public void Vault(Vector3 targetPos)
+        {
+            transform.position = targetPos;
+        }
+        public void Dashhold(Vector2 dir, float speed)
+        {
+
+        }
+        public IEnumerator Dash(float dashSpeed, Vector3 currPos, Vector3 targetPos)
+        {
+            rb.velocity = Vector3.zero;
+            isDashing = true;
+            while (dashLerpCounter <= dashSpeed)
+            {
+                transform.position = Vector3.Slerp(
+                    currPos,
+                    targetPos,
+                    (dashLerpCounter / dashSpeed));
+                dashLerpCounter += Time.deltaTime;
+
+                yield return null;
+            }
+            transform.position = targetPos;
+            dashLerpCounter = 0;
+            rb.velocity = new Vector3(rb.velocity.x, 0.0f, rb.velocity.z);
+            rb.AddForce((targetPos - currPos).normalized * 400);
+            isDashing = false;
+            yield return null;
         }
 
-        private void HandleInput()
+
+
+
+
+
+
+
+        public void Crounch()
         {
-            _horizontalInput = Input.GetAxisRaw("Horizontal");
-            _verticalInput = Input.GetAxisRaw("Vertical");
+           
 
             if (Input.GetKeyDown(KeyCode.LeftControl))
             {
-                _crouchTargetHeight = crouchHeight;
-                _crouchTargetCenterY = crouchCenterY;
+                Debug.Log("Entro a crounch");
+                playerController.isCrouching = true;
+                Vector3 scale = sizeArmsY.localScale;  
+                scale.y = 2f;                          
+                sizeArmsY.localScale = scale;         
+                CheckCrouchEvents(true);
             }
             else if (Input.GetKeyUp(KeyCode.LeftControl))
             {
-                _crouchTargetHeight = standHeight;
-                _crouchTargetCenterY = standCenterY;
+                Debug.Log("salgo de  crounch");
+                playerController.isCrouching = false;
+                Vector3 scale = sizeArmsY.localScale;
+                scale.y = sizeArmsYInitial; 
+                sizeArmsY.localScale = scale;
+                CheckCrouchEvents(false);
             }
+            HandleCrouchTransition();
         }
 
-        private void HandleMovement()
+        
+
+        void HandleCrouchTransition()
         {
-            _moveDirection = (orientation.forward * _verticalInput + orientation.right * _horizontalInput).normalized;
-            float targetSpeed = (state == MovementState.Crouching) ? crouchSpeed : sprintSpeed;
-            Vector3 desiredVelocity = _moveDirection * targetSpeed;
-
-            var flatCurrentVel = new Vector3(_currentVelocity.x, 0f, _currentVelocity.z);
-            IsAtMinSpeed = flatCurrentVel.magnitude >= targetSpeed * 0.3f;
-            IsIdle = flatCurrentVel.magnitude <= 0.1f;
-
-            if (IsIdle)
-            {
-                EventManager.TriggerEvent("OnIdle", gameObject);
-            }
-
-            float effectiveAcceleration = acceleration;
-            float effectiveDeceleration = deceleration;
-            if (!_controller.isGrounded)
-            {
-                effectiveAcceleration *= airControlMultiplier;
-                effectiveDeceleration *= airControlMultiplier;
-            }
-
-            flatCurrentVel = new Vector3(_currentVelocity.x, 0f, _currentVelocity.z);
-            var flatDesiredVel = new Vector3(desiredVelocity.x, 0f, desiredVelocity.z);
-
-            // Lerp o MoveTowards según input
-            if (_moveDirection.magnitude > 0.1f)
-            {
-                flatCurrentVel = Vector3.MoveTowards(
-                    flatCurrentVel,
-                    flatDesiredVel,
-                    effectiveAcceleration * Time.deltaTime
-                );
-            }
-            else
-            {
-                flatCurrentVel = Vector3.MoveTowards(
-                    flatCurrentVel,
-                    Vector3.zero,
-                    effectiveDeceleration * Time.deltaTime
-                );
-            }
-
-            _currentVelocity = new Vector3(flatCurrentVel.x, _currentVelocity.y, flatCurrentVel.z);
-
-            Vector3 finalVelocity = new Vector3(flatCurrentVel.x, _verticalVelocity, flatCurrentVel.z);
-            _controller.Move(finalVelocity * Time.deltaTime);
+            // Si querés hacer animaciones o escalar al personaje, lo hacés acá
+            // Por ejemplo, podrías escalar su Y con Lerp para hacer que se agache visualmente
+            Vector3 targetScale = playerController.isCrouching ? new Vector3(1, 0.5f, 1) : Vector3.one;
+            transform.localScale = Vector3.Lerp(transform.localScale, targetScale, Time.deltaTime * 10f);
         }
 
-        private void HandleJump()
+        void UpdateCameraHeight()
         {
-            if (_controller.isGrounded && _verticalVelocity < 0)
-                _verticalVelocity = -2f;
-
-            if (Input.GetKeyDown(KeyCode.Space) && _controller.isGrounded && state != MovementState.Crouching && _readyToJump)
-            {
-                _verticalVelocity = jumpForce;
-                _readyToJump = false;
-                Invoke(nameof(ResetJump), jumpCooldown);
-
-                EventManager.TriggerEvent("OnJump", gameObject);
-            }
+            Vector3 targetPos = playerController.isCrouching ? crouchingCameraHeight.localPosition : standingCameraHeight.localPosition;
+            cameraTransform.localPosition = Vector3.Lerp(cameraTransform.localPosition, targetPos, Time.deltaTime);
+        }
+        private bool IsGrounded()
+        {
+            float distanceToGround = 0.1f;
+            return Physics.Raycast(transform.position, Vector3.down, distanceToGround + 0.1f);
         }
 
-        private void ApplyGravity()
+        //private void StateHandler()
+        //{
+        //    if (Input.GetKey(KeyCode.LeftControl))
+        //    {
+        //        playerController.lastStatus = playerController.status;
+        //        playerController.status = Status.Crouching;
+        //    }
+        //    else if (IsGrounded())
+        //    {
+        //        playerController.lastStatus = playerController.status;
+        //        playerController.status = Status.Sprinting;
+        //    }
+        //    else
+        //    {
+        //        playerController.lastStatus = playerController.status;
+        //        playerController.status = Status.Air;
+        //    }
+        //}
+
+        public void ResetJump()
         {
-            _verticalVelocity += gravity * Time.deltaTime;
-        }
-
-        private void HandleCrouchTransition()
-        {
-            _controller.height = Mathf.SmoothDamp(
-                _controller.height,
-                _crouchTargetHeight,
-                ref _heightSmoothVelocity,
-                crouchSmoothTime
-            );
-
-            _controller.center = new Vector3(
-                0f,
-                Mathf.SmoothDamp(
-                    _controller.center.y,
-                    _crouchTargetCenterY,
-                    ref _centerYSmoothVelocity,
-                    crouchSmoothTime
-                ),
-                0f
-            );
-
-            UpdateCameraHeight();
-        }
-
-        private void UpdateCameraHeight()
-        {
-            cameraTransform.localPosition = new Vector3(
-                cameraTransform.localPosition.x,
-                _controller.center.y + eyeOffset,
-                cameraTransform.localPosition.z
-            );
-        }
-
-        private void StateHandler()
-        {
-            if (Input.GetKey(KeyCode.LeftControl))
-                state = MovementState.Crouching;
-            else if (_controller.isGrounded)
-                state = MovementState.Sprinting;
-            else
-                state = MovementState.Air;
-        }
-
-        private void ResetJump()
-        {
-            _readyToJump = true;
+            playerController._readyToJump = true;
             EventManager.TriggerEvent("OnIdle", gameObject);
         }
 
         private void CheckGroundedEvents()
         {
-            if (_controller.isGrounded && !_wasGrounded)
+            bool grounded = IsGrounded();
+
+            if (grounded && !_wasGrounded)
                 EventManager.TriggerEvent("OnLand", gameObject);
 
-            _wasGrounded = _controller.isGrounded;
+            _wasGrounded = grounded;
         }
 
-        private void CheckCrouchEvents()
+        //private void CheckCrouchEvents()
+        //{
+        //    bool currentlyCrouching = playerController.status == Status.Crouching;
+
+        //    if (currentlyCrouching && !_isCrouching)
+        //        EventManager.TriggerEvent("OnCrouchEnter", gameObject);
+        //    else if (!currentlyCrouching && _isCrouching)
+        //        EventManager.TriggerEvent("OnCrouchExit", gameObject);
+
+        //    _isCrouching = currentlyCrouching;
+        //}
+        private void CheckCrouchEvents(bool b)
         {
-            bool currentlyCrouching = state == MovementState.Crouching;
-
-            if (currentlyCrouching && !_isCrouching)
+            if (b)
+            {
                 EventManager.TriggerEvent("OnCrouchEnter", gameObject);
-            else if (!currentlyCrouching && _isCrouching)
+            }
+            else
+            {
                 EventManager.TriggerEvent("OnCrouchExit", gameObject);
-
-            _isCrouching = currentlyCrouching;
+            }
         }
     }
 }

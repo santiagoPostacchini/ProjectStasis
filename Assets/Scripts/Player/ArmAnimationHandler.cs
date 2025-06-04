@@ -99,12 +99,12 @@ namespace Player
         private readonly int _speedHash = Animator.StringToHash("Speed");
 
         // Referencia al Player que contiene CurrentSpeed
-        private Player _player;
+        private PlayerController2 _player;
 
         private void Awake()
         {
             // Buscamos el componente Player en la misma raíz
-            _player = transform.root.GetComponent<Player>();
+            _player = transform.root.GetComponent<PlayerController2>();
             if (_player == null)
                 Debug.LogWarning("ArmAnimationHandler: no se encontró componente Player en la raíz.");
         }
@@ -140,7 +140,7 @@ namespace Player
             if (_player != null)
             {
                 // ② Cada frame enviamos el valor float "Speed" al Animator
-                float velocidadActual = _player.CurrentSpeed;
+                float velocidadActual = _player.currentSpeed;
                 armAnimator.SetFloat(_speedHash, velocidadActual);
             }
         }

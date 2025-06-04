@@ -6,6 +6,7 @@ namespace Player
     public class CameraBobbing : MonoBehaviour
     {
         private bool _isEnabled = true;
+
         [SerializeField, Range(0, 0.1f)] private float amplitude;
         [SerializeField, Range(0, 30)] private float frecuency;
 
@@ -14,8 +15,8 @@ namespace Player
 
         private readonly float _toggleSpeed = 1f;
 
-        [SerializeField] private CharacterController characterController;
-        [SerializeField] private Player player; // ← Referencia al jugador
+        [SerializeField] private Rigidbody rb; // Ahora usa Rigidbody
+        [SerializeField] private PlayerController2 player; // Referencia al jugador
         private Vector3 _startPos;
 
         private bool _footstepTriggeredThisCycle;
@@ -28,7 +29,7 @@ namespace Player
 
         private void Update()
         {
-            if(!_isEnabled) return;
+            if (!_isEnabled) return;
 
             CheckMotion();
             ResetPosition();
@@ -37,13 +38,13 @@ namespace Player
         private Vector3 FootstepMotion()
         {
             Vector3 pos = Vector3.zero;
-            
+
             float bobbingValue = Mathf.Sin(Time.time * frecuency);
-            
+
             pos.y = bobbingValue * amplitude;
             pos.x = Mathf.Sin(Time.time * frecuency / 2) * amplitude / 2;
 
-            CheckFootstepEvent(bobbingValue); // Método modificado
+            CheckFootstepEvent(bobbingValue);
 
             _previousBobbingValue = bobbingValue;
 
@@ -52,7 +53,8 @@ namespace Player
 
         private void CheckMotion()
         {
-            float speed = new Vector3(characterController.velocity.x, 0, characterController.velocity.z).magnitude;
+            // Usa la velocidad del Rigidbody en el plano XZ
+            float speed = new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude;
 
             if (speed < _toggleSpeed)
             {
@@ -78,7 +80,7 @@ namespace Player
         {
             if (_previousBobbingValue < 0 && currentBobbingValue >= 0)
             {
-                if (!_footstepTriggeredThisCycle && player && player.state != Player.MovementState.Air)
+                if (!_footstepTriggeredThisCycle && player && player.status != Status.Air)
                 {
                     EventManager.TriggerEvent("OnFootstep", player.gameObject);
                     _footstepTriggeredThisCycle = true;
