@@ -54,6 +54,7 @@ Material:
     - _Cull: 1
     - _DstBlend: 0
     - _Emission: 3.4
+    - _Glitch_Strength: 0
     - _NoiseSacle: 1
     - _Outline_Size: 2
     - _QueueControl: 0
