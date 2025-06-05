@@ -12,7 +12,7 @@ public class FreezableErraticObject : MonoBehaviour,IStasis
 
     [SerializeField] private ErraticObject erraticObject;
 
-
+    public bool IsFreezed => erraticObject.isFreezed;
 
     private void Awake()
     {

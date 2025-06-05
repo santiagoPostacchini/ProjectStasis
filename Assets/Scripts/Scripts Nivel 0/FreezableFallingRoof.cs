@@ -14,7 +14,7 @@ public class FreezableFallingRoof : MonoBehaviour, IStasis
 
     [SerializeField] private FallingRoof fallingRoof;
 
-    
+    public bool IsFreezed => fallingRoof.isFreezed;
 
     private void Awake()
     {

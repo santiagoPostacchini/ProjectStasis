@@ -11,7 +11,6 @@ namespace Player
         [SerializeField, Range(0, 30)] private float frecuency;
 
         [SerializeField] private new Transform camera;
-        [SerializeField] private Transform cameraHolder;
 
         private readonly float _toggleSpeed = 1f;
 

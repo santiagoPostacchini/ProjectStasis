@@ -9,6 +9,8 @@ public class ButtonStasis : PhysicsObject, IStasis
     private Quaternion freezeRotation;
     [SerializeField]private PressurePlate pressurePlate;
 
+    public bool IsFreezed => _isFreezed;
+
     public void StatisEffectActivate()
     {
         FreezeObject();

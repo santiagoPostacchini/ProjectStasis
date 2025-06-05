@@ -11398,7 +11398,7 @@ Transform:
   m_GameObject: {fileID: 6619673513523736963}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: -0.5}
+  m_LocalPosition: {x: -0, y: 0.42, z: -1.32}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -12870,7 +12870,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.3
+  m_Radius: 0.4
   m_Height: 2.038168
   m_Direction: 1
   m_Center: {x: 0, y: -0.019083977, z: 0}
@@ -12893,7 +12893,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.3
+  m_Radius: 0.4
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
@@ -14102,7 +14102,6 @@ MonoBehaviour:
   amplitude: 0.001
   frecuency: 15
   camera: {fileID: 6802470351315537222}
-  cameraHolder: {fileID: 6802470351315537222}
   rb: {fileID: 8483464043759128726}
   player: {fileID: 3743274139033597385}
 --- !u!1 &9058048456565782352

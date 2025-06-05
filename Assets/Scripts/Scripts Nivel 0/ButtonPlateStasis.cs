@@ -13,6 +13,8 @@ public class ButtonPlateStasis : MonoBehaviour,IStasis
     private MaterialPropertyBlock _mpb;
     private Renderer _renderer;
 
+    public bool IsFreezed => _pressurePlate.isFrozen;
+
     private void Start()
     {
         _pressurePlate.isFrozen = false;
@@ -64,11 +66,9 @@ public class ButtonPlateStasis : MonoBehaviour,IStasis
     public void SetColorOutline(Color color, float alpha)
     {
         _renderer.GetPropertyBlock(_mpb);
-        //_mpb.SetFloat("_Alpha", alpha);
 
         _mpb.SetColor("_Color", color);
         _renderer.SetPropertyBlock(_mpb);
     }
-
 
 }

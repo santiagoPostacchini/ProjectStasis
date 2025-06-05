@@ -43,22 +43,24 @@ namespace Player
 
         public void HandleVisualStasisFeedback(IStasis lookedStasisObject, bool isGrabbing)
         {
-            var lookedPhysicsObject = lookedStasisObject as NewPhysicsBox;
-            var lastPhysicsObject   = _lastLookedStasisObject as NewPhysicsBox;
             
             if (lookedStasisObject != _lastLookedStasisObject)
             {
-                if (_lastLookedStasisObject != null && lastPhysicsObject)
+                if (_lastLookedStasisObject != null )
                 {
-                    if (!lastPhysicsObject.isFreezed)
-                        lastPhysicsObject.SetOutlineThickness(0f);
+                    if (!_lastLookedStasisObject.IsFreezed)
+                    {
+                        //Debug.Log("Es " + lookedStasisObject.IsFreezed);
+                        _lastLookedStasisObject.SetOutlineThickness(0f);
+                    }
+                        
 
                     EventManager.TriggerEvent(tickingStopEvent, gameObject);
                 }
                 
-                if (lookedPhysicsObject && !lookedPhysicsObject.isFreezed && !isGrabbing)
+                if (lookedStasisObject !=null && !lookedStasisObject.IsFreezed && !isGrabbing)
                 {
-                    lookedPhysicsObject.SetOutlineThickness(1.01f);
+                    lookedStasisObject.SetOutlineThickness(1.05f);
                     EventManager.TriggerEvent(tickingStartEvent, gameObject);
                     EventManager.TriggerEvent(selectEvent,      gameObject);
                 }

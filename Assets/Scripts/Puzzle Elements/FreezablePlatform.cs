@@ -8,6 +8,8 @@ public class FreezablePlatform : PhysicsObject, IStasis
     private Quaternion freezeRotation;
     [SerializeField] private MovingPlatform movingPlatform;
 
+    public bool IsFreezed => _isFreezed;
+
     private void Awake()
     {
         movingPlatform = GetComponent<MovingPlatform>();

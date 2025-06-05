@@ -16,6 +16,8 @@ public class MovableTrampoline : PhysicsObject, IStasis
     private Vector3 freezePosition;
     private Quaternion freezeRotation;
 
+    public bool IsFreezed => _isFreezed;
+
     /// <summary>
     /// When an object collides, determine a realistic bounce direction using the contact normal.
     /// Then compute the bounce speed based on the object's falling speed, using collision.relativeVelocity

@@ -12,6 +12,9 @@ public class ChildRoomStaseable : MonoBehaviour,IStasis
 
     public RoomStaseable room;
     public bool isFreezed;
+
+    public bool IsFreezed => isFreezed;
+
     private void Awake()
     {
         // Intentamos obtener el FallingRoof del mismo objeto si no está asignado
@@ -86,4 +89,5 @@ public class ChildRoomStaseable : MonoBehaviour,IStasis
         _mpb.SetColor("_Color", color);
         _renderer.SetPropertyBlock(_mpb);
     }
+
 }

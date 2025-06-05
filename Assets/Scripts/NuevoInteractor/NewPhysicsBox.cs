@@ -29,6 +29,8 @@ namespace NuevoInteractor
 
         public bool IsOverlappingAnything { get; private set; }
 
+        public bool IsFreezed => isFreezed;
+
         [SerializeField] private TrajectoryCube trajectoryCube;
 
         private void Start()
@@ -148,6 +150,7 @@ namespace NuevoInteractor
                 }
 
                 SetOutlineThickness(1.05f);
+                SetColorOutline(Color.green, 1f);
             }
         }
 
@@ -178,6 +181,8 @@ namespace NuevoInteractor
             rb.useGravity = true;
             rb.isKinematic = false;
             SetOutlineThickness(0f);
+            Color lightGreen = new Color(0.6f, 1f, 0.6f);
+            SetColorOutline(lightGreen, 1f);
 
             if (trajectoryCube.lineRenderer)
                 trajectoryCube.lineRenderer.positionCount = 0;
@@ -189,6 +194,14 @@ namespace NuevoInteractor
             if (!_renderer || _mpb == null) return;
             _renderer.GetPropertyBlock(_mpb);
             _mpb.SetFloat(_outlineThicknessName, thickness);
+            _renderer.SetPropertyBlock(_mpb);
+        }
+
+        public void SetColorOutline(Color color, float alpha)
+        {
+            _renderer.GetPropertyBlock(_mpb);
+
+            _mpb.SetColor("_Color", color);
             _renderer.SetPropertyBlock(_mpb);
         }
     }
