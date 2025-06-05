@@ -38,7 +38,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BumpMap:
-        m_Texture: {fileID: 2800000, guid: ec3f4dfa3b7173a478e13f7feb9f990a, type: 3}
+        m_Texture: {fileID: 2800000, guid: 19a652a72d2dbcd44b71e3c93aea148f, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _InterpBump:
@@ -50,7 +50,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 8445bbcf0b4547043a7e64c63d4fec53, type: 3}
+        m_Texture: {fileID: 2800000, guid: 546cdde65b6c6ff43a6159de780243c5, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -76,7 +76,7 @@ Material:
     - _Glossiness: 0.5
     - _IntPosInf: 0
     - _MaxNoise: 0.98999995
-    - _Metallic: 0.51
+    - _Metallic: 0
     - _MinNoise: 0.01
     - _NoiseBumpStrength: 0
     - _QueueControl: 0
