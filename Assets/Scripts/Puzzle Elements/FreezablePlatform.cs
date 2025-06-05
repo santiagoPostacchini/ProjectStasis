@@ -64,7 +64,6 @@ public class FreezablePlatform : PhysicsObject, IStasis
             }
 
             SaveRigidbodyState();
-            objRB.isKinematic = false;
             objRB.velocity = Vector3.zero;
             objRB.angularVelocity = Vector3.zero;
             _isFreezed = true;
@@ -85,7 +84,6 @@ public class FreezablePlatform : PhysicsObject, IStasis
             RestoreRigidbodyState();
             _isFreezed = false;
             movingPlatform.canMove = true;
-            objRB.isKinematic = false;
             SetOutlineThickness(1f); // Reset visual cue.
             //
         }

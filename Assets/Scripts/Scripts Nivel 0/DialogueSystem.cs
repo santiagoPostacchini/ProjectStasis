@@ -49,8 +49,15 @@ public class DialogueSystem : MonoBehaviour
     {
         if (typingCoroutine != null)
             StopCoroutine(typingCoroutine);
-
-        typingCoroutine = StartCoroutine(TypeLine(lines[currentLine]));
+        if(lines.Length > 0)
+        {
+            typingCoroutine = StartCoroutine(TypeLine(lines[currentLine]));
+        }
+        else
+        {
+            EndDialogue();
+        }
+       
     }
 
     IEnumerator TypeLine(string line)

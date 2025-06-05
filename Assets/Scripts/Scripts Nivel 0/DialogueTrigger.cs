@@ -10,7 +10,8 @@ public class DialogueTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!alreadyTriggered && other.CompareTag("Player"))
+        
+        if (!alreadyTriggered && other.CompareTag("DetectorDialogues"))
         {
             alreadyTriggered = true;
 
@@ -19,6 +20,7 @@ public class DialogueTrigger : MonoBehaviour
                 lines,
                 onDialogueComplete.Invoke
             );
+            gameObject.SetActive(false);
         }
     }
 }

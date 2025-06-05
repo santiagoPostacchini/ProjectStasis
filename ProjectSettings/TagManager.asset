@@ -8,6 +8,9 @@ TagManager:
   - Switch
   - Cube
   - CubePodium
+  - NoClimb
+  - CanAir
+  - DetectorDialogues
   layers:
   - Default
   - TransparentFX
@@ -21,7 +24,7 @@ TagManager:
   - PhyObj
   - ObjInteract
   - StasisObjects
-  - 
+  - DialogueTriggers
   - 
   - 
   - 

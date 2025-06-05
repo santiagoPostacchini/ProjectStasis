@@ -135,7 +135,7 @@ public class PlayerController2 : MonoBehaviour
     [Header("References")]
     public PlayerInput input;
     private Player.Player movement;
-    [SerializeField]private GroundDetector groundDetector;
+    [SerializeField] private GroundDetector groundDetector;
     [SerializeField] private CeilingDetector ceilingDetector;
     [SerializeField] private WallrunDetector wallrunDetector;
     [SerializeField] private FrontDetector frontDetector;
@@ -147,6 +147,9 @@ public class PlayerController2 : MonoBehaviour
     public bool wallrunLerpTargetGetOnceTrigger = false;
 
     private Player.Player _player;
+    [SerializeField]private bool iAMClimbing;
+    [SerializeField] private Transform posIAmClimbing;
+    [SerializeField] private Transform posCanIClimbing;
 
     void Start()
     {
@@ -168,6 +171,7 @@ public class PlayerController2 : MonoBehaviour
     }
     void Update()
     {
+        Climbing();
         if (!isPaused)
         {
             DetermineMonitorables();
@@ -331,6 +335,41 @@ public class PlayerController2 : MonoBehaviour
                 break;
         }
     }
+    public void Climbing()
+    {
+        RaycastHit hit;
+        if (status == Status.climbing)
+        {
+            if (Physics.Raycast(posIAmClimbing.position, posIAmClimbing.transform.forward, out hit, 4))
+            {
+                iAMClimbing = true;
+
+            }
+            else
+            {
+                iAMClimbing = false;
+            }
+        }
+
+
+    }
+    private bool DetectCanClimb()
+    {
+        RaycastHit hit;
+        if (status != Status.climbing)
+        {
+            if (Physics.Raycast(posIAmClimbing.position, posIAmClimbing.transform.forward, out hit, 4))
+            {
+                return true;
+
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return true;
+    }
     void RunStatusPhysics()
     {
         switch (status)
@@ -347,7 +386,7 @@ public class PlayerController2 : MonoBehaviour
                 break;
             case Status.Crouching:
                 movement.ApplyFriction(friction);
-               // _player.Crounch();
+                // _player.Crounch();
                 currentSpeed = crouchSpeed;
                 movement.Walk(input.InputDir(), crouchSpeed, 0, ref moveRampUpCounter, moveRampUpTime);
                 movement.ApplyGravity(gravity);
@@ -397,6 +436,7 @@ public class PlayerController2 : MonoBehaviour
     {
         if (ceilingDetector.canStand && !groundDetector.isGrounded)
         {
+            if (iAMClimbing) return;
             ChangeStatus(Status.Air);
         }
         if (ceilingDetector.canStand && groundDetector.isGrounded && input.InputDir() == Vector2.zero && !movement.isDashing)
@@ -572,3 +612,4 @@ public class PlayerController2 : MonoBehaviour
         horizontalSpeed = new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude;
     }
 }
+
