@@ -68,7 +68,7 @@ namespace NuevoInteractor
 
             }
 
-            stasisEffects.HandleVisualStasisFeedback(lookedStasisObject, HasObjectInHand());
+           // stasisEffects.HandleVisualStasisFeedback(lookedStasisObject, HasObjectInHand());
             
             if (Input.GetKeyDown(KeyCode.E))
             {

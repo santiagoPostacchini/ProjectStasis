@@ -38,7 +38,6 @@ public class GroundDetector : MonoBehaviour
         {
             distToGround = 20.0f;
         }
-        Debug.Log("ISGROUNDED " + isGrounded);
     }
 
     private float GetAngle(Vector3 normal)

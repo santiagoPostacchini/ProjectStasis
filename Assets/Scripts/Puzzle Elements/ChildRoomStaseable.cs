@@ -47,9 +47,9 @@ public class ChildRoomStaseable : MonoBehaviour,IStasis
         if (!isFreezed)
         {
 
-            room.rotateRoom.rb.velocity = Vector3.zero;
-            room.rotateRoom.rb.angularVelocity = Vector3.zero;
-            room.rotateRoom.rb.useGravity = false;
+            //room.rotateRoom.rb.velocity = Vector3.zero;
+            //room.rotateRoom.rb.angularVelocity = Vector3.zero;
+            //room.rotateRoom.rb.useGravity = false;
             isFreezed = true;
 
             SetColorOutline(Color.green, 1);
@@ -64,7 +64,7 @@ public class ChildRoomStaseable : MonoBehaviour,IStasis
         {
 
             isFreezed = false;
-            room.rotateRoom.rb.useGravity = false;
+            //room.rotateRoom.rb.useGravity = false;
 
             SetOutlineThickness(1f);
             NotifyRoom(false);

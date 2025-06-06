@@ -10,10 +10,10 @@ public class ReturnToCheckpoint : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Player.Player player = other.gameObject.GetComponent<Player.Player>();
-        IStasis fatherStasis = father.GetComponent<IStasis>();
-        if(fatherStasis != null)
+        RotateObject fatherMove = father.GetComponent<RotateObject>();
+        if (fatherMove != null)
         {
-            if (!fatherStasis.IsFreezed)
+            if (fatherMove.canRotate)
             {
                 if (player != null)
                 {
@@ -21,6 +21,5 @@ public class ReturnToCheckpoint : MonoBehaviour
                 }
             }
         }
-       
     }
 }
