@@ -8,7 +8,7 @@ public class RoomStaseable : MonoBehaviour
     private string OutlineThicknessName = "_BorderThickness";
     private MaterialPropertyBlock _mpb;
     [SerializeField] private Renderer _renderer;
-    public RotateObject rotateRoom;
+    public RotateObjectStasis rotateRoom;
 
     public List<ChildRoomStaseable> childreenRoom = new List<ChildRoomStaseable>();
 

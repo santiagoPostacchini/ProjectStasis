@@ -19,7 +19,11 @@ public class PlayerInput : MonoBehaviour
     private int moveInputDirX = 0;
     private int moveInputDirZ = 0;
 
-
+    private PlayerController2 playerController;
+    private void Start()
+    {
+        playerController = GetComponent<PlayerController2>();
+    }
 
     public Vector2 InputDir()
     {
@@ -39,7 +43,11 @@ public class PlayerInput : MonoBehaviour
     }
     public bool PressedJump()
     {
-        if (Input.GetKeyDown(jump)) { return true; }
+        if (Input.GetKeyDown(jump) && playerController.CanJump())
+        {
+
+            return true;
+        }
         return false;
     }
     public bool PressedWalk()

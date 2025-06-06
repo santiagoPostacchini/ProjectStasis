@@ -5,13 +5,22 @@ using UnityEngine;
 public class ReturnToCheckpoint : MonoBehaviour
 {
     public Transform pos;
-
-    private void OnCollisionEnter(Collision collision)
+    [SerializeField]private GameObject father;
+   
+    private void OnTriggerEnter(Collider other)
     {
-        Player.Player player = collision.gameObject.GetComponent<Player.Player>();
-        if(player != null)
+        Player.Player player = other.gameObject.GetComponent<Player.Player>();
+        IStasis fatherStasis = father.GetComponent<IStasis>();
+        if(fatherStasis != null)
         {
-            player.gameObject.transform.position = pos.position;
+            if (!fatherStasis.IsFreezed)
+            {
+                if (player != null)
+                {
+                    player.gameObject.transform.position = pos.position;
+                }
+            }
         }
+       
     }
 }

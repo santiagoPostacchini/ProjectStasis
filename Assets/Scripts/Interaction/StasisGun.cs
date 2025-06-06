@@ -1,6 +1,7 @@
 ﻿using NuevoInteractor;
 using UnityEngine;
 using Events;
+using System.Collections;
 
 namespace Interaction
 {
@@ -81,8 +82,7 @@ namespace Interaction
                 _activeBeam.SetBeam(stasisOrigin.position, hit.point, stasisHit);
             }
         }
-
-
+        
         void ApplyStasisEffect(GameObject newObject, IStasis newStasisComponent)
         {
             if (newObject == _firstFrozenObject)

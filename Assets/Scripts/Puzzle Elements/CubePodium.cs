@@ -32,6 +32,11 @@ namespace Puzzle_Elements
             {
                 rb.useGravity = false;
                 box.transform.position = t.transform.position;
+                Rotator boxRotator = box.GetComponent<Rotator>();
+                if(boxRotator != null)
+                {
+                    boxRotator.canRotate = true;
+                }
             }
             particle?.Play();
 
@@ -40,6 +45,11 @@ namespace Puzzle_Elements
         public void Interact()
         {
             particle?.Stop();
+            Rotator boxRotator = box.GetComponent<Rotator>();
+            if (boxRotator != null)
+            {
+                boxRotator.canRotate = false;
+            }
         }
     }
 }

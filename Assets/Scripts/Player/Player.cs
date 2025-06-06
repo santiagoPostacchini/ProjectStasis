@@ -213,7 +213,7 @@ namespace Player
         }
         private bool IsGrounded()
         {
-            float distanceToGround = 0.1f;
+            float distanceToGround = 1f;
             return Physics.Raycast(transform.position, Vector3.down, distanceToGround + 0.1f);
         }
 
@@ -245,7 +245,6 @@ namespace Player
         private void CheckGroundedEvents()
         {
             bool grounded = IsGrounded();
-
             if (grounded && !_wasGrounded)
                 EventManager.TriggerEvent("OnLand", gameObject);
 

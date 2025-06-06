@@ -94,6 +94,7 @@ public class PlayerController2 : MonoBehaviour
     public float airborneJumpForce;
 
     public bool _readyToJump = true;
+    public bool canJump;
 
     [Header("Air Control")]
     public float airFrictionMod;
@@ -200,6 +201,14 @@ public class PlayerController2 : MonoBehaviour
         {
             RunStatusPhysics();
         }
+    }
+    public bool CanJump()
+    {
+        if(status != Status.Air)
+        {
+            return true;
+        }
+        return false;
     }
     void RunStatus()
     {
