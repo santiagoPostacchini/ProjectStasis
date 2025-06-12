@@ -441,7 +441,7 @@ public class PlayerController2 : MonoBehaviour
         Debug.Log(rb.velocity.y < 2.1);
         Debug.Log(wallrunReady && !movement.isDashing);
     }
-    void ChooseStatus()
+    public void ChooseStatus()
     {
         if (ceilingDetector.canStand && !groundDetector.isGrounded)
         {
@@ -484,6 +484,7 @@ public class PlayerController2 : MonoBehaviour
             ChangeStatus(Status.dashholding);
         }
     }
+    
     void FrictionToSlope() //Adjusts friction to slope angle in order to not slide off
     {
         if (status == Status.sliding)

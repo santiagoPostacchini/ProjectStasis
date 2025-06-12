@@ -38,6 +38,10 @@ public class GroundDetector : MonoBehaviour
         {
             distToGround = 20.0f;
         }
+        if(isGrounded && playerController.status == Status.Air)
+        {
+            playerController.ChooseStatus();
+        }
     }
 
     private float GetAngle(Vector3 normal)

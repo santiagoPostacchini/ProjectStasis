@@ -97,6 +97,6 @@ Material:
     - _MainColor: {r: 0, g: 0, b: 0, a: 0}
     - _MainOffsetFactor: {r: 0, g: 0, b: 0, a: 0}
     - _MainScaleFactor: {r: 0.03, g: 0.03, b: 0.03, a: 0}
-    - _SecColor: {r: 0.21072927, g: 0.21554586, b: 0.29239535, a: 1}
+    - _SecColor: {r: 0.21067482, g: 0.21549141, b: 0.2923409, a: 1}
     - _Sin: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []

@@ -33,71 +33,66 @@ namespace Interaction
             _playerInteractor = GetComponent<NewPlayerInteractor>();
         }
 
-        void Update()
+       
+
+        //public void Shoot()
+        //{
+        //    StartCoroutine(ShootAllTargets());
+        //}
+        //private IEnumerator ShootAllTargets()
+        //{
+        //    while (targets.Count > 0)
+        //    {
+        //        GameObject currentTarget = targets[0];
+
+        //        if (currentTarget != null)
+        //        {
+        //            ErraticObject erraticObject = currentTarget.GetComponent<ErraticObject>();
+        //            if (erraticObject != null)
+        //            {
+        //                while (!erraticObject.isFreezed)
+        //                {
+        //                    TryApplyStasis(currentTarget.transform);
+        //                    yield return new WaitForSeconds(0.2f);
+        //                }
+        //            }
+        //            FallingRoof fallingRoof = currentTarget.GetComponentInParent<FallingRoof>();
+        //            if (fallingRoof != null)
+        //            {
+
+        //                Debug.Log("FallingRoof");
+        //                TryApplyStasis(currentTarget.transform);
+        //            }
+        //        }
+        //        if(targets.Count>0)
+        //        targets.RemoveAt(0);
+        //        yield return new WaitForSeconds(0.1f);
+        //    }
+        //}
+        public void TryStasis(Transform end, DestroyedPieceController part)
         {
-            if (Input.GetKeyDown(KeyCode.L))
-            {
-                Shoot();
-            }
-        }
-
-        public void Shoot()
-        {
-            StartCoroutine(ShootAllTargets());
-        }
-        private IEnumerator ShootAllTargets()
-        {
-            while (targets.Count > 0)
-            {
-                GameObject currentTarget = targets[0];
-
-                if (currentTarget != null)
-                {
-                    ErraticObject erraticObject = currentTarget.GetComponent<ErraticObject>();
-                    if (erraticObject != null)
-                    {
-                        while (!erraticObject.isFreezed)
-                        {
-                            TryApplyStasis(currentTarget.transform);
-                            yield return new WaitForSeconds(0.2f);
-                        }
-                    }
-                    FallingRoof fallingRoof = currentTarget.GetComponentInParent<FallingRoof>();
-                    if (fallingRoof != null)
-                    {
-
-                        Debug.Log("FallingRoof");
-                        TryApplyStasis(currentTarget.transform);
-                    }
-                }
-
-                targets.RemoveAt(0);
-                yield return new WaitForSeconds(0.1f);
-            }
-        }
-
-        private void TryApplyStasis(Transform end)
-        {
+            Debug.Log("Entro a TryStasis");
             Vector3 direction = (end.position - transform.position).normalized;
 
             if (Physics.Raycast(transform.position, direction, out RaycastHit hit, Mathf.Infinity))
             {
+                
                 bool stasisHit = false;
                 GameObject hitObject = hit.collider.gameObject;
-
                 if (hitObject.TryGetComponent<IStasis>(out var stasisComponent))
                 {
-                    ApplyStasisEffect(hitObject, stasisComponent);
+
+                    stasisComponent.StatisEffectActivate();
+                    part.wasHit = true;
+                    //ApplyStasisEffect(hitObject, stasisComponent);
                     stasisHit = true;
                 }
+                
 
-                if (_activeBeam)
-                {
-                    Destroy(_activeBeam.gameObject);
-                }
+                GameObject beamInstance = Instantiate(stasisBeamPrefab, stasisOrigin.position, Quaternion.LookRotation(direction)  // Rotación que apunta hacia la dirección del rayo
+      );
+                beamInstance.transform.localScale *= 2f;
 
-                GameObject beamInstance = Instantiate(stasisBeamPrefab,stasisOrigin.position,Quaternion.LookRotation(direction)  // Rotación que apunta hacia la dirección del rayo
-);
                 _activeBeam = beamInstance.GetComponent<StasisBeam>();
                 _activeBeam.SetBeam(stasisOrigin.position, hit.point, stasisHit);
 
@@ -109,48 +104,82 @@ namespace Interaction
                 _beamCoroutine = StartCoroutine(DisableBeamAfterDuration(beamDuration));
             }
         }
+//        public void TryApplyStasis(Transform end)
+//        {
+//            Vector3 direction = (end.position - transform.position).normalized;
 
-        void ApplyStasisEffect(GameObject newObject, IStasis newStasisComponent)
-        {
-            if (newObject == _firstFrozenObject)
-            {
-                _firstStasisComponent.StatisEffectDeactivate();
-                _firstFrozenObject = null;
-                _firstStasisComponent = null;
-                return;
-            }
-            if (newObject == _secondFrozenObject)
-            {
-                _secondStasisComponent.StatisEffectDeactivate();
-                _secondFrozenObject = null;
-                _secondStasisComponent = null;
-                return;
-            }
+//            if (Physics.Raycast(transform.position, direction, out RaycastHit hit, Mathf.Infinity))
+//            {
+//                bool stasisHit = false;
+//                GameObject hitObject = hit.collider.gameObject;
 
-            if (_firstFrozenObject && _secondFrozenObject)
-            {
-                _firstStasisComponent.StatisEffectDeactivate();
+//                if (hitObject.TryGetComponent<IStasis>(out var stasisComponent))
+//                {
+                    
+//                    ApplyStasisEffect(hitObject, stasisComponent);
+//                    stasisHit = true;
+//                }
 
-                _firstFrozenObject = _secondFrozenObject;
-                _firstStasisComponent = _secondStasisComponent;
-                _secondFrozenObject = null;
-                _secondStasisComponent = null;
-            }
+//                if (_activeBeam)
+//                {
+//                    Destroy(_activeBeam.gameObject);
+//                }
 
-            // Si hay lugar en el segundo slot, poner el nuevo ahí
-            if (!_firstFrozenObject)
-            {
-                _firstFrozenObject = newObject;
-                _firstStasisComponent = newStasisComponent;
-                _firstStasisComponent.StatisEffectActivate();
-            }
-            else if (!_secondFrozenObject)
-            {
-                _secondFrozenObject = newObject;
-                _secondStasisComponent = newStasisComponent;
-                _secondStasisComponent.StatisEffectActivate();
-            }
-        }
+//                GameObject beamInstance = Instantiate(stasisBeamPrefab, stasisOrigin.position, Quaternion.LookRotation(direction)  // Rotación que apunta hacia la dirección del rayo
+//);
+//                _activeBeam = beamInstance.GetComponent<StasisBeam>();
+//                _activeBeam.SetBeam(stasisOrigin.position, hit.point, stasisHit);
+
+//                // AudioManager.Instance?.PlaySfx("LaserFX");
+
+//                if (_beamCoroutine != null)
+//                    StopCoroutine(_beamCoroutine);
+
+//                _beamCoroutine = StartCoroutine(DisableBeamAfterDuration(beamDuration));
+//            }
+//        }
+
+//        void ApplyStasisEffect(GameObject newObject, IStasis newStasisComponent)
+//        {
+//            if (newObject == _firstFrozenObject)
+//            {
+//                _firstStasisComponent.StatisEffectDeactivate();
+//                _firstFrozenObject = null;
+//                _firstStasisComponent = null;
+//                return;
+//            }
+//            if (newObject == _secondFrozenObject)
+//            {
+//                _secondStasisComponent.StatisEffectDeactivate();
+//                _secondFrozenObject = null;
+//                _secondStasisComponent = null;
+//                return;
+//            }
+
+//            if (_firstFrozenObject && _secondFrozenObject)
+//            {
+//                _firstStasisComponent.StatisEffectDeactivate();
+
+//                _firstFrozenObject = _secondFrozenObject;
+//                _firstStasisComponent = _secondStasisComponent;
+//                _secondFrozenObject = null;
+//                _secondStasisComponent = null;
+//            }
+
+//            // Si hay lugar en el segundo slot, poner el nuevo ahí
+//            if (!_firstFrozenObject)
+//            {
+//                _firstFrozenObject = newObject;
+//                _firstStasisComponent = newStasisComponent;
+//                _firstStasisComponent.StatisEffectActivate();
+//            }
+//            else if (!_secondFrozenObject)
+//            {
+//                _secondFrozenObject = newObject;
+//                _secondStasisComponent = newStasisComponent;
+//                _secondStasisComponent.StatisEffectActivate();
+//            }
+        //}
 
         private IEnumerator DisableBeamAfterDuration(float duration)
         {
@@ -163,10 +192,10 @@ namespace Interaction
             }
         }
 
-        private void OnDisable()
-        {
-            UnfreezeAllObjects();
-        }
+        //private void OnDisable()
+        //{
+        //    UnfreezeAllObjects();
+        //}
 
         private void UnfreezeAllObjects()
         {

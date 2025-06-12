@@ -62,26 +62,30 @@ public class DialogueSystem : MonoBehaviour
 
     IEnumerator TypeLine(string line)
     {
-        dialogueText.text = "";
-
-        foreach (char c in line)
+        if(line.Length > 0)
         {
-            dialogueText.text += c;
-            yield return new WaitForSeconds(typingSpeed);
-        }
+            dialogueText.text = "";
 
-        yield return new WaitForSeconds(delayBetweenLines);
+            foreach (char c in line)
+            {
+                dialogueText.text += c;
+                yield return new WaitForSeconds(typingSpeed);
+            }
 
-        currentLine++;
+            yield return new WaitForSeconds(delayBetweenLines);
 
-        if (currentLine < lines.Length)
-        {
-            StartTypingLine();
+            currentLine++;
+
+            if (currentLine < lines.Length)
+            {
+                StartTypingLine();
+            }
         }
         else
         {
             EndDialogue();
         }
+        
     }
 
     void EndDialogue()

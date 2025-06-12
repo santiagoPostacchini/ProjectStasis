@@ -28,6 +28,13 @@ public class CameraShake : MonoBehaviour
         shakeRoutine = StartCoroutine(ShakeCoroutine(duration, magnitude));
     }
 
+    public void Shake10Seconds()
+    {
+        if (shakeRoutine != null)
+            StopCoroutine(shakeRoutine);
+        shakeRoutine = StartCoroutine(ShakeCoroutine(16, 1));
+    }
+
     private IEnumerator ShakeCoroutine(float duration, float magnitude)
     {
         float elapsed = 0f;

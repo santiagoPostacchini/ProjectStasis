@@ -83,7 +83,8 @@ namespace Interaction
 
         private void DisableBeam()
         {
-            gameObject.SetActive(false);
+            //gameObject.SetActive(false);
+            Destroy(gameObject);
         }
     }
 }

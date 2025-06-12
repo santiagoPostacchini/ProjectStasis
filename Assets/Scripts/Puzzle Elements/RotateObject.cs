@@ -11,17 +11,21 @@ public class RotateObject : MonoBehaviour
 
     public BladeStasis[] blades;
     public bool canRotate;
-
-
+    private bool AlreadyNotify = false;
+    
     public Material matStasis;
     public readonly string _outlineThicknessName = "_BorderThickness";
     public MaterialPropertyBlock _mpb;
     public Renderer _renderer;
+
+    public GameObject triggerObject;
+
+    private FanColisionDetector _fanColisionDetector;
+
     private void Start()
     {
-
+        _fanColisionDetector = GetComponent<FanColisionDetector>();
         rb = GetComponent<Rigidbody>();
-        _renderer = GetComponent<Renderer>();
         _mpb = new MaterialPropertyBlock();
     }
 
@@ -31,6 +35,15 @@ public class RotateObject : MonoBehaviour
         {
             Quaternion deltaRotation = Quaternion.Euler(ejeRotacion * velocidadRotacion * Time.fixedDeltaTime);
             rb.MoveRotation(rb.rotation * deltaRotation);
+        }
+        else
+        {
+            if (!AlreadyNotify)
+            {
+                _fanColisionDetector.ResetTimerScaler();
+                triggerObject.SetActive(false);
+                AlreadyNotify = true;
+            }
         }
 
     }

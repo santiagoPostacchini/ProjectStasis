@@ -10,17 +10,18 @@ public class BladeStasis : MonoBehaviour,IStasis
 
     public BladeStasis[] otherBlades;
     public RotateObject father;
-
+   
     
     // Start is called before the first frame update
     void Start()
     {
 
-        father.rb.freezeRotation = false; // Asegurate de que la rotación no esté congelada
+        father.rb.freezeRotation = false; 
     }
 
     public void FreezeOtherBlades()
     {
+        if (otherBlades.Length < 1) return;
         foreach (var item in otherBlades)
         {
             item._isFreezed = IsFreezed;
@@ -29,6 +30,7 @@ public class BladeStasis : MonoBehaviour,IStasis
     }
     public void UnFreezeOtherBlades()
     {
+        if (otherBlades.Length < 1) return;
         foreach (var item in otherBlades)
         {
             item._isFreezed = IsFreezed;

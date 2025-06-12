@@ -43,11 +43,13 @@ public class CameraController2 : MonoBehaviour
     private Camera cam;
     private Player.Player movement;
     private ParticleSystem speedLines;
+    public bool canRotateCamera= true;
 
 
 
     void Start()
     {
+        
         //References
         cam = Camera.main;
         controller = GetComponent<PlayerController2>();
@@ -100,6 +102,7 @@ public class CameraController2 : MonoBehaviour
     }
     void DefaultCameraUpdate()//Moves the FPP camera according to player input
     {
+        if (!canRotateCamera) return;
         transform.Rotate(0f, (Input.GetAxis("Mouse X") * mouseSensitivity) * 100 * Time.deltaTime, 0f, Space.World); // Player body is rotated, cam inherits rotation
 
         //Camera Pitch Clamping system
