@@ -36,15 +36,15 @@ public class RotateObject : MonoBehaviour
             Quaternion deltaRotation = Quaternion.Euler(ejeRotacion * velocidadRotacion * Time.fixedDeltaTime);
             rb.MoveRotation(rb.rotation * deltaRotation);
         }
-        else
-        {
-            if (!AlreadyNotify)
-            {
-                _fanColisionDetector.ResetTimerScaler();
-                triggerObject.SetActive(false);
-                AlreadyNotify = true;
-            }
-        }
+        //else
+        //{
+        //    if (!AlreadyNotify)
+        //    {
+        //        _fanColisionDetector.ResetTimerScaler();
+        //        triggerObject.SetActive(false);
+        //        AlreadyNotify = true;
+        //    }
+        //}
 
     }
 }

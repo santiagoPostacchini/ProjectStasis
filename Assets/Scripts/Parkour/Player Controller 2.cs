@@ -302,29 +302,29 @@ public class PlayerController2 : MonoBehaviour
                 climbGravity = (climbTimer * climbTimer) * climbHeight;
                 climbGravity = Mathf.Clamp(climbGravity, 0.0f, 9.5f);
                 break;
-            case (Status.Air):
-                transform.localScale = new Vector3(1, 1, 1);
-                if (input.PressedJump() && airJumpChargeAvailable > 0)
-                {
-                    airJumpChargeAvailable--;
-                    movement.AirborneJump(airborneJumpForce, airborneJumpControl, cam.transform.forward);
-                }
-                if (input.ReleasedDash() && dashCooldownTimer >= dashCooldown)
-                {
-                    dashCooldownTimer = 0.0f;
-                    Vector3 dashTarget;
-                    RaycastHit hit;
-                    if (Physics.Raycast(transform.position, cam.transform.forward, out hit, dashDist))
-                    {
-                        dashTarget = transform.position + cam.transform.forward * (hit.distance - 0.5f);
-                    }
-                    else
-                    {
-                        dashTarget = transform.position + cam.transform.forward * dashDist;
-                    }
-                    StartCoroutine(movement.Dash(dashSpeed, transform.position, dashTarget));
-                }
-                break;
+            //case (Status.Air):
+            //    transform.localScale = new Vector3(1, 1, 1);
+            //    if (input.PressedJump() && airJumpChargeAvailable > 0)
+            //    {
+            //        airJumpChargeAvailable--;
+            //        movement.AirborneJump(airborneJumpForce, airborneJumpControl, cam.transform.forward);
+            //    }
+            //    if (input.ReleasedDash() && dashCooldownTimer >= dashCooldown)
+            //    {
+            //        dashCooldownTimer = 0.0f;
+            //        Vector3 dashTarget;
+            //        RaycastHit hit;
+            //        if (Physics.Raycast(transform.position, cam.transform.forward, out hit, dashDist))
+            //        {
+            //            dashTarget = transform.position + cam.transform.forward * (hit.distance - 0.5f);
+            //        }
+            //        else
+            //        {
+            //            dashTarget = transform.position + cam.transform.forward * dashDist;
+            //        }
+            //        StartCoroutine(movement.Dash(dashSpeed, transform.position, dashTarget));
+            //    }
+            //    break;
             case (Status.dashholding):
                 Time.timeScale = dashSlowMoFactor;
                 Time.fixedDeltaTime = Time.timeScale * 0.02f;
@@ -425,7 +425,7 @@ public class PlayerController2 : MonoBehaviour
                 movement.ApplyFriction(friction / airFrictionMod);
                 movement.AirControl(input.InputDir(), airControlSpeed);
                 movement.ApplyGravity(gravity);
-                movement.Dashhold(input.InputDir(), dashHoldMoveSpeed);
+                //movement.Dashhold(input.InputDir(), dashHoldMoveSpeed);
                 break;
         }
     }
