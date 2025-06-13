@@ -54,10 +54,15 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
-    m_Floats: []
+    m_Floats:
+    - _Blending: 1
+    - _MaxNoise: 0.5832075
+    - _MinNoise: 0.41371065
+    - _NoiseBumpStrength: 0.283
     m_Colors:
-    - _CChangeAmbCol: {r: 0.49056596, g: 0.48850656, b: 0.48778903, a: 0.5803922}
-    - _IntScaleFactor: {r: 0.97, g: 0.00018653848, b: 0.00018653848, a: 0}
-    - _MainScaleFactor: {r: 0.12, g: 0.12, b: 0.12, a: 0}
-    - _SecColor: {r: 0.21051168, g: 0.21532825, b: 0.29217777, a: 1}
+    - _CChangeAmbCol: {r: 1, g: 1, b: 1, a: 0.5803922}
+    - _IntScaleFactor: {r: 1.4045359, g: 0.0001, b: 0.0001, a: 0}
+    - _MainOffsetFactor: {r: 0, g: 0, b: 0, a: 0}
+    - _MainScaleFactor: {r: 0.03, g: 0.03, b: 0.03, a: 0}
+    - _SecColor: {r: 0.2103301, g: 0.21514669, b: 0.29199618, a: 1}
   m_BuildTextureStacks: []
