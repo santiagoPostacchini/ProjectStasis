@@ -61,5 +61,5 @@ Material:
     m_Colors:
     - _CChangeAmbCol: {r: 0.6415094, g: 0.48052675, b: 0.48052675, a: 0.5803922}
     - _MainScaleFactor: {r: 0.03, g: 0.03, b: 0.03, a: 0}
-    - _SecColor: {r: 0.21061781, g: 0.2154344, b: 0.2922839, a: 1}
+    - _SecColor: {r: 0.21061593, g: 0.21543252, b: 0.29228202, a: 1}
   m_BuildTextureStacks: []

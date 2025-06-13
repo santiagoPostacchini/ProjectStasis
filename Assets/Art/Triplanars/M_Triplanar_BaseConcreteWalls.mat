@@ -27,7 +27,7 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
-  m_LightmapFlags: 2
+  m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -38,19 +38,19 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BumpMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: c97b53b4a8dc5ad48ae881e28f073e28, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _InterpBump:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: d602bb5725dafbf4287ee2051dd9a063, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _InterpNormal:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 480c8e6a0c29e29479d2f92f8bd8242b, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 26ba1b9177a10b74fb57fa3357c0ec9e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -68,35 +68,35 @@ Material:
     m_Ints: []
     m_Floats:
     - _Blending: 0
-    - _CChangeGrad: 2.61
-    - _CChangeHeight: 1.72
+    - _CChangeGrad: 0
+    - _CChangeHeight: 0
     - _CChangePenGrad: 0
-    - _CChangePenPos: 0.6289308
-    - _CChangePenWidth: 0.2327044
-    - _Glossiness: 0.013
+    - _CChangePenPos: 0
+    - _CChangePenWidth: 0
+    - _Glossiness: 0.5
     - _IntPosInf: 0
-    - _MaxNoise: 0.98999995
-    - _Metallic: 0
+    - _MaxNoise: 0.99
+    - _Metallic: 0.5
     - _MinNoise: 0.01
-    - _NoiseBumpStrength: 0
-    - _QueueControl: 0
+    - _NoiseBumpStrength: 1
+    - _QueueControl: -1
     - _QueueOffset: 0
-    - _SecGlossiness: 0
-    - _SecMetallic: 0
+    - _SecGlossiness: 0.5
+    - _SecMetallic: 0.5
     - _SmoothEnd: 0.5
     - _SmoothSmooth: 0
     - _SmoothStart: 0.5
     m_Colors:
-    - _CChangeAmbCol: {r: 1, g: 1, b: 1, a: 1}
+    - _CChangeAmbCol: {r: 1, g: 1, b: 1, a: 0}
     - _Cos: {r: 1, g: 1, b: 1, a: 0}
     - _IntClampPos: {r: 0, g: 0, b: 0, a: 0}
     - _IntClampWidth: {r: 1, g: 1, b: 1, a: 0}
     - _IntOffsetFactor: {r: 0, g: 0, b: 0, a: 0}
     - _IntPosGrad: {r: 1, g: 1, b: 1, a: 0}
     - _IntScaleFactor: {r: 1, g: 1, b: 1, a: 0}
-    - _MainColor: {r: 0.7169812, g: 0.7169812, b: 0.7169812, a: 0}
+    - _MainColor: {r: 1, g: 1, b: 1, a: 0}
     - _MainOffsetFactor: {r: 0, g: 0, b: 0, a: 0}
-    - _MainScaleFactor: {r: 0.03, g: 0.03, b: 0.03, a: 0}
-    - _SecColor: {r: 0.2105262, g: 0.21534279, b: 0.29219228, a: 1}
+    - _MainScaleFactor: {r: 0.06, g: 0.06, b: 0.06, a: 0}
+    - _SecColor: {r: 1, g: 1, b: 1, a: 0}
     - _Sin: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
