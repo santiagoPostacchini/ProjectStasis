@@ -27,7 +27,8 @@ public class DestroyedPieceController : MonoBehaviour,IStasis
     public readonly string _outlineThicknessName = "_BorderThickness";
     public MaterialPropertyBlock _mpb;
     public Renderer _renderer;
-
+    public MeshCollider meshCollider;
+    public MeshCollider meshColliderTrigger;
     // Start is called before the first frame update
     void Start()
     {
@@ -86,7 +87,7 @@ public class DestroyedPieceController : MonoBehaviour,IStasis
         is_dirty = true;
         _rigidbody.AddForce(force, ForceMode.Impulse);
         VFXController.Instance.spawn_dust_cloud(transform.position);
-
+        
     }
 
     public void drop()
@@ -114,6 +115,8 @@ public class DestroyedPieceController : MonoBehaviour,IStasis
             SetColorOutline(Color.green, 1f);
             _rigidbody.useGravity = false;
             _rigidbody.isKinematic = true;
+            // Congelar posición y rotación para prevenir movimientos
+            _rigidbody.constraints = RigidbodyConstraints.FreezeAll;
         }
     }
 
@@ -121,7 +124,6 @@ public class DestroyedPieceController : MonoBehaviour,IStasis
 
     private void UnfreezeObject()
     {
-        Debug.Log("Intenta desfrezear");
         if (!isFreezed) return;
         isFreezed = false;
         SetOutlineThickness(0f);
@@ -129,6 +131,8 @@ public class DestroyedPieceController : MonoBehaviour,IStasis
         SetColorOutline(Color.white, 1f);
         _rigidbody.useGravity = true;
         _rigidbody.isKinematic = false;
+        // Congelar posición y rotación para prevenir movimientos
+        _rigidbody.constraints = RigidbodyConstraints.None;
 
     }
 

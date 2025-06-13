@@ -29,12 +29,12 @@ public class PlayerInput : MonoBehaviour
     {
         moveInputDirX = 0;
         moveInputDirZ = 0;
-        if (Input.GetKey(forward)) { moveInputDirZ += 1; }
-        if (Input.GetKey(backward)) { moveInputDirZ -= 1; }
+        if (Input.GetKey(KeyCode.W)) { moveInputDirZ += 1; }
+        if (Input.GetKey(KeyCode.S)) { moveInputDirZ -= 1; }
         moveInputDirZ = Mathf.Clamp(moveInputDirZ, -1, 1);
 
-        if (Input.GetKey(right)) { moveInputDirX += 1; }
-        if (Input.GetKey(left)) { moveInputDirX -= 1; }
+        if (Input.GetKey(KeyCode.D)) { moveInputDirX += 1; }
+        if (Input.GetKey(KeyCode.A)) { moveInputDirX -= 1; }
         moveInputDirX = Mathf.Clamp(moveInputDirX, -1, 1);
 
         moveInputDir = new Vector2(moveInputDirX, moveInputDirZ);
@@ -43,7 +43,7 @@ public class PlayerInput : MonoBehaviour
     }
     public bool PressedJump()
     {
-        if (Input.GetKeyDown(jump) && playerController.CanJump())
+        if (Input.GetKeyDown(KeyCode.Space) && playerController.CanJump())
         {
 
             return true;
@@ -57,17 +57,17 @@ public class PlayerInput : MonoBehaviour
     }
     public bool PressedCrouch()
     {
-        if (Input.GetKey(crouch)) { return true; }
+        if (Input.GetKey(KeyCode.C)) { return true; }
         return false;
     }
     public bool HoldDash()
     {
-        if (Input.GetKey(dash)) { return true; }
+        if (Input.GetKey(KeyCode.LeftShift)) { return true; }
         return false;
     }
     public bool ReleasedDash()
     {
-        if (Input.GetKeyUp(dash)) { return true; }
+        if (Input.GetKeyUp(KeyCode.LeftShift)) { return true; }
         return false;
     }
 }

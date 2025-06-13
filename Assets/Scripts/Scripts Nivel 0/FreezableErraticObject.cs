@@ -62,7 +62,7 @@ public class FreezableErraticObject : MonoBehaviour,IStasis
             erraticObject.isFreezed = false;
 
 
-
+            SetColorOutline(Color.white, 1);
             SetOutlineThickness(1f);
         }
     }

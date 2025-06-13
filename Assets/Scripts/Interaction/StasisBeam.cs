@@ -74,7 +74,7 @@ namespace Interaction
             // Disparo el evento correspondiente según el bool 'hit'
             EventManager.TriggerEvent(hit ? successEventName : failEventName, gameObject);
            // EventManager.TriggerEvent("GearTurn", gameObject);
-            Debug.Log("hit es" + hit);
+            
 
             // Espero un poquito antes de ocultar el rayo
             yield return new WaitForSeconds(lightOffDelay);

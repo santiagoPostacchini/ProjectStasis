@@ -10,7 +10,7 @@ public class FrontDetector : MonoBehaviour
     public float obstacleMinAngle;
     public float distanceToObstacle;
     public int precision = 6;
-    private float obstacleMaxHeight = 3f;
+    private float obstacleMaxHeight = 3;
     private float subdivision;
     private int rayCount;
     public bool[] obstacleZone;

@@ -41,12 +41,13 @@ namespace Player
 
         private bool _wasGrounded;
         private bool _isCrouching;
-
+        [SerializeField] private Transform _posStartRotation;
         private void Start()
         {
             rb = GetComponent<Rigidbody>();
             UpdateCameraHeight();
             sizeArmsYInitial = sizeArmsY.localScale.y;
+            transform.LookAt(_posStartRotation);
 
         }
 
@@ -179,7 +180,6 @@ namespace Player
 
             if (b)
             {
-                Debug.Log("Entro a crounch");
                 Vector3 scale = sizeArmsY.localScale;  
                 scale.y = 1.45f;                          
                 sizeArmsY.localScale = scale;         
@@ -187,7 +187,6 @@ namespace Player
             }
             else
             {
-                Debug.Log("salgo de  crounch");
                 Vector3 scale = sizeArmsY.localScale;
                 scale.y = sizeArmsYInitial; 
                 sizeArmsY.localScale = scale;

@@ -68,12 +68,12 @@ Material:
     m_Ints: []
     m_Floats:
     - _Blending: 0
-    - _CChangeGrad: 2.61
-    - _CChangeHeight: 1.72
+    - _CChangeGrad: 0
+    - _CChangeHeight: 0
     - _CChangePenGrad: 0
-    - _CChangePenPos: 0.6289308
-    - _CChangePenWidth: 0.2327044
-    - _Glossiness: 0.013
+    - _CChangePenPos: 0
+    - _CChangePenWidth: 0
+    - _Glossiness: 0
     - _IntPosInf: 0
     - _MaxNoise: 0.98999995
     - _Metallic: 0
@@ -87,16 +87,16 @@ Material:
     - _SmoothSmooth: 0
     - _SmoothStart: 0.5
     m_Colors:
-    - _CChangeAmbCol: {r: 1, g: 1, b: 1, a: 1}
+    - _CChangeAmbCol: {r: 0.6415094, g: 0.48052675, b: 0.48052675, a: 0.5803922}
     - _Cos: {r: 1, g: 1, b: 1, a: 0}
     - _IntClampPos: {r: 0, g: 0, b: 0, a: 0}
     - _IntClampWidth: {r: 1, g: 1, b: 1, a: 0}
     - _IntOffsetFactor: {r: 0, g: 0, b: 0, a: 0}
     - _IntPosGrad: {r: 1, g: 1, b: 1, a: 0}
     - _IntScaleFactor: {r: 1, g: 1, b: 1, a: 0}
-    - _MainColor: {r: 0.7169812, g: 0.7169812, b: 0.7169812, a: 0}
+    - _MainColor: {r: 0, g: 0, b: 0, a: 0}
     - _MainOffsetFactor: {r: 0, g: 0, b: 0, a: 0}
     - _MainScaleFactor: {r: 0.03, g: 0.03, b: 0.03, a: 0}
-    - _SecColor: {r: 0.21059659, g: 0.21541318, b: 0.29226267, a: 1}
+    - _SecColor: {r: 0.21067482, g: 0.21549141, b: 0.2923409, a: 1}
     - _Sin: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []

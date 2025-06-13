@@ -69,9 +69,13 @@ namespace Interaction
         //        yield return new WaitForSeconds(0.1f);
         //    }
         //}
+        public IEnumerator waiTryStasis(Transform end, DestroyedPieceController part)
+        {
+            yield return new WaitForSeconds(0.5f);
+            TryStasis(end, part);
+        }
         public void TryStasis(Transform end, DestroyedPieceController part)
         {
-            Debug.Log("Entro a TryStasis");
             Vector3 direction = (end.position - transform.position).normalized;
 
             if (Physics.Raycast(transform.position, direction, out RaycastHit hit, Mathf.Infinity))

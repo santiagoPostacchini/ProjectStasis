@@ -16,7 +16,7 @@ public class CameraLookAt : MonoBehaviour
     private float lookAtTimeRemaining = 0;
     private Quaternion originalRotation;
     public bool canLook= false;
-
+    Transform padre;
 
     private PlayerInput _playerInput;
 
@@ -26,6 +26,7 @@ public class CameraLookAt : MonoBehaviour
         originalRotation = transform.rotation;
         Cursor.lockState = CursorLockMode.Locked;
         _playerInput = GetComponentInParent<PlayerInput>();
+        padre = transform.parent;
     }
 
     private void Update()
@@ -39,7 +40,7 @@ public class CameraLookAt : MonoBehaviour
         if (!canLook) return;
         if (!isLookingAtTarget) return;
 
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookTarget.position - transform.position, Vector3.up), lookAtTargetSpeed * Time.deltaTime);
+        padre.transform.rotation = Quaternion.Slerp(padre.rotation, Quaternion.LookRotation(lookTarget.position - transform.position, Vector3.up), lookAtTargetSpeed * Time.deltaTime);
         if(lookAtTimeRemaining > 0)
         {
             lookAtTimeRemaining -= Time.deltaTime;
@@ -52,22 +53,25 @@ public class CameraLookAt : MonoBehaviour
     {
         lookAtTimeRemaining = 0;
         isLookingAtTarget = false;
-        
+
+       
 
         float y = transform.eulerAngles.y;
         currentLookRotation.y = y;
+        
 
         float x = transform.eulerAngles.x;
         if (x - 360 > -90) x -= 360;
         currentLookRotation.x = x;
-        _playerInput.canMove = true;
+
+        originalRotation = Quaternion.Euler(0, 0, 0);
+
     }
 
     public void LookAtTarget()
     {
         isLookingAtTarget = true;
         lookAtTimeRemaining = lookAtTimeDuration;
-        _playerInput.canMove = false;
     }
     void LateUpdate()
     {
@@ -87,16 +91,6 @@ public class CameraLookAt : MonoBehaviour
 
     public void LookControls()
     {
-        /*
-        if (isLookingAtTarget)
-            return;
-	    
-        if (Input.GetKeyDown(KeyCode.Space) && lookTarget != null)
-        {
-            LookAtTarget();
-            return;
-        }
-		*/
         if (!canLook)
         {
             return;

@@ -24,6 +24,7 @@ namespace Interaction
         private Camera _mainCam;
 
         [SerializeField] private bool _canShootStasis;
+        [SerializeField] private Transform _originStasisGun;
     
         void Start()
         {

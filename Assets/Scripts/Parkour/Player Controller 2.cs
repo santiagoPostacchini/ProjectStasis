@@ -149,7 +149,6 @@ public class PlayerController2 : MonoBehaviour
     private Player.Player _player;
     [SerializeField]private bool iAMClimbing;
     [SerializeField] private Transform posIAmClimbing;
-    [SerializeField] private Transform posCanIClimbing;
 
     void Start()
     {
@@ -344,7 +343,7 @@ public class PlayerController2 : MonoBehaviour
         RaycastHit hit;
         if (status == Status.climbing)
         {
-            if (Physics.Raycast(posIAmClimbing.position, posIAmClimbing.transform.forward, out hit, 4))
+            if (Physics.Raycast(posIAmClimbing.position, posIAmClimbing.transform.forward, out hit, 0.4f))
             {
                 iAMClimbing = true;
 

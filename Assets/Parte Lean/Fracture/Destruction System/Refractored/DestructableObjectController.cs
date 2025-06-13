@@ -30,6 +30,11 @@ public class DestructableObjectController : MonoBehaviour
 
             var _mc = child.gameObject.AddComponent<MeshCollider>();
             _mc.convex = true;
+            _dpc.meshCollider = _mc;
+            var _mct = child.gameObject.AddComponent<MeshCollider>();
+            _mct.convex = true;
+            _mct.isTrigger = true;
+            _dpc.meshColliderTrigger = _mct;
             destroyed_pieces.Add(_dpc);
         }
 
