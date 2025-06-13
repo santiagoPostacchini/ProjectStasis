@@ -18,7 +18,7 @@ public class PlayerInput : MonoBehaviour
     public Vector2 moveInputDir;
     private int moveInputDirX = 0;
     private int moveInputDirZ = 0;
-
+    public bool canMove = true;
     private PlayerController2 playerController;
     private void Start()
     {

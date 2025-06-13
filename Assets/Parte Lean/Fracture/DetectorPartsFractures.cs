@@ -22,7 +22,7 @@ public class DetectorPartsFractures : MonoBehaviour
     {
         int randomValue = Random.Range(0, 2);
         int a = Random.Range(0, 6); // 0 es falso
-        if (a < 4) return;
+        if (a < 2) return;
         if(randomValue == 0)
         {
             //diosa1.targets.Add(part.gameObject);

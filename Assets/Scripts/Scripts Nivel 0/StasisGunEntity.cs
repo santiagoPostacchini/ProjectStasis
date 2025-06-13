@@ -83,7 +83,6 @@ namespace Interaction
                 {
 
                     stasisComponent.StatisEffectActivate();
-                    part.wasHit = true;
                     //ApplyStasisEffect(hitObject, stasisComponent);
                     stasisHit = true;
                 }

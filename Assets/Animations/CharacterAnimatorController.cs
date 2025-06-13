@@ -1,10 +1,9 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Animator))]
 public class CharacterAnimatorController : MonoBehaviour
 {
     [Header("References")]
-    public PlayerController playerController; // Asignalo desde el Inspector
+    public PlayerController2 playerController; // Asignalo desde el Inspector
     public Rigidbody playerRb;                // Asignalo desde el Inspector
     public GroundDetector groundDetector;     // Asignalo desde el Inspector
 
@@ -20,7 +19,7 @@ public class CharacterAnimatorController : MonoBehaviour
         animator = GetComponent<Animator>();
 
         // Verificaciones opcionales
-        if (!playerController) playerController = GetComponentInParent<PlayerController>();
+        if (!playerController) playerController = GetComponentInParent<PlayerController2>();
         if (!playerRb) playerRb = GetComponentInParent<Rigidbody>();
         if (!groundDetector) groundDetector = GetComponentInParent<GroundDetector>();
     }

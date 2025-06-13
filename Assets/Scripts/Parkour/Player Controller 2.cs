@@ -135,7 +135,6 @@ public class PlayerController2 : MonoBehaviour
 
     [Header("References")]
     public PlayerInput input;
-    private Player.Player movement;
     [SerializeField] private GroundDetector groundDetector;
     [SerializeField] private CeilingDetector ceilingDetector;
     [SerializeField] private WallrunDetector wallrunDetector;
@@ -156,7 +155,7 @@ public class PlayerController2 : MonoBehaviour
     {
         //References
         input = GetComponent<PlayerInput>();
-        movement = GetComponent<Player.Player>();
+        _player = GetComponent<Player.Player>();
         groundDetector = GetComponentInChildren<GroundDetector>();
         ceilingDetector = GetComponentInChildren<CeilingDetector>();
         wallrunDetector = GetComponentInChildren<WallrunDetector>();
@@ -190,10 +189,6 @@ public class PlayerController2 : MonoBehaviour
             RunStatus();
             OnStatusChange();
         }
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            Metodo();
-        }
     }
     void FixedUpdate()
     {
@@ -216,32 +211,32 @@ public class PlayerController2 : MonoBehaviour
         {
             case Status.idle:
                 transform.localScale = new Vector3(1, 1, 1);
-                movement.slideReady = true;
+                _player.slideReady = true;
                 if (input.PressedJump())
                 {
-                    movement.GroundedJump(groundedJumpForce);
+                    _player.GroundedJump(groundedJumpForce);
                 }
                 break;
             case Status.Sprinting:
                 transform.localScale = new Vector3(1, 1, 1);
-                movement.slideReady = true;
+                _player.slideReady = true;
                 if (input.PressedJump())
                 {
-                    movement.GroundedJump(groundedJumpForce);
+                    _player.GroundedJump(groundedJumpForce);
                 }
                 break;
             case Status.Crouching:
                 transform.localScale = new Vector3(1, 0.7f, 1);
                 if (input.PressedJump())
                 {
-                    movement.GroundedJump(groundedJumpForce);
+                    _player.GroundedJump(groundedJumpForce);
                 }
                 break;
             case Status.sliding:
                 transform.localScale = new Vector3(1, 0.5f, 1);
                 if (input.PressedJump() && groundDetector.isGrounded)
                 {
-                    movement.SlideJump(groundedJumpForce, rb.velocity * slideJumpRange);
+                    _player.SlideJump(groundedJumpForce, rb.velocity * slideJumpRange);
                 }
                 break;
             case Status.wallrunning:
@@ -294,7 +289,7 @@ public class PlayerController2 : MonoBehaviour
                     wallrunGravity = 0.0f;
                     wallrunTimer = 0.0f;
                     rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-                    movement.WallJump(wallJumpHeight, wallJumpRange, wallJumpPushoff, new Vector3(cam.transform.forward.x, 0, cam.transform.forward.z), wallrunDetector.contactR ? -transform.right : transform.right);
+                    _player.WallJump(wallJumpHeight, wallJumpRange, wallJumpPushoff, new Vector3(cam.transform.forward.x, 0, cam.transform.forward.z), wallrunDetector.contactR ? -transform.right : transform.right);
                 }
                 break;
             case (Status.climbing):
@@ -384,62 +379,50 @@ public class PlayerController2 : MonoBehaviour
         switch (status)
         {
             case Status.idle:
-                movement.ApplyFriction(friction);
-                movement.ApplyGravity(gravity);
+                _player.ApplyFriction(friction);
+                _player.ApplyGravity(gravity);
                 break;
             case Status.Sprinting:
-                movement.ApplyFriction(friction);
+                _player.ApplyFriction(friction);
                 currentSpeed = walkSpeed;
-                movement.Walk(input.InputDir(), currentSpeed, walkSpeedIncrease, ref moveRampUpCounter, moveRampUpTime);
-                movement.ApplyGravity(gravity);
+                _player.Walk(input.InputDir(), currentSpeed, walkSpeedIncrease, ref moveRampUpCounter, moveRampUpTime);
+                _player.ApplyGravity(gravity);
                 break;
             case Status.Crouching:
-                movement.ApplyFriction(friction);
+                _player.ApplyFriction(friction);
                 // _player.Crounch();
                 currentSpeed = crouchSpeed;
-                movement.Walk(input.InputDir(), crouchSpeed, 0, ref moveRampUpCounter, moveRampUpTime);
-                movement.ApplyGravity(gravity);
+                _player.Walk(input.InputDir(), crouchSpeed, 0, ref moveRampUpCounter, moveRampUpTime);
+                _player.ApplyGravity(gravity);
                 break;
             case Status.sliding:
-                movement.ApplyFriction(friction / slideFrictionMod);
-                movement.Slide(groundDetector.isGrounded ? slideStrenght : slideStrenght * 2, groundDetector.isGrounded);
-                movement.ApplyGravity(gravity);
+                _player.ApplyFriction(friction / slideFrictionMod);
+                _player.Slide(groundDetector.isGrounded ? slideStrenght : slideStrenght * 2, groundDetector.isGrounded);
+                _player.ApplyGravity(gravity);
                 break;
             case Status.wallrunning:
-                movement.ApplyFriction(friction);
-                movement.Wallrun(wallrunDetector.contactR, input.moveInputDir.y, wallrunSpeed, wallrunDetector.wallNormal);
-                movement.ApplyGravity(wallrunGravity);
+                _player.ApplyFriction(friction);
+                _player.Wallrun(wallrunDetector.contactR, input.moveInputDir.y, wallrunSpeed, wallrunDetector.wallNormal);
+                _player.ApplyGravity(wallrunGravity);
                 break;
             case Status.Air:
-                movement.ApplyFriction(friction / airFrictionMod);
-                movement.AirControl(input.InputDir(), airControlSpeed);
-                movement.ApplyGravity(gravity);
+                _player.ApplyFriction(friction / airFrictionMod);
+                _player.AirControl(input.InputDir(), airControlSpeed);
+                _player.ApplyGravity(gravity);
                 break;
             case Status.climbing:
-                movement.ApplyFriction(friction);
-                movement.Climb(input.InputDir(), climbSpeed);
-                movement.ApplyGravity(climbGravity);
-                movement.ApplyVerticalFriction(climbFriction);
+                _player.ApplyFriction(friction);
+                _player.Climb(input.InputDir(), climbSpeed);
+                _player.ApplyGravity(climbGravity);
+                _player.ApplyVerticalFriction(climbFriction);
                 break;
             case Status.dashholding:
-                movement.ApplyFriction(friction / airFrictionMod);
-                movement.AirControl(input.InputDir(), airControlSpeed);
-                movement.ApplyGravity(gravity);
+                _player.ApplyFriction(friction / airFrictionMod);
+                _player.AirControl(input.InputDir(), airControlSpeed);
+                _player.ApplyGravity(gravity);
                 //movement.Dashhold(input.InputDir(), dashHoldMoveSpeed);
                 break;
         }
-    }
-    public void Metodo()
-    {
-        Debug.Log(input.InputDir().y > 0);
-        Debug.Log(groundDetector.distToGround >= 0.5f);
-        Debug.Log((wallrunDetector.contactR || wallrunDetector.contactL));
-        Debug.Log((currentCamRotation.y >= -wallrunMaxAngle && currentCamRotation.y <= wallrunMaxAngle));
-        Debug.Log(new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude > wallrunSpeedThreshold);
-        Debug.Log("Velocidad " + new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude);
-        Debug.Log("wallrunSpeedThreshold " + wallrunSpeedThreshold);
-        Debug.Log(rb.velocity.y < 2.1);
-        Debug.Log(wallrunReady && !movement.isDashing);
     }
     public void ChooseStatus()
     {
@@ -448,38 +431,38 @@ public class PlayerController2 : MonoBehaviour
             if (iAMClimbing) return;
             ChangeStatus(Status.Air);
         }
-        if (ceilingDetector.canStand && groundDetector.isGrounded && input.InputDir() == Vector2.zero && !movement.isDashing)
+        if (ceilingDetector.canStand && groundDetector.isGrounded && input.InputDir() == Vector2.zero && !_player.isDashing)
         {
             _player.ResetJump();
             ChangeStatus(Status.idle);
         }
-        if (ceilingDetector.canStand && groundDetector.isGrounded && input.InputDir() != Vector2.zero && !movement.isDashing)
+        if (ceilingDetector.canStand && groundDetector.isGrounded && input.InputDir() != Vector2.zero && !_player.isDashing)
         {
 
             ChangeStatus(Status.Sprinting);
         }
-        if (input.PressedCrouch() && new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude < slideThreshold && !movement.isDashing)
+        if (input.PressedCrouch() && new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude < slideThreshold && !_player.isDashing)
         {
             ChangeStatus(Status.Crouching);
         }
-        if (input.PressedCrouch() && new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude > slideThreshold && !movement.isDashing)
+        if (input.PressedCrouch() && new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude > slideThreshold && !_player.isDashing)
         {
             ChangeStatus(Status.sliding);
         }
-        if (input.InputDir().y > 0 && groundDetector.distToGround >= 0.5f && (wallrunDetector.contactR || wallrunDetector.contactL) && (currentCamRotation.y >= -wallrunMaxAngle && currentCamRotation.y <= wallrunMaxAngle) && new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude > wallrunSpeedThreshold && rb.velocity.y < 2.1 && wallrunReady && !movement.isDashing)
+        if (input.InputDir().y > 0 && groundDetector.distToGround >= 0.5f && (wallrunDetector.contactR || wallrunDetector.contactL) && (currentCamRotation.y >= -wallrunMaxAngle && currentCamRotation.y <= wallrunMaxAngle) && new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude > wallrunSpeedThreshold && rb.velocity.y < 2.1 && wallrunReady && !_player.isDashing)
         {
             Debug.Log("Change");
             ChangeStatus(Status.wallrunning);
         }
-        if (input.InputDir().y > 0 && frontDetector.angleToPlayer < maxClimbApproachAngle && frontDetector.wallAngle > minClimbWallAngle && frontDetector.wallAngle < maxClimbWallAngle && frontDetector.obstacleHeightFromPlayer > 1.2 && frontDetector.distanceToObstacle < climbApproachDistance && rb.velocity.y > -0.25f && status != Status.sliding && !movement.isDashing)
+        if (input.InputDir().y > 0 && frontDetector.angleToPlayer < maxClimbApproachAngle && frontDetector.wallAngle > minClimbWallAngle && frontDetector.wallAngle < maxClimbWallAngle && frontDetector.obstacleHeightFromPlayer > 1.2 && frontDetector.distanceToObstacle < climbApproachDistance && rb.velocity.y > -0.25f && status != Status.sliding && !_player.isDashing)
         {
             ChangeStatus(Status.climbing);
         }
-        if (ceilingDetector.distToCeiling > 2 && input.InputDir().y > 0 && frontDetector.obstacleDetected && frontDetector.angleToPlayer < maxVaultApproachAngle && frontDetector.wallAngle > minVaultWallAngle && frontDetector.wallAngle < maxVaultWallAngle && frontDetector.obstacleHeightFromPlayer <= vaultHeight && frontDetector.distanceToObstacle < vaultApproachDistance && !movement.isDashing)
+        if (ceilingDetector.distToCeiling > 2 && input.InputDir().y > 0 && frontDetector.obstacleDetected && frontDetector.angleToPlayer < maxVaultApproachAngle && frontDetector.wallAngle > minVaultWallAngle && frontDetector.wallAngle < maxVaultWallAngle && frontDetector.obstacleHeightFromPlayer <= vaultHeight && frontDetector.distanceToObstacle < vaultApproachDistance && !_player.isDashing)
         {
             ChangeStatus(Status.vaulting);
         }
-        if ((status == Status.Air || status == Status.dashholding) && input.HoldDash() && !movement.isDashing && dashCooldownTimer >= dashCooldown)
+        if ((status == Status.Air || status == Status.dashholding) && input.HoldDash() && !_player.isDashing && dashCooldownTimer >= dashCooldown)
         {
             ChangeStatus(Status.dashholding);
         }
@@ -588,13 +571,13 @@ public class PlayerController2 : MonoBehaviour
     void RechargeAbilities()
     {
         //Dashing
-        if (status != Status.dashholding && !movement.isDashing)
+        if (status != Status.dashholding && !_player.isDashing)
         {
             if (dashCooldownTimer <= dashCooldown) dashCooldownTimer += Time.deltaTime;
             else dashCooldownTimer = dashCooldown;
         }
         //AirJumping
-        if (status != Status.Air && status != Status.dashholding && !movement.isDashing)
+        if (status != Status.Air && status != Status.dashholding && !_player.isDashing)
         {
             if (airJumpChargeAvailable < airJumpCharge)
             {

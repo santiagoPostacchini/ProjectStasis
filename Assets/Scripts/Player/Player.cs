@@ -34,7 +34,6 @@ namespace Player
         [SerializeField] private Transform cameraTransform;
         [SerializeField] private Transform sizeArmsY;
         private float sizeArmsYInitial;
-
         //public enum MovementState { Sprinting, Crouching, Air }
         //public MovementState state;
     
@@ -95,6 +94,7 @@ namespace Player
         }
         public void Walk(Vector2 moveDir, float walkSpeed, float walkSpeedIncrease, ref float rampUpCounter, float rampUpTime)
         {
+            if (!playerInput.canMove) return;
             if (rampUpCounter < rampUpTime)
             {
                 rampUpCounter += 0.05f;

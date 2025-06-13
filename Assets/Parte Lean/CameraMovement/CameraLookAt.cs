@@ -17,11 +17,15 @@ public class CameraLookAt : MonoBehaviour
     private Quaternion originalRotation;
     public bool canLook= false;
 
+
+    private PlayerInput _playerInput;
+
     private void Start()
     {
         t = transform;
         originalRotation = transform.rotation;
         Cursor.lockState = CursorLockMode.Locked;
+        _playerInput = GetComponentInParent<PlayerInput>();
     }
 
     private void Update()
@@ -56,12 +60,14 @@ public class CameraLookAt : MonoBehaviour
         float x = transform.eulerAngles.x;
         if (x - 360 > -90) x -= 360;
         currentLookRotation.x = x;
+        _playerInput.canMove = true;
     }
 
     public void LookAtTarget()
     {
         isLookingAtTarget = true;
         lookAtTimeRemaining = lookAtTimeDuration;
+        _playerInput.canMove = false;
     }
     void LateUpdate()
     {
