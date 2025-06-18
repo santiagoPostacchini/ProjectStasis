@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Gameplay 1.unity
     guid: cadc36b49c443c1489f58cda3b24c126
   - enabled: 1
-    path: Assets/Scenes/Gameplay.unity
+    path: Assets/Tortazo Proposito/Scene/Gameplay.unity
     guid: 0afd3c06dea0f7542baf44908cd8eebc
   - enabled: 0
     path: Assets/Scenes/Stasis.Parkour.Test.Lvl.unity

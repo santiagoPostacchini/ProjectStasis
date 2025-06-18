@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-2954522102557700968
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 7
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: M_Triplanar_IndustrialSteel
+  m_Shader: {fileID: -6465566751694194690, guid: ea3981a8a6a413b48a4b0bd7164f8711,
+    type: 3}
+  m_Parent: {fileID: 2100000, guid: 94bb2c1058004d64197240d5ec29ef1a, type: 2}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BumpMap:
+        m_Texture: {fileID: 2800000, guid: 1cefa2b4956da574394ed50a3056bba1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _InterpBump:
+        m_Texture: {fileID: 2800000, guid: eb15e1492ff9ee1419f81872633eaa67, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _InterpNormal:
+        m_Texture: {fileID: 2800000, guid: 282fd4740cfd6984db15a85184043958, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 031b9924d3d73d646bc32b59ed8d5802, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _CChangeGrad: 0
+    - _CChangeHeight: 0
+    - _CChangePenGrad: 0.326
+    - _CChangePenPos: 0.63735855
+    - _CChangePenWidth: 0.07962263
+    - _Glossiness: 1
+    - _MaxNoise: 0.62943393
+    - _Metallic: 0.559
+    - _MinNoise: 0.38597482
+    - _NoiseBumpStrength: 0.438
+    - _SecGlossiness: 0.559
+    - _SecMetallic: 0.537
+    - _SmoothEnd: 0.2751572
+    - _SmoothSmooth: 0
+    - _SmoothStart: 0.7216981
+    m_Colors:
+    - _IntScaleFactor: {r: 0.47, g: 0.47, b: 0.47, a: 0}
+    - _MainColor: {r: 0.9433962, g: 0.9433962, b: 0.9433962, a: 1}
+    - _MainScaleFactor: {r: 0.07, g: 0.07, b: 0.07, a: 0}
+    - _SecColor: {r: 1, g: 1, b: 1, a: 0.4745098}
+  m_BuildTextureStacks: []
